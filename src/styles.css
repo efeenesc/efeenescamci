@@ -1,1 +1,61 @@
-/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --darkest: #000000;
+  --darker: #ffffff;
+  --dark: #f0f0f0;
+  --foreground: #333333;
+  --accent1: #333333;
+  --accent2: #333333;
+  --border1: #747474;
+  --contrast: #000000;
+  --highlight: #ff5b5b;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+::-moz-selection {
+  background: var(--highlight);
+}
+::selection {
+  background: var(--highlight);
+}
+
+h1 {
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+h3 {
+  font-size: 1.17em;
+}
+
+h4 {
+  font-size: 1em;
+}
+
+h5 {
+  font-size: 0.83em;
+}
+
+h6 {
+  font-size: 0.67em;
+}
+
+blockquote {
+  @apply rounded-lg p-3 bg-dark;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 40px;
+  margin-inline-end: 40px;
+  unicode-bidi: isolate;
+  text-wrap: wrap;
+}

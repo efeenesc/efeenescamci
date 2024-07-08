@@ -1,0 +1,54 @@
+<div #themebtn id="themebtn" class="rounded-2xl outline-border1 transition-color outline-1 outline bg-dark p-3 h-[10%] overflow-hidden cursor-pointer flex gap-2 shadow-lg shadow-darker z-20 fixed top-2 right-2" (click)="this.buttonClicked()" (mouseenter)="this.mouseEnteredEvent($event)" (mouseleave)="this.mouseLeftEvent($event)">
+  <img id="theme_icon" class="object-contain h-full w-fit" [src]="this.themeIcon">
+  <div class="flex flex-col h-full">
+    <span class="text-foreground transition-color text-nowrap">{{this.themeName}}</span>
+    <span class="text-accent1 transition-color">{{this.themeAuthor}}</span>
+    @if (hoverState.value) {
+      <span id="theme-select" class="w-full opacity-0 underline-offset-4 underline">Pick a new theme</span>
+    }
+  </div>
+  <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+    <path
+      class="fill-foreground"
+      d="M162.4 6c-1.5-3.6-5-6-8.9-6h-19c-3.9 0-7.5 2.4-8.9 6L104.9 57.7c-3.2 8-14.6 8-17.8 0L66.4 6c-1.5-3.6-5-6-8.9-6H48C21.5 0 0 21.5 0 48V224v22.4V256H9.6 374.4 384v-9.6V224 48c0-26.5-21.5-48-48-48H230.5c-3.9 0-7.5 2.4-8.9 6L200.9 57.7c-3.2 8-14.6 8-17.8 0L162.4 6zM0 288v32c0 35.3 28.7 64 64 64h64v64c0 35.3 28.7 64 64 64s64-28.7 64-64V384h64c35.3 0 64-28.7 64-64V288H0zM192 432a16 16 0 1 1 0 32 16 16 0 1 1 0-32z"
+    />
+  </svg> -->
+</div>
+@if (fullscreen.value) {
+  <div #fullscreen id="fullscreen" class="fixed top-0 left-0 w-full h-full backdrop-blur-lg bg-opacity-50 opacity-0 z-10 flex items-center justify-center" (click)="this.clickedOutside($event)">
+    <div id="inner-fullscreen" class="w-3/4 h-full flex p-12 gap-4 flex-col">
+      <div id="placeholder_card" class="w-1/6 h-0"></div>
+      <input class="w-1/2 h-12 transition-color bg-dark outline outline-1 outline-border1 rounded-lg p-2" [formControl]="searchControl" placeholder="Search themes in Visual Studio marketplace" />
+      <div id="content" class="transition-color flex-grow flex h-[60%] outline outline-1 outline-border1 relative rounded-lg justify-center">
+        @if (displayLoading) {
+          <div id="extrablur" class="absolute top-0 w-full h-full backdrop-blur-lg opacity-0 pointer-events-none justify-center flex items-center z-20">
+            <div id="inner-container" class="w-3/4">
+              <loading-bar class="h-12 flex rounded-lg" [progress]="this.downloadPercent"></loading-bar>
+            </div>
+          </div>
+        }
+        <div id="contentbody" class="bg-dark rounded-lg grid justify-between grid-cols-[30%_30%_30%] auto-rows-[40%] flex-grow gap-5 p-5 overflow-auto">
+          @if (searchResults) {
+            @for (ext of searchResults!.results[0].extensions; track ext.extensionId) {
+              <div class="bg-darker flex flex-col outline outline-1 rounded-lg outline-border1 shadow-lg p-5 hover:scale-105 hover:shadow-2xl transition-all cursor-pointer overflow-hidden" (click)="themeSelected(ext, true)">
+                @if (!ext.extensionIcon) {
+                  <div class="h-full w-fit max-h-[75px] aspect-square rounded-lg bg-white font-extrabold text-2xl text-black flex justify-center items-center">-</div>
+                } @else {
+                  <img id="theme_icon" class="object-contain h-full w-fit max-h-[75px] rounded-lg aspect-square" [src]="ext.extensionIcon">
+                }
+                
+                <div class="flex flex-col h-full overflow-hidden">
+                  <span class="text-foreground transition-color">{{ext.displayName}}</span>
+                  <span class="text-accent1 transition-color">{{ext.publisher.displayName}}</span>
+                  <span class="text-ellipsis text-contrast transition-color overflow-hidden">{{ext.shortDescription}}</span>
+                </div>
+              </div>
+            }
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+
