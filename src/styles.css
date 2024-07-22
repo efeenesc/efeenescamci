@@ -19,35 +19,30 @@ body {
   height: 100%;
 }
 
+::-webkit-scrollbar {
+  background-color: var(--darkest);
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--darkest);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #babac0;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-button {
+  display:none;
+}
+
 ::-moz-selection {
   background: var(--highlight);
 }
 ::selection {
   background: var(--highlight);
-}
-
-h1 {
-  font-size: 2em;
-}
-
-h2 {
-  font-size: 1.5em;
-}
-
-h3 {
-  font-size: 1.17em;
-}
-
-h4 {
-  font-size: 1em;
-}
-
-h5 {
-  font-size: 0.83em;
-}
-
-h6 {
-  font-size: 0.67em;
 }
 
 blockquote {
@@ -58,4 +53,15 @@ blockquote {
   margin-inline-end: 40px;
   unicode-bidi: isolate;
   text-wrap: wrap;
+}
+
+ol {
+  display: block;
+  list-style-type: decimal;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 40px;
+  unicode-bidi: isolate;
 }

@@ -7,41 +7,17 @@ import * as vst from '../../types/vs-types';
 import anime from 'animejs';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { LoadingBarComponent } from '../loading-bar/loading-bar.component';
+import { GetSetObj } from '../../classes/getsetobj';
+import { VsCardComponent } from '../vs-card/vs-card.component';
+import { MagnifyingGlassComponent } from "../../icons/magnifying-glass/magnifying-glass.component";
+import { SkeletonLoaderComponent } from "../skeleton-loader/skeleton-loader.component";
 
 const AsyncFunction = (async () => {}).constructor;
-
-class GetSetObj<T> {
-  private val!: T;
-  callback?: (newVal: T) => void | Promise<void>;
-
-  constructor(_val: T, _callback?: (newVal: T) => void | Promise<void>) {
-    this.val = _val;
-    this.callback = _callback;
-  }
-  get value(): T {
-    return this.val;
-  }
-  set value(value: T) {
-    if (value === this.val) return;
-
-    const callbackResult = this.callback?.(value);
-
-    if (callbackResult instanceof Promise) {
-      callbackResult.then(() => {
-        this.val = value;
-      }).catch((error) => {
-        console.error("Error in callback:", error);
-      });
-    } else {
-      this.val = value;
-    }
-  }
-}
 
 @Component({
   selector: 'vs-search',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, LoadingBarComponent],
+  imports: [FormsModule, ReactiveFormsModule, LoadingBarComponent, VsCardComponent, MagnifyingGlassComponent, SkeletonLoaderComponent],
   templateUrl: './vs-search.component.html',
   styleUrl: './vs-search.component.css',
 })
@@ -57,8 +33,10 @@ export class VsSearchComponent {
   suppressHover: boolean = false;
   suppressClick: boolean = false;
   mouseHover: Subject<boolean> = new Subject();
+  mouseDown: Subject<boolean> = new Subject();
   searchFilter: vst.VSFilterBody = new vst.VSFilterBody();
   searchResults!: vst.VSResultBody | null;
+  searching: boolean = false;
   hoverState: GetSetObj<boolean> = new GetSetObj<boolean>(
     false,
     this.playHoverEffect
@@ -71,6 +49,10 @@ export class VsSearchComponent {
     false,
     this.playLoadingAnimation
   );
+  mouseDownState: GetSetObj<boolean> = new GetSetObj<boolean>(
+    false,
+    this.playMouseDownAnimation
+  )
   downloadPercent: number = 0;
   buttonCoords?: { left: number; top: number };
 
@@ -417,13 +399,21 @@ export class VsSearchComponent {
     this.searchControl.valueChanges
       .pipe(debounceTime(this.searchDebounce), distinctUntilChanged())
       .subscribe((query: string) => {
-        this.searchVSMarketplace(query);
+        this.searching = true;
+        this.searchVSMarketplace(query)
+        .then(() => this.searching = false);
       });
 
     this.mouseHover
       .pipe(debounceTime(this.hoverDebounce), distinctUntilChanged())
       .subscribe((newState) => {
         if (!this.suppressHover) this.hoverState.value = newState;
+      });
+
+    this.mouseDown
+      .pipe(debounceTime(this.hoverDebounce), distinctUntilChanged())
+      .subscribe((newState) => {
+        this.mouseDownState.value = newState;
       });
   }
 
@@ -435,6 +425,22 @@ export class VsSearchComponent {
     this.themeAuthor = this._lss.get("theme_author");
     this.themeName = this._lss.get("theme_name");
     this.themeIcon = 'data:image/png;base64,' + this._lss.get("theme_icon");
+  }
+
+  playMouseDownAnimation(state: boolean) {
+    if (state) {
+      anime({
+        targets: "#themebtn",
+        duration: 100,
+        easing: 'easeInOutQuad'
+      })
+    } else {
+      anime({
+        targets: "#themebtn",
+        duration: 100,
+        easing: 'easeInOutQuad'
+      })
+    }
   }
 
   playHoverEffect(expand: boolean) {
@@ -519,11 +525,18 @@ export class VsSearchComponent {
     }, 0);
   }
 
-  mouseLeftEvent(_: MouseEvent) {
+  mouseLeftEvent() {
     this.mouseHover.next(false);
   }
-  mouseEnteredEvent(_: MouseEvent) {
+  mouseEnteredEvent() {
     this.mouseHover.next(true);
+  }
+
+  mouseDownEvent() {
+    this.mouseDown.next(true);
+  }
+  mouseUpEvent() {
+    this.mouseDown.next(false);
   }
 
   displayFullscreenAnimation(show: boolean) : Promise<void> {
@@ -576,36 +589,9 @@ export class VsSearchComponent {
     }, 0);
   }
 
-  async getIcon(ext: vst.VSExtension): Promise<string | undefined> {
-    function blobToBase64(blob: Blob): Promise<string | null | ArrayBuffer> {
-      return new Promise((resolve, _) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(blob);
-      });
-    }
-
-    const extUri = ext.versions[0].files?.find(
-      (prop) => prop.assetType === 'Microsoft.VisualStudio.Services.Icons.Small'
-    )?.source;
-    if (!extUri) return;
-
-    const res = await fetch(extUri);
-    const blob = await res.blob();
-    const base64 = await blobToBase64(blob);
-
-    if (typeof base64 === 'string') return base64;
-
-    return;
-  }
-
   async searchVSMarketplace(query: string) {
     this.searchFilter.addSearchFilter(query);
     this.searchResults = await this.vsSvc.getFilteredResults(this.searchFilter);
-    this.searchResults?.results[0].extensions.map(async (ext) => {
-      ext.extensionIcon = await this.getIcon(ext);
-      return ext;
-    });
   }
 
   async themeSelected(ext: vst.VSExtension, showLoading: boolean = false) {

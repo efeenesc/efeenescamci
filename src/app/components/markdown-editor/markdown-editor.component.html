@@ -1,12 +1,16 @@
-<div class="flex h-full w-full overflow-hidden transition-colors flex-col xl:flex-row">
+<div
+  class="flex h-full w-full overflow-hidden transition-colors flex-col xl:flex-row"
+>
+  @if (this.showRenderer) {
   <div
     class="preview bg-darker flex-1 justify-center overflow-auto flex p-5 flex-col transition-colors text-nowrap text-foreground"
   >
-  @if (this.mdTree) {
-    <markdown-renderer [parsedContent]="this.mdTree.content"></markdown-renderer>
-  }
-  
-    
+    @if (this.mdTree) {
+    <markdown-renderer
+      [parsedContent]="this.mdTree.content"
+    ></markdown-renderer>
+    }
+
     <!-- <h1
       class="font-mono text-7xl text-foreground font-bold transition-colors tracking-tight"
     >
@@ -16,10 +20,16 @@
       Solutions Architect
     </h3> -->
   </div>
-  <div class="editor bg-dark flex-1 flex p-2 text-contrast relative">
-    <div class="w-6 h-full flex flex-col pointer-events-none select-none left-0 overflow-hidden">
+  }
+
+  <div
+    class="editor bg-dark h-full w-full flex-1 flex p-2 text-contrast relative overflow-y-auto font-fantasque"
+  >
+    <div
+      class="w-8 h-full flex flex-col pointer-events-none select-none left-0"
+    >
       @for (i of this.lineCount; track i) {
-      <span [id]="'line-' + i" [class]="this.selectedLineNumber === i ? 'opacity-100' : 'opacity-50'">{{ i + 1 }}</span>
+      <span [id]="'line-' + i">{{ i + 1 }}</span>
       }
     </div>
     <div
@@ -29,10 +39,10 @@
       (keydown)="this.keyDownEvent($event)"
       (click)="this.clickEvent($event)"
       id="markdownArea"
-      class="w-full flex-grow bg-transparent outline-none border-none resize-none text-nowrap overflow-y-auto"
+      class="w-full flex flex-col h-max min-h-full flex-grow bg-transparent outline-none border-none resize-none text-nowrap overflow-x-auto justify-stretch items-stretch justify-items-stretch place-content-stretch [&>div]:min-w-full"
     >
-    <div># Efe Enes Çamcı</div>
-    <div>### Solutions Architect</div>
-  </div>
+      <div># Efe Enes Çamcı</div>
+      <div>### Solutions Architect</div>
+    </div>
   </div>
 </div>

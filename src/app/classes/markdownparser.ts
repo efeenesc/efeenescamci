@@ -132,29 +132,54 @@ export function lex(mdstr: string): string[][] {
 export function parse(l: string[][]): MdNode {
   let rootNode: MdNode = new MdNode('document', []);
   let prevIsNewline = false;
+  const arrLen = l.length;
 
-  for (let line of l) {
-    const result = processTokens(line, 0);
+  for (let idx = 0; idx < arrLen; idx++) {
+    const line = l[idx];
+    let content = rootNode.content as MdNode[];
+
     if (line.length === 0) {
       if (prevIsNewline) {
         prevIsNewline = false;
-        (rootNode.content as MdNode[]).push(new MdNode('br', ''));
+        content.push(new MdNode('br', ''));
       }
 
       prevIsNewline = true;
       continue;
     }
-    (rootNode.content as MdNode[]).push(...result.nodes);
+
+    const result = processTokens(line);
+    if (result.nodes[0].type === 'li') {
+      let newNode;
+      if (content[content.length-1].type !== 'ol') {
+        newNode = new MdNode('ol', [...result.nodes]);
+        content.push(newNode);
+      } else {
+        (content[content.length-1].content as MdNode[]).push(...result.nodes);
+      }
+    } else {
+      content.push(...result.nodes);
+    }
   }
 
   return rootNode;
+}
+
+function lookAheadFind(targetToken: string, tokens: string[], startFrom: number) : number {
+  const arrLen = tokens.length;
+  for (; startFrom < arrLen; startFrom++) {
+    if (tokens[startFrom] === targetToken)
+      return startFrom;
+  }
+  return -1;
 }
 
 function processTokens(
   tokens: string[],
   index: number = 0,
   closingToken?: string
-): { nodes: MdNode[]; index: number } {
+): { nodes: MdNode[]; index: number; } {
+  const arrlen = tokens.length;
   const nodes: MdNode[] = [];
   let textBuffer: string[] = [];
 
@@ -165,10 +190,10 @@ function processTokens(
     }
   }
 
-  while (index < tokens.length) {
+  for (; index < arrlen; index++) {
     const token = tokens[index];
 
-    if (token === closingToken) {
+    if (closingToken && token === closingToken) {
       flushTextBuffer();
       return { nodes, index };
     }
@@ -176,59 +201,77 @@ function processTokens(
     const nodeType = getNodeType(token);
     if (nodeType) {
       flushTextBuffer();
-      const { nodes: childNodes, index: newIndex } = processTokens(
-        tokens,
-        index + 1,
-        getClosingToken(token)
-      );
-      nodes.push(new MdNode(nodeType, childNodes));
-      index = newIndex;
-    } else {
-      textBuffer.push(token);
-    }
+      const closingToken = getClosingToken(token);
+      let tokenClosed = true;
+      if (closingToken) {
+        tokenClosed = lookAheadFind(closingToken, tokens, index + 1) === -1 ? false : true;
+      }
 
-    index++;
+      if (tokenClosed) {
+        const { nodes: childNodes, index: newIndex } = processTokens(
+          tokens,
+          index + 1,
+          closingToken
+        );
+  
+        nodes.push(new MdNode(nodeType, childNodes));
+        index = newIndex;
+        continue;
+      }
+    } 
+    
+    textBuffer.push(token);
   }
 
   flushTextBuffer();
   return { nodes, index };
 }
 
-function getNodeType(token: string): MdNodeType | null {
+function getNodeType(token: string): MdNodeType | undefined {
   const typeMap: { [key: string]: MdNodeType } = {
     '#': 'h1',
     '##': 'h2',
     '###': 'h3',
+    '####': 'h4',
+    '#####': 'h5',
+    '######': 'h6',
+    '-': 'ul',
     '>': 'bq',
     '*': 'i',
-    _: 'i',
     '**': 'b',
-    __: 'b',
     '***': 'bi',
-    ___: 'bi',
+    '_': 'i',
+    '__': 'b',
+    '___': 'bi',
     '`': 'code',
     '~~': 'st',
   };
-  return typeMap[token] || null;
+
+  const result = typeMap[token];
+
+  if (result)
+    return result;
+
+  if (token.endsWith(".") && !isNaN(Number(token.substring(0, token.length-1)))) {
+    return "li";
+  }
+
+  return;
 }
 
-function getClosingToken(token: string): string {
-  const closingMap: { [key: string]: string } = {
-    '#': '\n',
-    '##': '\n',
-    '###': '\n',
-    '>': '\n',
-    '*': '*',
-    _: '_',
-    '**': '**',
-    __: '__',
-    '***': '***',
-    '####': '####',
-    '#####': '#####',
-    '######': '######',
-    ___: '___',
-    '`': '`',
-    '~~': '~~',
-  };
-  return closingMap[token] || '';
+function getClosingToken(token: string): string | undefined {
+  switch(token) {
+    case "*":
+    case "**":
+    case "***":
+    case '_':
+    case '__':
+    case '___':
+    case '`':
+    case '~~':
+      return token;
+
+    default:
+      return;
+  }
 }

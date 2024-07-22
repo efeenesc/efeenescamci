@@ -8,6 +8,8 @@ import JSZip from 'jszip';
 import { ColorScheme, ColorTheme } from '../classes/colorscheme';
 import { LocalStorageService } from './local-storage.service';
 
+export type iconDownloadConfig = 'none' | 'small' | 'large'
+
 @Injectable({
   providedIn: 'root',
 })
@@ -15,7 +17,8 @@ export class VsThemeService {
   constructor(private _lss: LocalStorageService) {}
 
   getFilteredResults = async (
-    requestedFilter: vst.VSFilterBody
+    requestedFilter: vst.VSFilterBody,
+    downloadIcons: iconDownloadConfig = 'small'
   ): Promise<vst.VSResultBody | null> => {
     const postBody = JSON.stringify(requestedFilter);
 
@@ -30,8 +33,18 @@ export class VsThemeService {
       }
     );
 
-    const jsonObj = postResult.json() as Object;
-    return plainToInstance(vst.VSResultBody, jsonObj);
+    const jsonObj = await postResult.json() as Object;
+    let finalObj = plainToInstance(vst.VSResultBody, jsonObj);
+
+    if (downloadIcons !== 'none') {
+      finalObj.results.map((result) => {
+        result.extensions.map(async (ext) => 
+          ext.extensionIcon = await this.getIcon(ext, downloadIcons)
+        )
+      })
+    }
+
+    return finalObj;
   };
 
   getPackageFile = (
@@ -97,6 +110,7 @@ export class VsThemeService {
 
     const themeName = pkg_json.displayName;
     const themeAuthor = pkg_json.publisher;
+    const themeId = ext.extensionId;
 
     const themeIcon = await zip.files[`extension/${pkg_logo_path}`].async(
       'base64'
@@ -107,6 +121,7 @@ export class VsThemeService {
 
     this._lss.set('theme_name', themeName);
     this._lss.set('theme_author', themeAuthor);
+    this._lss.set('theme_id', themeId);
     this._lss.set('theme_icon', themeIcon);
 
     const colorScheme = themeFile.substring(0, 5).includes('<?xml')
@@ -114,6 +129,40 @@ export class VsThemeService {
       : this.readJSONFile(themeFile, colorTheme as ColorTheme)!;
 
     this.changeColorVariables(colorScheme);
+  }
+
+  async getIcon(ext: vst.VSExtension, iconSizePreference: 'small' | 'large' = 'small'): Promise<string | undefined> {
+    function blobToBase64(blob: Blob): Promise<string | null | ArrayBuffer> {
+      return new Promise((resolve, _) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    let extUri;
+
+    if (iconSizePreference === 'small') {
+      extUri = ext.versions[0].files?.find(
+        (prop) => prop.assetType === 'Microsoft.VisualStudio.Services.Icons.Small'
+      )?.source;
+    }
+      
+    if (iconSizePreference === 'large' || !extUri) {
+      extUri = ext.versions[0].files?.find(
+        (prop) => prop.assetType === 'Microsoft.VisualStudio.Services.Icons.Default'
+      )?.source;
+    }
+    
+    if (!extUri) return;
+
+    const res = await fetch(extUri);
+    const blob = await res.blob();
+    const base64 = await blobToBase64(blob);
+
+    if (typeof base64 === 'string') return base64;
+
+    return;
   }
 
   readPlistFile(filestr: string, colorTheme: ColorTheme): ColorScheme {

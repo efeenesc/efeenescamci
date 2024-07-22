@@ -4,10 +4,15 @@ import { MdNode } from '../../classes/markdownparser';
 @Component({
   selector: 'markdown-renderer',
   standalone: true,
+  styleUrl: './markdown-renderer.component.css',
   template: `
-    @if (this.parsedNode !== undefined) { @for (node of this.parsedNode; track
-    node) { @switch (node.type) { @case ('text') {
-    {{ node.content }}
+    @if (this.parsedNode !== undefined) { 
+    @for (node of this.parsedNode; track node) 
+    { 
+    @switch (node.type) 
+    { 
+      @case ('text') {
+      {{ node.content }}
     } @case ('p') {
     <p>
       <markdown-renderer [parsedContent]="node.content"></markdown-renderer>
@@ -26,27 +31,27 @@ import { MdNode } from '../../classes/markdownparser';
     </li>
     } @case ('h1') {
     <h1>
-      <markdown-renderer [parsedContent]="node.content"></markdown-renderer>
+      <markdown-renderer class="text-5xl lg:text-6xl font-extrabold" [parsedContent]="node.content"></markdown-renderer>
     </h1>
     } @case ('h2') {
     <h2>
-      <markdown-renderer [parsedContent]="node.content"></markdown-renderer>
+      <markdown-renderer class="text-4xl lg:text-5xl" [parsedContent]="node.content"></markdown-renderer>
     </h2>
     } @case ('h3') {
     <h3>
-      <markdown-renderer [parsedContent]="node.content"></markdown-renderer>
+      <markdown-renderer class="text-3xl lg:text-4xl text-accent1" [parsedContent]="node.content"></markdown-renderer>
     </h3>
     } @case ('h4') {
     <h4>
-      <markdown-renderer [parsedContent]="node.content"></markdown-renderer>
+      <markdown-renderer class="text-2xl lg:text-3xl" [parsedContent]="node.content"></markdown-renderer>
     </h4>
     } @case ('h5') {
     <h5>
-      <markdown-renderer [parsedContent]="node.content"></markdown-renderer>
+      <markdown-renderer class="text-xl lg:text-2xl" [parsedContent]="node.content"></markdown-renderer>
     </h5>
     } @case ('h6') {
     <h6>
-      <markdown-renderer [parsedContent]="node.content"></markdown-renderer>
+      <markdown-renderer class="text-lg lg:text-xl" [parsedContent]="node.content"></markdown-renderer>
     </h6>
     } @case ('code') {
     <pre><code><markdown-renderer [parsedContent]="node.content"></markdown-renderer></code></pre>

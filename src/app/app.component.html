@@ -1,15 +1,103 @@
 <main
-  class="w-full h-full bg-darkest font-fantasque transition-colors overflow-hidden text-contrast"
+  class="w-full h-max bg-darkest font-jakarta transition-colors text-contrast
+  bg-noise {{ this.blendClass }} overflow-x-hidden"
 >
-  <div class="topbar w-full h-20 p-2 flex justify-end px-8 relative"></div>
+  <div class="topbar w-full h-0 lg:h-20"></div>
 
   <vs-search />
 
+  <div class="flex flex-col gap-24">
+
   <section
-    class="rounded-2xl m-12 flex-grow h-3/4 flex overflow-hidden transition-colors shadow-lg outline-border1 outline-1 outline"
+    class="p-2 lg:p-0 lg:m-12 flex-grow h-screen flex overflow-hidden transition-colors"
   >
-    <markdown-editor class="h-full w-full flex-grow"></markdown-editor>
+    <div class="w-full h-full lg:h-3/4 grid lg:grid-rows-1 lg:grid-cols-[49%_2%_49%] lg:grid-flow-row grid-rows-[49%_2%_49%] grid-flow-row">
+      <div
+        class="flex-1 justify-center overflow-auto flex lg:m-1 p-5 flex-col transition-colors text-nowrap text-foreground outline-dashed outline-border1 rounded-2xl"
+      >
+        @if (this.markdown) {
+        <markdown-renderer
+          [parsedContent]="this.markdown.content"
+        ></markdown-renderer>
+        }
+      </div>
+
+      <div></div>
+
+      <div
+        class="h-full w-full grid grid-rows-[6%_94%] bg-darker border-border1 border rounded-2xl shadow-lg overflow-hidden p-2"
+      >
+        <div
+          class="title w-full h-full mb-2 flex items-center justify-center"
+        >
+          <span class="select-none opacity-50">markdown editor</span>
+        </div>
+        <markdown-editor
+          class="overflow-hidden block h-full mb-2 rounded-xl"
+          (result)="markdownChanged($event)"
+          [showRenderer]="false"
+        ></markdown-editor>
+      </div>
+    </div>
   </section>
 
-  <router-outlet />
+  <section class="min-h-screen flex w-full justify-center overflow-x-hidden">
+    <div
+      class="w-full h-full flex flex-grow flex-col items-center justify-center gap-10"
+    >
+      <div class="p-3 w-full lg:w-3/4 flex flex-col gap-5 text-3xl lg:text-4xl">
+        <h4>
+          I couldn't decide on a color scheme, so I thought I'd leave it to
+          <b class="text-accent1">you!</b>
+        </h4>
+        <h4>
+          Click the theme button on the
+          top right corner to search for a theme in Visual Studio marketplace,
+          or pick from one of my favorites:
+        </h4>
+      </div>
+      <carousel class="select-none self-start">
+        @for (ext of placeholders; track ext) {
+        <carousel-item>
+          @defer (when ext.displayName) {
+          <div
+            class="flex flex-col w-full h-full shadow-xl items-center justify-center py-6 px-2 overflow-hidden cursor-pointer bg-dark {{
+              ext.extensionId === this.currentThemeId ? 'bg-highlight' : ''
+            }}"
+            (click)="this.itemSelected(ext)"
+          >
+            <img
+              class="rounded-lg overflow-hidden object-cover block mb-2"
+              [src]="ext.extensionIcon"
+            />
+            <span class="text-foreground">{{ ext.displayName }}</span>
+            <a
+              target="_blank"
+              href="https://marketplace.visualstudio.com/publishers/{{
+                ext.publisher.publisherName
+              }}"
+              class="relative flex items-center text-accent1 flex-nowrap gap-2 border-b-[1px] border-accent1 transition-colors hover:border-contrast hover:text-contrast [&_svg]:transition-colors [&_svg]:fill-accent1 [&_svg]:hover:fill-contrast"
+              ><span>{{ ext.publisher.displayName }}</span><icon-arrow-up-right-from-square
+              class="w-[1rem] aspect-square"
+            /></a
+            >
+          </div>
+          } @placeholder (minimum 5s) {
+            <div class="w-full h-full bg-dark">
+              <skeleton-loader class="w-full h-full"></skeleton-loader>
+            </div>
+          }
+        </carousel-item>
+        }
+      </carousel>
+    </div>
+  </section>
+
+  <!-- <router-outlet /> -->
+
+  <section
+    class="footer w-full justify-self-center p-5 flex items-center justify-center"
+  ></section>
+
+  </div>
 </main>

@@ -71,7 +71,6 @@ export class MdNode {
 
 export function parseMd(mdstr: string): MdNode {
   const rootNode = new MdNode('document');
-  console.log(JSON.stringify(mdstr));
   const lines = mdstr.split('\n');
 
   for (let i = 0; i < lines.length; i++) {
