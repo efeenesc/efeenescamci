@@ -16,7 +16,7 @@ module.exports = {
       },
       fontFamily: {
         "fantasque": "Fantasque Sans Mono, monospace",
-        "jakarta": "Red Hat Display, monospace",
+        "inter": "Inter, monospace",
       },
       backgroundImage: {
         "noise": "url('assets/noise.png')"

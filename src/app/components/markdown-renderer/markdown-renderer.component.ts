@@ -85,6 +85,7 @@ import { MdNode } from '../../classes/markdownparser';
     } @case ('br') {
     <br />
     } } } }
+    <ng-content></ng-content>
   `,
   imports: [],
 })

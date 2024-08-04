@@ -10,15 +10,6 @@
       [parsedContent]="this.mdTree.content"
     ></markdown-renderer>
     }
-
-    <!-- <h1
-      class="font-mono text-7xl text-foreground font-bold transition-colors tracking-tight"
-    >
-      Efe Enes Çamcı
-    </h1>
-    <h3 class="font-mono text-4xl text-accent1 transition-colors">
-      Solutions Architect
-    </h3> -->
   </div>
   }
 
@@ -29,7 +20,7 @@
       class="w-8 h-full flex flex-col pointer-events-none select-none left-0"
     >
       @for (i of this.lineCount; track i) {
-      <span [id]="'line-' + i">{{ i + 1 }}</span>
+      <span class="opacity-50" [id]="'line-' + i">{{ i + 1 }}</span>
       }
     </div>
     <div

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { VsSearchComponent } from './components/vs-search/vs-search.component';
 import { MarkdownEditorComponent } from './components/markdown-editor/markdown-editor.component'
@@ -9,76 +9,79 @@ import { MarkdownRendererComponent } from "./components/markdown-renderer/markdo
 import { CarouselItemComponent } from "./components/carousel-item/carousel-item.component";
 import { VsThemeService } from './services/vs-theme.service';
 import { VSExtension, VSFilterBody } from './types/vs-types';
-import { ArrowUpRightFromSquareComponent } from "./icons/arrow-up-right-from-square/arrow-up-right-from-square.component";
 import { SkeletonLoaderComponent } from "./components/skeleton-loader/skeleton-loader.component";
+import anime from 'animejs';
+import { ThemesComponent } from "./sections/themes/themes.component";
+import { ProjectsComponent } from "./sections/projects/projects.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, VsSearchComponent, MarkdownEditorComponent, MarkdownRendererComponent, CarouselComponent, CarouselItemComponent, ArrowUpRightFromSquareComponent, SkeletonLoaderComponent],
+  imports: [RouterOutlet, VsSearchComponent, MarkdownEditorComponent, MarkdownRendererComponent, CarouselComponent, CarouselItemComponent, SkeletonLoaderComponent, ThemesComponent, ProjectsComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent {
+  @ViewChild('main') set _(content: ElementRef) {
+    this.main = content.nativeElement as HTMLDivElement;
+  }
+  main!: HTMLDivElement;
+
   title = 'efeenescamci';
   blendClass?: string;
   markdown?: MdNode;
-  favoriteThemes = [
-    "c56274bf-4605-4ffe-8302-a1c94ca32e76", //Noir
-    "f5d7ffda-c1d6-4070-ba80-803c705a1ee6", //Monokai Pro
-    "71f8bc18-fb5f-401f-aa46-5a5484e605a7", //Pink-Cat-Boo Theme
-    "469aea7c-9f56-40d2-bf75-2874886663be", //C64 Purple Pro
-    "043cbe69-59a0-4952-a548-2366587a1226", //Github Theme
-    "26a529c9-2654-4b95-a63f-02f6a52429e6", //One Dark Pro
-    "undefined"
-  ];
-  placeholders = [...this.favoriteThemes.map(() => { return new VSExtension(); })]
+  scrollPos: number = 0;
   currentThemeId?: string;
 
-  constructor(private lss : LocalStorageService, private vs : VsThemeService) { }
+  constructor(private lss : LocalStorageService) { }
 
   ngAfterContentInit() {
-    this.currentThemeId = this.lss.get('theme_id')!;
+    this.setMainHeight();
+    this.checkTouchDevice();
 
     this.lss.valueChanges.subscribe((newVal) => {
       if (newVal.key === "theme_val") {
         const themeObj = JSON.parse(newVal.value);
         this.blendClass = themeObj["theme"] === 'dark' ? 'bg-blend-soft-light' : 'bg-blend-hard-light';
-      } else if (newVal.key === "theme_id") {
-        this.currentThemeId = newVal.value;
       }
     })
+  }
 
-    this.placeholders.forEach((_, idx) => {
-      if (this.favoriteThemes[idx] !== "undefined") {
-        let filter = new VSFilterBody();
-        filter.addSearchFilter(this.favoriteThemes[idx]);
-        filter.filters[0].pageSize = 1;
+  isTouchDevice() {
+    return (('ontouchstart' in window) ||
+        (navigator.maxTouchPoints > 0) ||
+        ((navigator as any).msMaxTouchPoints > 0));
+  }
 
-        this.vs.getFilteredResults(filter, 'large').then((val) => {
-          if (val && val.results[0] && val.results[0].extensions[0])
-            this.placeholders[idx] = val.results[0].extensions[0];
-        })
-      }
+  checkTouchDevice() {
+    if (!this.isTouchDevice()) {
+      document.addEventListener('scroll', () => this.animatePageScroll());
+      document.removeEventListener('scroll', () => this.normalPageScroll());
+    } else {
+      document.addEventListener('scroll', () => this.normalPageScroll());
+      document.removeEventListener('scroll', () => this.animatePageScroll());
+    }
+  }
+
+  animatePageScroll() {
+    anime({
+      targets: this.main,
+      translateY: -window.scrollY,
+      easing: 'easeOutExpo',
+      duration: 200
     })
+  }
+
+  normalPageScroll() {
+    this.main.style.transform = "translateY("+ -window.scrollY + "px)";
+  }
+
+  setMainHeight() {
+    const pageHeight = document.getElementById('main')!.clientHeight;
+    document.body.style.height = pageHeight + 'px';
   }
 
   markdownChanged(newMd: MdNode) {
     this.markdown = newMd;
-  }
-
-  itemSelected(ext: VSExtension) {
-    this.vs.changeTheme(ext);
-  }
-
-  async getTheme(id: string) {
-    let filter = new VSFilterBody();
-    filter.addSearchFilter(id);
-    filter.filters[0].pageSize = 1;
-    const response = await this.vs.getFilteredResults(filter);
-    if (response!.results.length === 0)
-      return;
-
-    return response!.results[0];
   }
 }

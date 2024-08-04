@@ -540,6 +540,9 @@ export class VsSearchComponent {
   }
 
   displayFullscreenAnimation(show: boolean) : Promise<void> {
+    document.getElementById('main')!.style.paddingRight = show ? '10px' : '';
+    document.body.style.overflow = show ? 'hidden' : '';
+    
     return new Promise((resolve, _) => {
       const opacity = show ? 10 : 0;
       setTimeout(() => {

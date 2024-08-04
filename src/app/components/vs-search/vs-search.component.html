@@ -1,8 +1,8 @@
 <div
   #themebtn
   id="themebtn"
-  class="rounded-2xl outline-border1 transition-color outline-1 outline bg-dark p-3 h-[10%]
-overflow-hidden cursor-pointer flex gap-2 shadow-lg-alt shadow-darker z-20 fixed top-2 right-2
+  class="rounded-2xl outline-border1 transition-color outline-1 outline bg-dark p-3 h-[10vh]
+overflow-hidden cursor-pointer flex gap-2 shadow-lg-alt z-20 fixed top-2 right-2
 active:rounded-[32px] active:shadow-sm-alt duration-50 active:scale-95"
   style="transition-property: 'border-radius'; transition-duration: 50"
   (click)="this.buttonClicked()"
@@ -34,7 +34,7 @@ active:rounded-[32px] active:shadow-sm-alt duration-50 active:scale-95"
 <div
   #fullscreen
   id="fullscreen"
-  class="fixed top-0 left-0 w-full h-full backdrop-blur-lg bg-opacity-50 opacity-0 z-10 flex items-center justify-center"
+  class="fixed top-0 left-0 w-full h-screen backdrop-blur-lg bg-opacity-50 opacity-0 z-10 flex items-center justify-center"
   (click)="this.clickedOutside($event)"
 >
   <div id="inner-fullscreen" class="w-full lg:w-3/4 h-full flex p-2 lg:p-12 gap-4 flex-col">
@@ -50,7 +50,7 @@ active:rounded-[32px] active:shadow-sm-alt duration-50 active:scale-95"
     
     <div
       id="content"
-      class="transition-color flex-grow flex h-[60%] outline outline-1 outline-border1 relative rounded-lg justify-center"
+      class="transition-color flex-grow flex h-[60vh] outline outline-1 outline-border1 relative rounded-lg justify-center"
     >
       @if (displayLoading) {
       <div
@@ -69,7 +69,7 @@ active:rounded-[32px] active:shadow-sm-alt duration-50 active:scale-95"
         id="contentbody"
         class="bg-dark rounded-lg grid justify-between grid-cols-2 lg:grid-cols-3 auto-rows-[40%] flex-grow gap-5 p-5 overflow-auto"
       >
-      @if (searching) {
+      @if (searching || searchResults === undefined) {
         @for (i of [1,1,1,1,1,1,1,1,1]; track i) {
           <div class="w-full h-full bg-darker outline outline-1 rounded-lg outline-border1 shadow-lg overflow-hidden">
             <skeleton-loader class="w-full h-full"></skeleton-loader>
