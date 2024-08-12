@@ -1,6 +1,6 @@
 <div
   #carousel
-  class="flex w-screen will-change-transform select-none cursor-grab"
+  class="flex w-screen will-change-transform select-none cursor-grab active:cursor-grabbing"
   (mousedown)="this.startDragging($event)"
   (mousemove)="this.drag($event)"
   (mouseup)="this.stopDragging()"

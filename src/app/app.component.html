@@ -1,61 +1,67 @@
-<drawer-component>
-  <vs-menu></vs-menu>
-</drawer-component>
+@if (this.drawerOpened) {
+  <drawer-component (closed)="this.drawerClosed()">
+    <vs-menu></vs-menu>
+  </drawer-component>
+}
 
 <div
   id="massive-container"
-  class="max-h-screen w-screen p-2 pr-5 font-inter overflow-hidden bg-system bg-blend-soft-light fixed"
+  class="max-h-screen w-screen p-2 pr-5 font-inter overflow-hidden bg-system bg-noise bg-blend-soft-light fixed"
 >
   <div
     id="topbar"
     #topbar
-    class="w-full h-5 lg:h-20 overflow-hidden flex py-2 text-inverse relative z-10 gap-5"
+    class="w-full h-[6vh] lg:h-[10vh] overflow-hidden flex py-2 text-inverse relative z-10 gap-5"
   >
     <svg
       viewBox="0 0 101 101"
       xmlns="http://www.w3.org/2000/svg"
       id="website-logo-svg"
-      class="xl:mr-[0.1em]"
+      class="h-full w-auto aspect-square"
     >
       <path
         id="website-logo-path"
-        fillRule="evenodd"
-        clipRule="evenodd"
-        fill="rgba(0,0,0,0)"
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        fill="#ffffffff"
         stroke="#ffffff"
         d="M 50.5 3.6 C 24.598 3.6 3.6 24.598 3.6 50.5 C 3.6 76.402 24.598 97.4 50.5 97.4 C 76.402 97.4 97.4 76.402 97.4 50.5 C 97.4 24.598 76.402 3.6 50.5 3.6 Z M 0.6 50.5 C 0.6 22.941 22.941 0.6 50.5 0.6 C 78.059 0.6 100.4 22.941 100.4 50.5 C 100.4 78.059 78.059 100.4 50.5 100.4 C 22.941 100.4 0.6 78.059 0.6 50.5 Z M 23.377 45.5 L 77.623 45.5 C 75.271 32.658 64.022 22.924 50.5 22.924 C 36.979 22.924 25.729 32.658 23.377 45.5 Z M 88.094 50.504 L 88.047 51.961 C 88.067 51.465 88.076 50.978 88.076 50.5 C 88.076 29.748 71.252 12.924 50.5 12.924 C 29.748 12.924 12.924 29.748 12.924 50.5 C 12.924 71.252 29.748 88.076 50.5 88.076 C 63.012 88.076 74.093 81.957 80.915 72.57 L 80.917 72.568 C 82.314 70.643 83.534 68.581 84.553 66.404 L 75.495 62.165 C 74.748 63.762 73.853 65.276 72.826 66.691 C 67.805 73.6 59.676 78.076 50.5 78.076 C 36.979 78.076 25.729 68.342 23.377 55.5 L 88.01 55.106 L 88.094 50.504 Z"
       />
     </svg>
-    <nav class="flex justify-center gap-4 text-contrast">
+    <nav class="flex justify-center gap-4 text-contrast [&>a]:flex [&>a]:h-full">
       <a href="#">
         <div
-          class="rounded-full flex items-center bg-darkest justify-center py-2 px-6"
+          class="rounded-full flex items-center bg-darkest justify-center py-2 px-8"
         >
           HOME
         </div>
       </a>
       <a href="#">
         <div
-          class="rounded-full flex items-center bg-darkest justify-center py-2 px-6"
+          class="rounded-full flex items-center bg-darkest justify-center py-2 px-8"
         >
           BLOG
         </div> </a
       ><a href="#">
         <div
-          class="rounded-full flex items-center bg-darkest justify-center py-2 px-6"
+          class="rounded-full flex items-center bg-darkest justify-center py-2 px-8"
         >
           PROJECTS
         </div>
       </a>
     </nav>
+    <div class="flex-1"></div>
     <vs-search
-      class="w-full h-full overflow-hidden flex flex-row justify-end"
+      class="w-fit h-full overflow-hidden flex flex-row justify-self-end"
+      [internalStyle]="this.themeBarStyle"
+      (click)="this.themeButtonClicked()"
     />
   </div>
   <div
     id="contentarea"
     #contentarea
-    class="main-container w-full overflow-hidden rounded-[2rem]"
+    class="main-container w-full max-h-screen overflow-hidden rounded-[2rem]"
+    
   >
     <main
       class="w-full [&_section]:bg-darkest transition-colors text-contrast overflow-hidden top-0 left-0 will-change-transform rounded-[2rem]"

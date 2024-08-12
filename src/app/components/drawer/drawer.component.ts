@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import anime from 'animejs';
 import { Subject } from 'rxjs';
 
@@ -20,6 +20,7 @@ export class DrawerComponent {
   darkenedBg!: HTMLDivElement;
 
   @Input() closeEvent?: Subject<any>;
+  @Output() closed: EventEmitter<any> = new EventEmitter();
 
   ngOnInit() {
     document.body.style.overflow = 'hidden';
@@ -38,28 +39,34 @@ export class DrawerComponent {
   }
 
   slideUp() {
-    document.getElementById('darkenedBg')!.style.opacity = '0.4';
+    const dkbg = document.getElementById('darkenedBg')!;
+    const overlay = document.getElementById('mainOverlay')!;
+    dkbg.style.opacity = '0.4';
+    overlay.style.pointerEvents = 'auto';
     
     anime({
       targets: '#drawerMain',
       top: '5vh',
       easing: 'easeOutExpo',
-      duration: 600,
-      complete: () => {
-        // this.slideDown();
-      }
+      duration: 600
     })
   }
 
   slideDown() {
-    document.getElementById('darkenedBg')!.style.removeProperty('opacity');
+    const dkbg = document.getElementById('darkenedBg')!;
+    const overlay = document.getElementById('mainOverlay')!;
+    dkbg.style.removeProperty('opacity');
+    overlay.style.removeProperty('pointer-events');
     document.body.style.removeProperty('overflow');
 
     anime({
       targets: '#drawerMain',
       top: '100vh',
       easing: 'easeInQuad',
-      duration: 200
+      duration: 300,
+      complete: () => {
+        this.closed.emit();
+      }
     })
   }
 
