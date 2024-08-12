@@ -6,8 +6,11 @@ import { ReplaySubject } from 'rxjs';
   selector: 'loading-bar',
   standalone: true,
   imports: [],
-  templateUrl: './loading-bar.component.html',
-  styleUrl: './loading-bar.component.css'
+  template:`
+  <div class="w-full h-full rounded-full outline outline-1 outline-border1 bg-dark overflow-hidden block items-center justify-center">
+    <div id="progressbar" class="h-full bg-blue-500 w-0"></div>
+  </div>
+  `
 })
 export class LoadingBarComponent {
   @Input() set progress(v: number | undefined) { if (v === undefined) return; this.pProgress = v; this.progress$.next(null); }

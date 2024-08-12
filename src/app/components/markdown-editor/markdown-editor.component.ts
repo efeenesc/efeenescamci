@@ -9,8 +9,7 @@ import { MarkdownRendererComponent } from '../markdown-renderer/markdown-rendere
   selector: 'markdown-editor',
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, MarkdownRendererComponent],
-  templateUrl: './markdown-editor.component.html',
-  styleUrl: './markdown-editor.component.css',
+  templateUrl: './markdown-editor.component.html'
 })
 export class MarkdownEditorComponent {
   @ViewChild('markdownArea') set content(content: ElementRef) {

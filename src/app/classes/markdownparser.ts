@@ -41,6 +41,25 @@ export const MdNodeDict: IDictionary<string> = {
   '>': 'bq',
 };
 
+export const typeMap: { [key: string]: MdNodeType } = {
+  '#': 'h1',
+  '##': 'h2',
+  '###': 'h3',
+  '####': 'h4',
+  '#####': 'h5',
+  '######': 'h6',
+  '-': 'ul',
+  '>': 'bq',
+  '*': 'i',
+  '**': 'b',
+  '***': 'bi',
+  '_': 'i',
+  '__': 'b',
+  '___': 'bi',
+  '`': 'code',
+  '~~': 'st',
+};
+
 export const MdSpecialChar: string[] = [
   '#',
   '*',
@@ -68,6 +87,7 @@ export class MdNode {
 
 export function lex(mdstr: string): string[][] {
   let lines: string[] | string[][] = mdstr.split('\n');
+  lines.pop();
   lines = lines.map((line: string) => {
     let tokens: string[] = line.split(' ');
     let processedTokens: string[] = [];
@@ -136,12 +156,13 @@ export function parse(l: string[][]): MdNode {
 
   for (let idx = 0; idx < arrLen; idx++) {
     const line = l[idx];
-    let content = rootNode.content as MdNode[];
+    let rootContent = rootNode.content as MdNode[];
 
     if (line.length === 0) {
       if (prevIsNewline) {
         prevIsNewline = false;
-        content.push(new MdNode('br', ''));
+        console.log('br inserted');
+        rootContent.push(new MdNode('br', ''));
       }
 
       prevIsNewline = true;
@@ -149,16 +170,23 @@ export function parse(l: string[][]): MdNode {
     }
 
     const result = processTokens(line);
-    if (result.nodes[0].type === 'li') {
-      let newNode;
-      if (content[content.length-1].type !== 'ol') {
-        newNode = new MdNode('ol', [...result.nodes]);
-        content.push(newNode);
-      } else {
-        (content[content.length-1].content as MdNode[]).push(...result.nodes);
-      }
-    } else {
-      content.push(...result.nodes);
+
+    switch (result.nodes[0].type) {
+      case "li":
+
+      case "ul":
+        let newNode;
+        if (rootContent[rootContent.length-1].type !== 'ol') {
+          newNode = new MdNode('ol', [...result.nodes]);
+          rootContent.push(newNode);
+        } else {
+          (rootContent[rootContent.length-1].content as MdNode[]).push(...result.nodes);
+        }
+        break;
+
+      default:
+        rootContent.push(...result.nodes);
+        break;
     }
   }
 
@@ -228,25 +256,6 @@ function processTokens(
 }
 
 function getNodeType(token: string): MdNodeType | undefined {
-  const typeMap: { [key: string]: MdNodeType } = {
-    '#': 'h1',
-    '##': 'h2',
-    '###': 'h3',
-    '####': 'h4',
-    '#####': 'h5',
-    '######': 'h6',
-    '-': 'ul',
-    '>': 'bq',
-    '*': 'i',
-    '**': 'b',
-    '***': 'bi',
-    '_': 'i',
-    '__': 'b',
-    '___': 'bi',
-    '`': 'code',
-    '~~': 'st',
-  };
-
   const result = typeMap[token];
 
   if (result)

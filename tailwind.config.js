@@ -12,7 +12,9 @@ module.exports = {
         "accent2": "var(--accent2",
         "border1": "var(--border1)",
         "contrast": "var(--contrast)",
-        "highlight": "var(--highlight)"
+        "inverse": "var(--inverse)",
+        "highlight": "var(--highlight)",
+        "system": "var(--system)"
       },
       fontFamily: {
         "fantasque": "Fantasque Sans Mono, monospace",

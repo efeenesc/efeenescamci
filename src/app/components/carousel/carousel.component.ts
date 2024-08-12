@@ -19,8 +19,7 @@ interface MousePosition {
   selector: 'carousel',
   standalone: true,
   imports: [],
-  templateUrl: './carousel.component.html',
-  styleUrl: './carousel.component.css',
+  templateUrl: './carousel.component.html'
 })
 export class CarouselComponent implements AfterViewInit {
   @ViewChild('carousel') set _carouselDiv(content: ElementRef) {

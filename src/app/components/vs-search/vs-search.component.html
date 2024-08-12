@@ -1,87 +1,13 @@
-<div
-  #themebtn
-  id="themebtn"
-  class="rounded-2xl outline-border1 transition-color outline-1 outline bg-dark p-3 h-[10vh]
-overflow-hidden cursor-pointer flex gap-2 shadow-lg-alt z-20 fixed top-2 right-2
-active:rounded-[32px] active:shadow-sm-alt duration-50 active:scale-95"
-  style="transition-property: 'border-radius'; transition-duration: 50"
-  (click)="this.buttonClicked()"
-  (mousedown)="this.mouseDownEvent()"
-  (mouseup)="this.mouseDownEvent()"
-  (mouseenter)="this.mouseEnteredEvent()"
-  (mouseleave)="this.mouseLeftEvent()"
->
+<div class="flex flex-row gap-2 rounded-full bg-darkest py-2 pl-2 pr-6">
   <img
     id="theme_icon"
-    class="object-contain h-full w-fit rounded-lg"
+    class="object-contain h-full aspect-square rounded-full bg-dark"
     [src]="this.themeIcon"
   />
-  <div class="flex flex-col h-full">
-    <span class="text-foreground transition-color text-nowrap font-extrabold">{{
+  <div class="flex flex-col h-full text-contrast">
+    <span class="transition-color text-nowrap font-extrabold">{{
       this.themeName
     }}</span>
-    <span class="text-accent1 transition-color">{{ this.themeAuthor }}</span>
-    @if (hoverState.value) {
-    <span
-      id="theme-select"
-      class="w-full opacity-0 underline-offset-4 underline"
-      >Pick a new theme</span
-    >
-    }
+    <span class="transition-color">{{ this.themeAuthor }}</span>
   </div>
 </div>
-@if (fullscreen.value) {
-<div
-  #fullscreen
-  id="fullscreen"
-  class="fixed top-0 left-0 w-full h-screen backdrop-blur-lg bg-opacity-50 opacity-0 z-10 flex items-center justify-center"
-  (click)="this.clickedOutside($event)"
->
-  <div id="inner-fullscreen" class="w-full lg:w-3/4 h-full flex p-2 lg:p-12 gap-4 flex-col">
-    <div id="placeholder_card" class="w-1/6 h-0"></div>
-
-    <div class="flex w-full lg:w-1/2 h-12 transition-color bg-dark outline outline-1 outline-border1 rounded-lg p-2 gap-2">
-      <magnifying-glass class="h-full aspect-square p-2 outline-none [&_svg]:fill-contrast" />
-      <input class="w-full bg-dark focus:outline-none"
-        [formControl]="searchControl"
-        placeholder="Search themes in Visual Studio marketplace"
-      />
-    </div>
-    
-    <div
-      id="content"
-      class="transition-color flex-grow flex h-[60vh] outline outline-1 outline-border1 relative rounded-lg justify-center"
-    >
-      @if (displayLoading) {
-      <div
-        id="extrablur"
-        class="absolute top-0 w-full h-full backdrop-blur-lg opacity-0 pointer-events-none justify-center flex items-center z-20"
-      >
-        <div id="inner-container" class="w-3/4">
-          <loading-bar
-            class="h-12 flex rounded-lg"
-            [progress]="this.downloadPercent"
-          ></loading-bar>
-        </div>
-      </div>
-      }
-      <div
-        id="contentbody"
-        class="bg-dark rounded-lg grid justify-between grid-cols-2 lg:grid-cols-3 auto-rows-[40%] flex-grow gap-5 p-5 overflow-auto"
-      >
-      @if (searching || searchResults === undefined) {
-        @for (i of [1,1,1,1,1,1,1,1,1]; track i) {
-          <div class="w-full h-full bg-darker outline outline-1 rounded-lg outline-border1 shadow-lg overflow-hidden">
-            <skeleton-loader class="w-full h-full"></skeleton-loader>
-          </div>
-        }
-      } @else {
-        @for (ext of searchResults!.results[0].extensions; track ext.extensionId) {
-          <vs-card [cardInfo]="ext" (selected)="this.themeSelected(ext, true)"></vs-card>
-        }
-      }
-      </div>
-    </div>
-  </div>
-</div>
-}

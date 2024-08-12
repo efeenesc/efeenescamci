@@ -10,3 +10,14 @@
 #caret {
   animation: blink-caret 1.25s step-end infinite;
 }
+
+.website-logo-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}

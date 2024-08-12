@@ -5,8 +5,7 @@ import { VSExtension } from '../../types/vs-types';
   selector: 'vs-card',
   standalone: true,
   imports: [],
-  templateUrl: './vs-card.component.html',
-  styleUrl: './vs-card.component.css'
+  templateUrl: './vs-card.component.html'
 })
 export class VsCardComponent {
   @Input() cardInfo!: VSExtension;

@@ -220,8 +220,13 @@ export class VsThemeService {
     root.style.setProperty('--accent1', cs.accent1 === cs.text ? cs.accent2 || cs.accent1 : cs.accent1);
     root.style.setProperty('--accent2', cs.accent2);
     root.style.setProperty('--border1', cs.border1);
+
     root.style.setProperty('--contrast', cs.contrast);
+    root.style.setProperty('--inverse', cs.inverse);
+    
     root.style.setProperty('--highlight', cs.highlight);
+    root.style.setProperty('--system', `color-mix(in srgb, ${cs.darkest} 50%, ${cs.system} 50%)`);
+    
     
     this.saveToLocalStorage(cs);
   }

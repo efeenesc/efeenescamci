@@ -4,9 +4,12 @@ import { Component } from '@angular/core';
   selector: 'carousel-item',
   standalone: true,
   imports: [],
-  templateUrl: './carousel-item.component.html',
-  styleUrl: './carousel-item.component.css'
+  template: `
+    <div
+      class="h-full overflow-hidden aspect-square shadow-lg-alt rounded-2xl flex items-center justify-center"
+    >
+      <ng-content></ng-content>
+    </div>
+  `,
 })
-export class CarouselItemComponent {
-
-}
+export class CarouselItemComponent {}

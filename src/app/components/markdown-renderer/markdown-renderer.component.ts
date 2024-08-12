@@ -4,7 +4,6 @@ import { MdNode } from '../../classes/markdownparser';
 @Component({
   selector: 'markdown-renderer',
   standalone: true,
-  styleUrl: './markdown-renderer.component.css',
   template: `
     @if (this.parsedNode !== undefined) { 
     @for (node of this.parsedNode; track node) 

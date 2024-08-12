@@ -20,13 +20,13 @@ body {
 }
 
 ::-webkit-scrollbar {
-  background-color: var(--darkest);
+  background-color: var(--system);
   width: 10px;
   height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: var(--darkest);
+  background-color: var(--system);
 }
 
 ::-webkit-scrollbar-thumb {
