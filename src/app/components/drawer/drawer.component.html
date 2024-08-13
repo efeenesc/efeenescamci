@@ -8,14 +8,24 @@
     class="w-4/5 h-full p-2 rounded-[2rem] bg-[#1c1c1e] text-contrast relative top-full left-0 z-20 flex flex-col justify-center items-center"
   >
     <div class="flex w-full h-full flex-col">
-      <div class="flex justify-center">
-        <div
-          class="w-full h-4 justify-center items-center flex cursor-grab active:cursor-grabbing"
-        >
+      <div
+        class="flex justify-center cursor-grab active:cursor-grabbing"
+        (mousedown)="this.startDragging($event)"
+        (mousemove)="this.drag($event)"
+        (mouseup)="this.stopDragging()"
+        (mouseleave)="this.stopDragging()"
+      >
+        <div class="w-full h-4 justify-center items-center flex">
           <div class="w-1/5 h-2 bg-[#616368] rounded-full"></div>
         </div>
-        <div class="self-end">
-          <div class="rounded-full aspect-square h-12 bg-[#2c2c2e]">X</div>
+        <div
+          class="self-end rounded-full aspect-square h-14 bg-[#2c2c2e] cursor-pointer"
+          (click)="this.clickedOutside()"
+        >
+          <xmark
+            class="fill-[#616368]"
+            [internalClasses]="'h-full w-full p-2'"
+          />
         </div>
       </div>
       <ng-content></ng-content>

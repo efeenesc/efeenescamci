@@ -5,7 +5,7 @@
     [src]="this.themeIcon"
   />
   <div class="flex flex-col h-full text-contrast justify-center">
-    <span class="transition-color text-nowrap font-extrabold">{{
+    <span class="transition-color text-nowrap font-extrabold {{this.internalStyle == '' ? '' : 'font-normal'}}">{{
       this.themeName
     }}</span>
     @if (this.internalStyle == '') {

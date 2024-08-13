@@ -82,6 +82,7 @@ export class CarouselComponent implements AfterViewInit {
       console.log('YOOO');
     });
   }
+  
   getDragPosition(e: MouseEvent | TouchEvent): number {
     if (e instanceof TouchEvent) {
       return e.changedTouches[0].clientX - this.carouselRect.left;
