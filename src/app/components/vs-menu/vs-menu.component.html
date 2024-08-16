@@ -22,7 +22,7 @@
       id="content"
       class="transition-color flex-grow flex h-full relative rounded-lg justify-center"
     >
-      @if (displayLoading) {
+      <!-- @if (displayLoading) {
       <div
         id="extrablur"
         class="absolute top-0 w-full h-full backdrop-blur-lg opacity-0 pointer-events-none justify-center flex items-center z-20"
@@ -34,10 +34,10 @@
           ></loading-bar>
         </div>
       </div>
-      }
+      } -->
       <div
         id="contentbody"
-        class="grid justify-between grid-cols-2 lg:grid-cols-3 auto-rows-[40%] pt-4 flex-grow gap-5"
+        class="grid justify-between grid-cols-2 lg:grid-cols-3 auto-rows-[50vh] lg:auto-rows-[30vh] pt-4 flex-grow gap-5"
       >
         @if (searching || searchResults === undefined) { @for (i of
         [1,1,1,1,1,1,1,1,1]; track i) {
@@ -51,6 +51,7 @@
         <vs-card
         class="w-full h-full"
           [cardInfo]="ext"
+          [cardType]="'large'"
           (selected)="this.themeSelected(ext, true)"
         ></vs-card>
         } }

@@ -5,6 +5,10 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   styles: `
+  ::host {
+    overflow: hidden;
+    display: block;
+  }
   div {
     background: linear-gradient(0deg, #ffffff00, #ffffff00, #bbbbbb52, #ffffff00, #ffffff00);
     background-size: 400% 400%;

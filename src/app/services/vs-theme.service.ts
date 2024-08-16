@@ -131,15 +131,15 @@ export class VsThemeService {
     this.changeColorVariables(colorScheme);
   }
 
-  async getIcon(ext: vst.VSExtension, iconSizePreference: 'small' | 'large' = 'small'): Promise<string | undefined> {
-    function blobToBase64(blob: Blob): Promise<string | null | ArrayBuffer> {
-      return new Promise((resolve, _) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(blob);
-      });
-    }
+  blobToBase64(blob: Blob): Promise<string | null | ArrayBuffer> {
+    return new Promise((resolve, _) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.readAsDataURL(blob);
+    });
+  }
 
+  async getIcon(ext: vst.VSExtension, iconSizePreference: 'small' | 'large' = 'small'): Promise<string | undefined | boolean> {
     let extUri;
 
     if (iconSizePreference === 'small') {
@@ -154,15 +154,15 @@ export class VsThemeService {
       )?.source;
     }
     
-    if (!extUri) return;
+    if (!extUri) return false;
 
     const res = await fetch(extUri);
     const blob = await res.blob();
-    const base64 = await blobToBase64(blob);
+    const base64 = await this.blobToBase64(blob);
 
     if (typeof base64 === 'string') return base64;
 
-    return;
+    return false;
   }
 
   readPlistFile(filestr: string, colorTheme: ColorTheme): ColorScheme {

@@ -6,11 +6,12 @@ import { LocalStorageService } from '../../services/local-storage.service';
 import { ArrowUpRightFromSquareComponent } from "../../icons/arrow-up-right-from-square/arrow-up-right-from-square.component";
 import { CarouselItemComponent } from "../../components/carousel-item/carousel-item.component";
 import { SkeletonLoaderComponent } from "../../components/skeleton-loader/skeleton-loader.component";
+import { VsCardComponent } from "../../components/vs-card/vs-card.component";
 
 @Component({
   selector: 'themes-section',
   standalone: true,
-  imports: [CarouselComponent, ArrowUpRightFromSquareComponent, CarouselItemComponent, SkeletonLoaderComponent],
+  imports: [CarouselComponent, ArrowUpRightFromSquareComponent, CarouselItemComponent, SkeletonLoaderComponent, VsCardComponent],
   templateUrl: './themes.component.html',
   styles: `
   :host {
@@ -57,7 +58,6 @@ export class ThemesComponent {
       }
     })
   }
-  
 
   async getTheme(id: string) {
     let filter = new VSFilterBody();
