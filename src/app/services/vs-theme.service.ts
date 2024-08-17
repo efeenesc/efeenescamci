@@ -7,6 +7,7 @@ import { ScopeFinder, ScopeFinderType } from '../classes/scopefinder';
 import JSZip from 'jszip';
 import { ColorScheme, ColorTheme } from '../classes/colorscheme';
 import { LocalStorageService } from './local-storage.service';
+import { ThemeMetadata, ThemePackage } from '../types/vs/manifest';
 
 export type iconDownloadConfig = 'none' | 'small' | 'large'
 
@@ -49,7 +50,7 @@ export class VsThemeService {
 
   getPackageFile = (
     requestedPackage: string,
-    progress?: (loaded: number, total: number) => void
+    progressCallback?: (loaded: number, total: number) => void
   ): Promise<JSZip> => {
     return new Promise((resolve, reject) => {
       const client = new XMLHttpRequest();
@@ -57,8 +58,8 @@ export class VsThemeService {
       client.responseType = 'arraybuffer';
 
       client.onprogress = (prog) => {
-        if (prog.lengthComputable && progress) {
-          progress(prog.loaded, prog.total);
+        if (prog.lengthComputable && progressCallback) {
+          progressCallback(prog.loaded, prog.total);
         }
       };
 
@@ -98,15 +99,9 @@ export class VsThemeService {
     const packagemanifest = await zip.files['extension/package.json'].async(
       'string'
     );
-    const pkg_json = JSON.parse(packagemanifest);
+    const pkg_json = JSON.parse(packagemanifest) as ThemePackage;
     const pkg_logo_path: string = pkg_json.icon;
     const pkg_themes = pkg_json.contributes.themes;
-
-    const selectedtheme = pkg_themes[0];
-
-    const themestr = selectedtheme.path as string;
-
-    const colorTheme = selectedtheme.uiTheme === 'vs-dark' ? 'dark' : 'light';
 
     const themeName = pkg_json.displayName;
     const themeAuthor = pkg_json.publisher;
@@ -115,20 +110,47 @@ export class VsThemeService {
     const themeIcon = await zip.files[`extension/${pkg_logo_path}`].async(
       'base64'
     );
-    const themeFile = await zip.files[
-      `extension${themestr.substring(1, themestr.length)}`
-    ].async('string');
 
     this._lss.set('theme_name', themeName);
     this._lss.set('theme_author', themeAuthor);
     this._lss.set('theme_id', themeId);
     this._lss.set('theme_icon', themeIcon);
 
-    const colorScheme = themeFile.substring(0, 5).includes('<?xml')
-      ? this.readPlistFile(themeFile, colorTheme as ColorTheme)!
-      : this.readJSONFile(themeFile, colorTheme as ColorTheme)!;
+    const themes = await this.readThemes(pkg_themes, zip);
+    this._lss.set("themes", JSON.stringify(themes));
+    this.changeColorVariables(themes[0]);
+  }
 
-    this.changeColorVariables(colorScheme);
+  private async readThemes(themesList: ThemeMetadata[], zip: JSZip): Promise<ColorScheme[]> {
+    const themePalettes: ColorScheme[] = await Promise.all(
+      themesList.map(async (theme) => {
+        const colorTheme = theme.uiTheme === 'vs-dark' ? 'dark' : 'light';
+
+        const themeFile = await zip.files[
+          `extension${theme.path.substring(1, theme.path.length)}` // Discard the . at the start of a path, e.g.: ./themes/1.json
+        ].async('string');
+
+        const colorScheme = themeFile.substring(0, 5).includes('<?xml')
+        ? this.readPlistFile(themeFile, colorTheme as ColorTheme)!
+        : this.readJSONFile(themeFile, colorTheme as ColorTheme)!;
+
+        colorScheme.name = theme.label;
+        return colorScheme;
+    }));
+
+    return themePalettes;
+  }
+  
+  async changeThemeJson(themeJson: string) {
+    if (!themeJson || themeJson.length <= 0)
+      return;
+
+    try {
+      const themeObj = JSON.parse(themeJson) as ColorScheme;
+      this.changeColorVariables(themeObj);
+    } catch (ex) {
+      console.error(`Error while applying theme: ${ex}`);
+    }
   }
 
   blobToBase64(blob: Blob): Promise<string | null | ArrayBuffer> {
@@ -165,7 +187,7 @@ export class VsThemeService {
     return false;
   }
 
-  readPlistFile(filestr: string, colorTheme: ColorTheme): ColorScheme {
+  private readPlistFile(filestr: string, colorTheme: ColorTheme): ColorScheme {
     const pfile = plist.parse(filestr);
 
     const sf = new ScopeFinder('plist', pfile);
@@ -185,7 +207,7 @@ export class VsThemeService {
     return cs;
   }
 
-  readJSONFile(filestr: string, colorTheme: ColorTheme): ColorScheme {
+  private readJSONFile(filestr: string, colorTheme: ColorTheme): ColorScheme {
     const theme_json = JSON.parse(
       stripJsonComments(filestr, { trailingCommas: true })
     );
@@ -231,7 +253,7 @@ export class VsThemeService {
     this.saveToLocalStorage(cs);
   }
 
-  saveToLocalStorage(cs: ColorScheme): void {
+  private saveToLocalStorage(cs: ColorScheme): void {
     const jsonVal = JSON.stringify(cs);
     this._lss.set("theme_val", jsonVal);
   }

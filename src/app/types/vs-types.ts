@@ -1,16 +1,10 @@
 export class VSFilterBody {
   constructor() {
-    const themeFilter = new VSCriteria;
-    themeFilter.filterType = 5;
-    themeFilter.value = "themes";
+    const themeFilter: VSCriteria = { filterType: 5, value: "themes" };
 
-    const vscodeFilter = new VSCriteria;
-    vscodeFilter.filterType = 8;
-    vscodeFilter.value = "Microsoft.VisualStudio.Code";
+    const vscodeFilter: VSCriteria = { filterType: 8, value: "Microsoft.VisualStudio.Code" }
 
-    const defaultFilter = new VSCriteria;
-    defaultFilter.filterType = 12;
-    defaultFilter.value = "4096";
+    const defaultFilter: VSCriteria = { filterType: 12, value: "4096" }
 
     const empty = new VSFilters;
     this.filters.push(empty);
@@ -30,9 +24,7 @@ export class VSFilterBody {
   }
 
   addSearchFilter(filterFor: string) {
-    const newFilter = new VSCriteria;
-    newFilter.filterType = 10;
-    newFilter.value = filterFor;
+    const newFilter: VSCriteria = { filterType: 10, value: filterFor };
     this.addFilter(newFilter);
   }
 
@@ -49,9 +41,9 @@ export class VSFilters {
   sortOrder: number = 0;
 }
 
-export class VSCriteria {
-  filterType!: number;
-  value!: string;
+export interface VSCriteria {
+  filterType: number;
+  value: string;
 };
 
 export class VSResultBody {
@@ -67,73 +59,73 @@ export class VSResultBody {
   };
 }
 
-export class VSResult {
-  extensions: VSExtension[] = [];
+export interface VSResult {
+  extensions: VSExtension[];
   pagingToken: any;
-  resultMetadata: VSExtensionMetadataBody[] = [];
+  resultMetadata: VSExtensionMetadataBody[];
 }
 
-export class VSExtension {
-  publisher!: VSExtensionPublisherInfo;
-  extensionId!: string;
-  extensionName!: string;
-  displayName!: string;
-  flags!: string;
-  lastUpdated!: string;
-  publishedDate!: string;
-  releaseDate!: string;
-  shortDescription!: string;
-  versions: VSExtensionVersions[] = [];
-  categories: string[] = [];
-  tags: string[] = [];
-  statistics: VSExtensionStat[] = [];
-  deploymentType!: number;
+export interface VSExtension {
+  publisher: VSExtensionPublisherInfo;
+  extensionId: string;
+  extensionName: string;
+  displayName: string;
+  flags: string;
+  lastUpdated: string;
+  publishedDate: string;
+  releaseDate: string;
+  shortDescription: string;
+  versions: VSExtensionVersions[];
+  categories: string[];
+  tags: string[];
+  statistics: VSExtensionStat[];
+  deploymentType: number;
 
   // extensionIcon is not included in the response from VS. The icon is downloaded via a GET and the Base64 string is saved here.
   // For convenience extensionIcon may be set to a boolean false value to indicate that there is no extensionIcon
   extensionIcon?: string | boolean;
 }
 
-export class VSExtensionPublisherInfo {
-  publisherId!: string;
-  publisherName!: string;
-  displayName!: string;
-  flags!: string;
-  domain!: any;
-  isDomainVerified!: boolean
+export interface VSExtensionPublisherInfo {
+  publisherId: string;
+  publisherName: string;
+  displayName: string;
+  flags: string;
+  domain: any;
+  isDomainVerified: boolean
 }
 
-export class VSExtensionVersions {
-  version!: string;
-  flags!: string;
-  lastUpdated!: string;
-  files!: VSExtensionVersionFiles[];
+export interface VSExtensionVersions {
+  version: string;
+  flags: string;
+  lastUpdated: string;
+  files: VSExtensionVersionFiles[];
   properties?: VSExtensionVersionProps[];
   assetUri?: string;
   fallbackAssetUri?: string;
 }
 
-export class VSExtensionVersionFiles {
-  assetType!: string;
-  source!: string;
+export interface VSExtensionVersionFiles {
+  assetType: string;
+  source: string;
 }
 
-export class VSExtensionVersionProps {
-  key!: string;
-  value: string = "";
+export interface VSExtensionVersionProps {
+  key: string;
+  value: string;
 }
 
-export class VSExtensionStat {
-  statisticName!: string;
-  value!: number;
+export interface VSExtensionStat {
+  statisticName: string;
+  value: number;
 }
 
-export class VSExtensionMetadataBody {
-  metadataType!: string;
-  metadataItems: VSExtensionMetadataItem[] = [];
+export interface VSExtensionMetadataBody {
+  metadataType: string;
+  metadataItems: VSExtensionMetadataItem[];
 }
 
-export class VSExtensionMetadataItem {
-  name!: string;
-  count!: number;
+export interface VSExtensionMetadataItem {
+  name: string;
+  count: number;
 }

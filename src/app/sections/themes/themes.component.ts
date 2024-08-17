@@ -31,7 +31,7 @@ export class ThemesComponent {
     "26a529c9-2654-4b95-a63f-02f6a52429e6", //One Dark Pro
     "undefined"
   ];
-  placeholders = [...this.favoriteThemes.map(() => { return new VSExtension(); })]
+  placeholders = [...this.favoriteThemes.map(() => { return {} as VSExtension; })]
   currentThemeId?: string;
 
   constructor(private lss : LocalStorageService, private vs : VsThemeService) {}

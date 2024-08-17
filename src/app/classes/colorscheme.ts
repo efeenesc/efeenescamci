@@ -1,6 +1,8 @@
 export type ColorTheme = 'dark' | 'light';
 
 export class ColorScheme {
+
+  // Constructor configures fallbacks and essential colors based on light/dark theme
   constructor(theme: ColorTheme) {
     this.theme = theme;
     this.contrast = this.theme === 'dark' ? "#fff" : "#000";
@@ -10,7 +12,9 @@ export class ColorScheme {
     this.border1 = this.theme === 'dark' ? "#30363d" : "#d3d3d3";
     this.system = this.theme === 'dark' ? "#0d0d0d" : "#1c1c1e";
   }
-  // Required to configure fallbacks
+  
+  name!: string;
+
   theme!: ColorTheme;
   darkest!: string;
   darker!: string;
