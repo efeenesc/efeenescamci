@@ -282,11 +282,11 @@ export class VsThemeService {
     cs.darker = '#c7c4a8';
     cs.dark = '#c7c4a8';
     cs.text = '#3d3929';
-    cs.accent1 = "#472727";
+    cs.accent1 = "#ad8b63";
     cs.accent2 = "#4b4848";
     cs.border1 = "#747474";
     cs.contrast = "#000000";
-    cs.highlight = "#935151";
+    cs.highlight = "#f3c092";
 
     this.changeColorVariables(cs);
     this.setThemeInternal({

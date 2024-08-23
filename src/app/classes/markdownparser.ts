@@ -161,7 +161,6 @@ export function parse(l: string[][]): MdNode {
     if (line.length === 0) {
       if (prevIsNewline) {
         prevIsNewline = false;
-        console.log('br inserted');
         rootContent.push(new MdNode('br', ''));
       }
 

@@ -46,6 +46,9 @@ export class CarouselComponent implements AfterViewInit {
 
   ngOnInit() {
     window.addEventListener('resize', () => this.onWindowSizeChange());
+  }
+  
+  ngOnViewInit() {
     this.children.changes.subscribe((children: QueryList<any>) => {
       this.childrenChanged(children);
     });
@@ -79,7 +82,7 @@ export class CarouselComponent implements AfterViewInit {
 
   childrenChanged(children: QueryList<any>) {
     children.forEach((child) => {
-      console.log('YOOO');
+      return;
     });
   }
   
@@ -133,8 +136,6 @@ export class CarouselComponent implements AfterViewInit {
 
     const { x: curX, time: curTime } = this.currentMousePos;
     const { x: prevX, time: prevTime } = this.prevMousePos;
-
-    console.log(curX, prevX)
 
     const dt = curTime - prevTime;
     const dx = curX - prevX;

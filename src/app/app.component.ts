@@ -62,7 +62,11 @@ export class AppComponent {
   constructor(private lss: LocalStorageService, private vsSvc: VsThemeService) {}
 
   ngOnInit() {
-    this.restoreLastTheme();
+    // Reset to default theme if the current theme is default theme
+    // This is to make sure any changes to the default theme are reflected on-device
+    let resetToDefaultTheme = this.checkIfDefaultThemeEnabled();
+    this.restoreLastTheme(resetToDefaultTheme)
+
     this.checkTouchDevice();
   }
 
@@ -81,12 +85,20 @@ export class AppComponent {
     });
   }
 
-  restoreLastTheme() {
+  checkIfDefaultThemeEnabled(): boolean {
+    const themeName = this.lss.get('theme_name');
+    const themeAuthor = this.lss.get('theme_author');
+
+    return themeName === 'Beige' && themeAuthor === 'efeenesc';
+  }
+
+  restoreLastTheme(resetToDefault: boolean = false) {
     const cs = this.vsSvc.getFromLocalStorage();
-    if (!cs) {
-      this.vsSvc.setDefaultColorScheme();
-      return;
+
+    if (!cs || resetToDefault) {
+      return this.vsSvc.setDefaultColorScheme();
     }
+
     this.vsSvc.changeColorVariables(cs);
   }
 

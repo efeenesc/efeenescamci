@@ -151,8 +151,6 @@ export class DrawerComponent implements AfterViewInit {
     const { y: curY, time: curTime } = this.currentMousePos;
     const { y: prevY, time: prevTime } = this.prevMousePos;
 
-    console.log(curY, prevY)
-
     const dt = curTime - prevTime;
     const dx = curY - prevY;
 
