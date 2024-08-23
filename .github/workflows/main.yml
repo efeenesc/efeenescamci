@@ -26,4 +26,4 @@ jobs:
       run: npm run build
 
     - name: Copy to /var/www/dev.efeenescamci.com
-      run: yes | cp -rf ./dist/efeenescamci/browser/ /var/www/dev.efeenescamci.com/
+      run: yes | cp -rf ./dist/efeenescamci/browser/* /var/www/dev.efeenescamci.com/
