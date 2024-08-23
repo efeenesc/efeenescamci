@@ -1,5 +1,4 @@
 name: Deploy site locally
-name: Deploy site locally
 
 on:
   push:
