@@ -278,15 +278,15 @@ export class VsThemeService {
   setDefaultColorScheme(): void {
     let cs = new ColorScheme('light');
 
-    cs.darkest = '#c6c4ba';
-    cs.darker = '#737163';
-    cs.dark = '#ded8c4';
+    cs.darkest = '#ded8c4';
+    cs.darker = '#c7c4a8';
+    cs.dark = '#c7c4a8';
     cs.text = '#3d3929';
-    cs.accent1 = "#333333";
+    cs.accent1 = "#472727";
     cs.accent2 = "#4b4848";
     cs.border1 = "#747474";
     cs.contrast = "#000000";
-    cs.highlight = "#b84e4e";
+    cs.highlight = "#935151";
 
     this.changeColorVariables(cs);
     this.setThemeInternal({
