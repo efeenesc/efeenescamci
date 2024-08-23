@@ -83,7 +83,10 @@ export class AppComponent {
 
   restoreLastTheme() {
     const cs = this.vsSvc.getFromLocalStorage();
-    if (!cs) return;
+    if (!cs) {
+      this.vsSvc.setDefaultColorScheme();
+      return;
+    }
     this.vsSvc.changeColorVariables(cs);
   }
 
