@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --darkest: #000000;
-  --darker: #ffffff;
-  --dark: #f0f0f0;
-  --foreground: #333333;
+  --darkest: #c6c4ba;
+  --darker: #737163;
+  --dark: #ded8c4;
+  --foreground: #3d3929;
   --accent1: #333333;
-  --accent2: #333333;
+  --accent2: #4b4848;
   --border1: #747474;
   --contrast: #000000;
-  --highlight: #ff5b5b;
+  --highlight: #b84e4e;
 }
 
 html,

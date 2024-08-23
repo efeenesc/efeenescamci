@@ -9,12 +9,20 @@ import { ColorScheme, ColorTheme } from '../classes/colorscheme';
 import { LocalStorageService } from './local-storage.service';
 import { ThemeMetadata, ThemePackage } from '../types/vs/manifest';
 
-export type iconDownloadConfig = 'none' | 'small' | 'large'
+export type iconDownloadConfig = 'none' | 'small' | 'large';
+
+export interface ThemeInfo {
+  themeId: string,
+  themeName: string,
+  themeAuthor: string,
+  themeIcon: string
+};
 
 @Injectable({
   providedIn: 'root',
 })
 export class VsThemeService {
+  
   constructor(private _lss: LocalStorageService) {}
 
   getFilteredResults = async (
@@ -111,14 +119,28 @@ export class VsThemeService {
       'base64'
     );
 
-    this._lss.set('theme_name', themeName);
-    this._lss.set('theme_author', themeAuthor);
-    this._lss.set('theme_id', themeId);
-    this._lss.set('theme_icon', themeIcon);
+    const themeInfo: ThemeInfo = {
+      themeId,
+      themeName,
+      themeAuthor,
+      themeIcon
+    }
 
     const themes = await this.readThemes(pkg_themes, zip);
-    this._lss.set("themes", JSON.stringify(themes));
     this.changeColorVariables(themes[0]);
+
+    this.setThemeInternal(themeInfo, themes);
+  }
+
+  private setThemeInternal(info: ThemeInfo, themes?: ColorScheme[]) {
+    this._lss.set('theme_name', info.themeName);
+    this._lss.set('theme_author', info.themeAuthor);
+    this._lss.set('theme_id', info.themeId);
+    this._lss.set('theme_icon', info.themeIcon);
+
+    if (themes) {
+      this._lss.set("themes", JSON.stringify(themes));
+    }
   }
 
   private async readThemes(themesList: ThemeMetadata[], zip: JSZip): Promise<ColorScheme[]> {
@@ -251,6 +273,28 @@ export class VsThemeService {
     
     
     this.saveToLocalStorage(cs);
+  }
+
+  setDefaultColorScheme(): void {
+    let cs = new ColorScheme('light');
+
+    cs.darkest = '#c6c4ba';
+    cs.darker = '#737163';
+    cs.dark = '#ded8c4';
+    cs.text = '#3d3929';
+    cs.accent1 = "#333333";
+    cs.accent2 = "#4b4848";
+    cs.border1 = "#747474";
+    cs.contrast = "#000000";
+    cs.highlight = "#b84e4e";
+
+    this.changeColorVariables(cs);
+    this.setThemeInternal({
+      themeId: "",
+      themeAuthor: "efeenesc",
+      themeIcon: "",
+      themeName: "Beige",
+    })
   }
 
   private saveToLocalStorage(cs: ColorScheme): void {
