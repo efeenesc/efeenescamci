@@ -8,13 +8,13 @@ import { MdNode } from './classes/markdownparser';
 import { MarkdownRendererComponent } from './components/markdown-renderer/markdown-renderer.component';
 import { CarouselItemComponent } from './components/carousel-item/carousel-item.component';
 import { VsThemeService } from './services/vs-theme.service';
-import { VSExtension, VSFilterBody } from './types/vs-types';
 import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-loader.component';
 import anime from 'animejs';
 import { ThemesComponent } from './sections/themes/themes.component';
 import { ProjectsComponent } from './sections/projects/projects.component';
 import { DrawerComponent } from './components/drawer/drawer.component';
 import { VsMenuComponent } from "./components/vs-menu/vs-menu.component";
+import { TopBarComponent } from './components/top-bar/top-bar.component';
 
 @Component({
   selector: 'app-root',
@@ -30,7 +30,8 @@ import { VsMenuComponent } from "./components/vs-menu/vs-menu.component";
     ThemesComponent,
     ProjectsComponent,
     DrawerComponent,
-    VsMenuComponent
+    VsMenuComponent,
+    TopBarComponent
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',

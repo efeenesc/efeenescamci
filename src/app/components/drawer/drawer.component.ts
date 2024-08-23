@@ -24,8 +24,11 @@ export class DrawerComponent implements AfterViewInit {
   }
   darkenedBg!: HTMLDivElement;
 
-  @Input() closeEvent?: Subject<any>;
-  @Output() closed: EventEmitter<any> = new EventEmitter();
+  @Input()
+  closeEvent?: Subject<any>;
+  
+  @Output()
+  closed: EventEmitter<any> = new EventEmitter();
 
   isDragging: boolean = false;
   dragStartTime: number = 0;
