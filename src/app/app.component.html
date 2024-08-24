@@ -6,7 +6,7 @@
 
 <div
   id="massive-container"
-  class="h-screen max-h-screen w-screen p-2 pr-5 font-inter overflow-hidden bg-system bg-noise bg-blend-soft-light fixed"
+  class="h-screen max-h-screen w-screen p-1 lg:p-2 lg:pr-5 font-inter overflow-hidden bg-system bg-noise bg-blend-soft-light fixed"
 >
   <top-bar [themeBarStyle]="this.themeBarStyle" (themeButtonClicked)="this.themeButtonClicked()"></top-bar>
   <div
@@ -29,7 +29,7 @@
             class="w-full grid h-[80vh] lg:grid-rows-1 lg:grid-cols-[49%_2%_49%] lg:grid-flow-row grid-rows-[49%_2%_49%] grid-flow-row"
           >
             <div
-              class="flex-1 justify-center overflow-auto flex p-1 lg:m-1 lg:p-5 flex-col transition-colors text-nowrap text-foreground outline-dashed outline-border1 rounded-2xl"
+              class="flex-1 justify-center overflow-auto flex p-1 lg:m-1 lg:p-5 flex-col transition-colors text-nowrap text-foreground outline-dashed outline-border1 rounded-xl lg:rounded-2xl"
             >
               @if (this.markdown) {
               <markdown-renderer

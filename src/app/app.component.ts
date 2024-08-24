@@ -15,6 +15,7 @@ import { ProjectsComponent } from './sections/projects/projects.component';
 import { DrawerComponent } from './components/drawer/drawer.component';
 import { VsMenuComponent } from "./components/vs-menu/vs-menu.component";
 import { TopBarComponent } from './components/top-bar/top-bar.component';
+import { ScrollObserverService } from './services/scroll-observer.service';
 
 @Component({
   selector: 'app-root',
@@ -42,11 +43,6 @@ export class AppComponent {
   }
   main!: HTMLDivElement;
 
-  @ViewChild('topbar') set _tb(content: ElementRef) {
-    this.topbar = content.nativeElement as HTMLDivElement;
-  }
-  topbar!: HTMLDivElement;
-
   @ViewChild('contentarea') set _ca(content: ElementRef) {
     this.contentarea = content.nativeElement as HTMLDivElement;
   }
@@ -56,11 +52,10 @@ export class AppComponent {
   blendClass?: string;
   markdown?: MdNode;
   scrollPos: number = 0;
-  topbarExtended: boolean = true;
   themeBarStyle: string = '';
   drawerOpened: boolean = false;
 
-  constructor(private lss: LocalStorageService, private vsSvc: VsThemeService) {}
+  constructor(private lss: LocalStorageService, private vsSvc: VsThemeService, private soSvc: ScrollObserverService) {}
 
   ngOnInit() {
     // Reset to default theme if the current theme is default theme
@@ -113,11 +108,13 @@ export class AppComponent {
 
   checkTouchDevice() {
     if (!this.isTouchDevice()) {
-      document.addEventListener('scroll', () => this.animatePageScroll());
-      document.removeEventListener('scroll', () => this.normalPageScroll());
+      this.soSvc.scrollObservable.subscribe((newYval) => {
+        this.animatePageScroll(newYval);
+      });
     } else {
-      document.addEventListener('scroll', () => this.normalPageScroll());
-      document.removeEventListener('scroll', () => this.animatePageScroll());
+      this.soSvc.scrollObservable.subscribe((newYval) => {
+        this.normalPageScroll(newYval);
+      });
     }
   }
 
@@ -129,11 +126,10 @@ export class AppComponent {
     this.drawerOpened = true;
   }
 
-  animatePageScroll() {
-    this.trackTopBar();
+  animatePageScroll(scrollY: number) {
     anime({
       targets: this.main,
-      translateY: -window.scrollY,
+      translateY: -scrollY,
       easing: 'easeOutExpo',
       duration: 200,
     });
@@ -161,39 +157,8 @@ export class AppComponent {
     }, 50);
   }
 
-  normalPageScroll() {
-    this.trackTopBar();
-    this.main.style.transform = 'translateY(' + -window.scrollY + 'px)';
-  }
-
-  trackTopBar() {
-    if (window.scrollY > 50) {
-
-      if (this.topbarExtended)
-        this.playTopBarAnimation(false);
-
-    } else {
-
-      if (!this.topbarExtended)
-        this.playTopBarAnimation(true);
-      
-    }
-  }
-
-  playTopBarAnimation(forward: boolean) {
-    this.topbarExtended = forward;
-    const newHeight = forward ? '10vh' : '5vh';
-
-    const themeBarStyle = forward ? '' : 'padding: 0; padding-right: 10px; font-size: 1em';
-
-    this.themeBarStyle = themeBarStyle;
-
-    anime({
-      targets: '#topbar',
-      height: newHeight,
-      duration: 100,
-      easing: 'easeInOutQuad'
-    })
+  normalPageScroll(scrollY: number) {
+    this.main.style.transform = 'translateY(' + -scrollY + 'px)';
   }
 
   setMainHeight() {

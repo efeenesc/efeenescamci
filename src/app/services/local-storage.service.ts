@@ -10,7 +10,7 @@ type KeyValuePair = {
   providedIn: 'root'
 })
 export class LocalStorageService {
-  valueChanges: Subject<KeyValuePair> = new Subject<KeyValuePair>;
+  valueChanges: Subject<KeyValuePair> = new Subject<KeyValuePair>();
   constructor() { }
   
   get(variableName: string) : string | null {
