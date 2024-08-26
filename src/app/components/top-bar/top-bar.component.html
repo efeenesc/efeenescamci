@@ -1,0 +1,37 @@
+<div
+    id="topbar"
+    #topbar
+    class="w-full h-[6vh] lg:h-[10vh] overflow-hidden flex py-2 text-inverse relative z-10 gap-5"
+  >
+    <site-logo></site-logo>
+    <nav
+      class="flex justify-center gap-4 text-contrast [&>a]:flex [&>a]:h-full"
+    >
+      <a href="#">
+        <div
+          class="rounded-full flex items-center bg-darkest justify-center py-2 px-8"
+        >
+          HOME
+        </div>
+      </a>
+      <a href="#">
+        <div
+          class="rounded-full flex items-center bg-darkest justify-center py-2 px-8"
+        >
+          BLOG
+        </div> </a
+      ><a href="#">
+        <div
+          class="rounded-full flex items-center bg-darkest justify-center py-2 px-8"
+        >
+          PROJECTS
+        </div>
+      </a>
+    </nav>
+    <div class="flex-1"></div>
+    <vs-search
+      class="w-fit h-full overflow-hidden flex flex-row justify-self-end"
+      [internalStyle]="this.themeBarStyle"
+      (click)="this.emitThemeBarClickedEvent()"
+    />
+  </div>
