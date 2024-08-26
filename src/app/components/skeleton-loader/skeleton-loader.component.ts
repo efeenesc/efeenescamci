@@ -5,13 +5,14 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   styles: `
-  ::host {
+  :host {
     overflow: hidden;
     display: block;
   }
-  div {
+  :host div {
     background: linear-gradient(0deg, #ffffff00, #ffffff00, #bbbbbb52, #ffffff00, #ffffff00);
     background-size: 400% 400%;
+    background-attachment: fixed;
     animation: gradient 1.5s ease infinite;
   }
 
@@ -25,7 +26,7 @@ import { Component } from '@angular/core';
   }
   `,
   template: `
-  <div class="w-full h-full"></div>
+  <div class="skeleton w-full h-full"></div>
   `
 })
 export class SkeletonLoaderComponent {}

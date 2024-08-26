@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ScrollObserverService } from './scroll-observer.service';
+import { WindowObserverService } from './scroll-observer.service';
 
-describe('ScrollObserverService', () => {
-  let service: ScrollObserverService;
+describe('WindowObserverService', () => {
+  let service: WindowObserverService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ScrollObserverService);
+    service = TestBed.inject(WindowObserverService);
   });
 
   it('should be created', () => {

@@ -1,9 +1,7 @@
 export class VSFilterBody {
   constructor() {
     const themeFilter: VSCriteria = { filterType: 5, value: "themes" };
-
     const vscodeFilter: VSCriteria = { filterType: 8, value: "Microsoft.VisualStudio.Code" }
-
     const defaultFilter: VSCriteria = { filterType: 12, value: "4096" }
 
     const empty = new VSFilters;
@@ -41,6 +39,15 @@ export class VSFilters {
   sortOrder: number = 0;
 }
 
+/*
+FilterType is not documented. Known filter types are:
+
+5: Category name
+8: Platform name
+10: Filter value
+12: Unknown - always set to 4096 by VS Code
+
+*/
 export interface VSCriteria {
   filterType: number;
   value: string;

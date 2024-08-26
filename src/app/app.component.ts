@@ -15,7 +15,7 @@ import { ProjectsComponent } from './sections/projects/projects.component';
 import { DrawerComponent } from './components/drawer/drawer.component';
 import { VsMenuComponent } from "./components/vs-menu/vs-menu.component";
 import { TopBarComponent } from './components/top-bar/top-bar.component';
-import { ScrollObserverService } from './services/scroll-observer.service';
+import { WindowObserverService } from './services/scroll-observer.service';
 
 @Component({
   selector: 'app-root',
@@ -55,7 +55,7 @@ export class AppComponent {
   themeBarStyle: string = '';
   drawerOpened: boolean = false;
 
-  constructor(private lss: LocalStorageService, private vsSvc: VsThemeService, private soSvc: ScrollObserverService) {}
+  constructor(private lss: LocalStorageService, private vsSvc: VsThemeService, private woSvc: WindowObserverService) {}
 
   ngOnInit() {
     // Reset to default theme if the current theme is default theme
@@ -108,11 +108,11 @@ export class AppComponent {
 
   checkTouchDevice() {
     if (!this.isTouchDevice()) {
-      this.soSvc.scrollObservable.subscribe((newYval) => {
+      this.woSvc.scrollObservable.subscribe((newYval) => {
         this.animatePageScroll(newYval);
       });
     } else {
-      this.soSvc.scrollObservable.subscribe((newYval) => {
+      this.woSvc.scrollObservable.subscribe((newYval) => {
         this.normalPageScroll(newYval);
       });
     }
