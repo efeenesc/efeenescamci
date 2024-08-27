@@ -3,12 +3,14 @@ import {
   Component,
   ContentChildren,
   ElementRef,
+  inject,
   Query,
   QueryList,
   ViewChild,
 } from '@angular/core';
 import { CarouselItemComponent } from '../carousel-item/carousel-item.component';
 import anime from 'animejs';
+import { WINDOW } from '../../classes/windowinjection';
 
 interface MousePosition {
   x: number;
@@ -43,9 +45,10 @@ export class CarouselComponent implements AfterViewInit {
   carouselBounds!: [number, number];
   private currentMousePos: MousePosition | null = { x: 0, time: 0 };
   private prevMousePos: MousePosition | null = { x: 0, time: 0 };
+  private wnd = inject(WINDOW);
 
   ngOnInit() {
-    window.addEventListener('resize', () => this.onWindowSizeChange());
+    this.wnd.addEventListener('resize', () => this.onWindowSizeChange());
   }
   
   ngOnViewInit() {

@@ -1,9 +1,10 @@
-import { Component, ElementRef, Output, EventEmitter, ViewChild, Input } from '@angular/core';
+import { Component, ElementRef, Output, EventEmitter, ViewChild, Input, inject } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, Subject } from 'rxjs';
 import * as vst from '../../types/vs-types';
 import { lex, parse, MdNode } from '../../classes/markdownparser';
 import { MarkdownRendererComponent } from '../markdown-renderer/markdown-renderer.component';
+import { WINDOW } from '../../classes/windowinjection';
 
 @Component({
   selector: 'markdown-editor',
@@ -32,6 +33,7 @@ export class MarkdownEditorComponent {
   debounce: number = 300;
   htmlElements: string = '';
   mdTree?: MdNode;
+  private wnd = inject(WINDOW);
   // example: string =
   //   '# Efe Enes Çamcı\n\n## Testing\n\nYooo *this is italic* and this is *italic*\n';
   // example: string = '# Markdown Benchmark Text\n\n## Basic Formatting\n\nThis is *italic*, **bold**, and ***bold italic***. Some ~~strikethrough~~.\n\n## Lists\n\n1. Ordered list\n2. With nested unordered list:\n   * Item A\n   * Item B\n3. And continuation\n   of the ordered list\n\n- Unordered list\n- With nested ordered list:\n  1. Sub-item 1\n  2. Sub-item 2\n- And continuation\n\n## Code\n\nInline `code` and ``code with `backticks` inside``.\n\n```python\ndef tricky_function():\n    print("This is a code block")\n    # With a comment\n    return None\n```\n\n    Indented code block\n    without language specification\n\n## Blockquotes\n\n> Single-level quote\n>> Nested quote\n> \n> Quote continuation after blank line\n\n## Horizontal Rules\n\n---\n***\n___\n\n## Tables\n\n| Left-aligned | Center-aligned | Right-aligned |\n|:-------------|:--------------:|---------------:|\n| Left | Center | Right |\n| Long cell content | Short | Content |\n\n## Task Lists\n\n- [x] Completed task\n- [ ] Incomplete task\n  - [x] Nested completed task\n  - [ ] Nested incomplete task\n\n## Escaping and Edge Cases\n\n\*Not italic\* and \`not code\`\n\n*Italic with\* escaped asterisk*\n\n**Bold with\** escaped asterisks**\n\nA a \ backslash\n\n<span>HTML tag</span>\n\n<!-- HTML comment -->\n\n### Heading with *italic* and **bold**\n\n[Link](https://example.com/(nested_parentheses))\n\n`Inline code with <html> tags`\n\n    Code block with <html> tags\n    And *asterisks* that should not be italic\n\n> Blockquote with # heading\n> \n> And a [link](https://example.com)\n\n1\. Not a list item\n\n- List item with\n  multiple lines\n  \n  And a paragraph break\n\n* [ ] Task list item with \[escaped\] brackets';
@@ -59,7 +61,7 @@ export class MarkdownEditorComponent {
 
   ngOnInit() {
     document.addEventListener('selectionchange', (ev) => {
-      const sel = window.getSelection();
+      const sel = this.wnd.getSelection();
       if (sel!.anchorOffset !== sel!.focusOffset) {
         if (this.selectedLine) {
           this.selectedLine.style.removeProperty('background-color');
@@ -114,7 +116,7 @@ export class MarkdownEditorComponent {
       range.selectNodeContents(textNode);
       range.collapse(false);
 
-      const selection = window.getSelection()!;
+      const selection = this.wnd.getSelection()!;
       selection.removeAllRanges();
       selection.addRange(range);
     }

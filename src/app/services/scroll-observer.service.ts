@@ -1,5 +1,6 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { inject, Injectable, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
+import { WINDOW } from '../classes/windowinjection';
 
 export interface WindowSize {
   x: number
@@ -12,23 +13,24 @@ export interface WindowSize {
 export class WindowObserverService implements OnDestroy {
   scrollObservable!: Subject<number>;
   sizeObservable!: Subject<WindowSize>;
+  private wnd = inject(WINDOW);
 
   constructor() {
     this.scrollObservable = new Subject();
     this.sizeObservable = new Subject();
 
-    window.addEventListener('resize', this.onWindowResize);
-    window.addEventListener('scroll', this.onWindowScroll);
+    this.wnd.addEventListener('resize', this.onWindowResize);
+    this.wnd.addEventListener('scroll', this.onWindowScroll);
   }
   
   ngOnDestroy(): void {
-    window.removeEventListener('resize', this.onWindowResize);
-    window.removeEventListener('scroll', this.onWindowScroll);
+    this.wnd.removeEventListener('resize', this.onWindowResize);
+    this.wnd.removeEventListener('scroll', this.onWindowScroll);
   }
 
   // Use arrow functions here else "this" doesn't work
   private onWindowScroll = () => {
-    this.scrollObservable.next(window.scrollY);
+    this.scrollObservable.next(this.wnd.scrollY);
   }
 
   private onWindowResize = () => {
@@ -38,8 +40,8 @@ export class WindowObserverService implements OnDestroy {
 
   getWindowSize() : WindowSize {
     return {
-      x: window.innerWidth,
-      y: window.innerHeight
+      x: this.wnd.innerWidth,
+      y: this.wnd.innerHeight
     }
   }
 }
