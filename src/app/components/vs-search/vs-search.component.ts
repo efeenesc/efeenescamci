@@ -1,5 +1,4 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { VsThemeService } from '../../services/vs-theme.service';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { LoadingBarComponent } from '../loading-bar/loading-bar.component';
 import { VsCardComponent } from '../vs-card/vs-card.component';

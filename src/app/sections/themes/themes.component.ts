@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { VSExtension, VSFilterBody } from '../../types/vs-types';
 import { VsThemeService } from '../../services/vs-theme.service';
 import { CarouselComponent } from "../../components/carousel/carousel.component";
@@ -47,7 +47,7 @@ export class ThemesComponent {
 
     this.placeholders.forEach((_, idx) => {
       if (this.favoriteThemes[idx] !== "undefined") {
-        let filter = new VSFilterBody();
+        const filter = new VSFilterBody();
         filter.addSearchFilter(this.favoriteThemes[idx]);
         filter.filters[0].pageSize = 1;
   
@@ -60,7 +60,7 @@ export class ThemesComponent {
   }
 
   async getTheme(id: string) {
-    let filter = new VSFilterBody();
+    const filter = new VSFilterBody();
     filter.addSearchFilter(id);
     filter.filters[0].pageSize = 1;
     const response = await this.vs.getFilteredResults(filter);

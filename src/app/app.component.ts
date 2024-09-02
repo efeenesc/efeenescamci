@@ -60,7 +60,7 @@ export class AppComponent {
   ngOnInit() {
     // Reset to default theme if the current theme is default theme
     // This is to make sure any changes to the default theme are reflected on-device
-    let resetToDefaultTheme = this.checkIfDefaultThemeEnabled();
+    const resetToDefaultTheme = this.checkIfDefaultThemeEnabled();
     this.restoreLastTheme(resetToDefaultTheme)
 
     this.checkTouchDevice();
@@ -143,7 +143,7 @@ export class AppComponent {
     const targetpath = document.getElementById('website-logo-path');
 
     setTimeout(() => {
-      let timeline = anime.timeline();
+      const timeline = anime.timeline();
 
       timeline.add({
         targets: targetpath,

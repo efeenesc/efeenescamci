@@ -11,7 +11,7 @@ export class VSFilterBody {
   }
 
   addFilter(filter: VSCriteria) {
-    for (let c of this.filters[0].criteria) {
+    for (const c of this.filters[0].criteria) {
       if (c.filterType === filter.filterType) {
         c.value = filter.value;
         return;
@@ -27,7 +27,7 @@ export class VSFilterBody {
   }
 
   filters: VSFilters[] = [];
-  assetTypes: any[] = [];
+  assetTypes: unknown[] = [];
   flags?: number;
 }
 
@@ -68,7 +68,7 @@ export class VSResultBody {
 
 export interface VSResult {
   extensions: VSExtension[];
-  pagingToken: any;
+  pagingToken: unknown;
   resultMetadata: VSExtensionMetadataBody[];
 }
 
@@ -98,7 +98,7 @@ export interface VSExtensionPublisherInfo {
   publisherName: string;
   displayName: string;
   flags: string;
-  domain: any;
+  domain: unknown;
   isDomainVerified: boolean
 }
 

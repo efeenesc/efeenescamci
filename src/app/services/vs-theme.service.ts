@@ -3,7 +3,7 @@ import * as vst from '../types/vs-types';
 import { plainToInstance } from 'class-transformer';
 import plist from 'plist';
 import stripJsonComments from 'strip-json-comments';
-import { ScopeFinder, ScopeFinderType } from '../classes/scopefinder';
+import { ScopeFinder } from '../classes/scopefinder';
 import JSZip from 'jszip';
 import { ColorScheme, ColorTheme } from '../classes/colorscheme';
 import { LocalStorageService } from './local-storage.service';
@@ -42,8 +42,8 @@ export class VsThemeService {
       }
     );
 
-    const jsonObj = await postResult.json() as Object;
-    let finalObj = plainToInstance(vst.VSResultBody, jsonObj);
+    const jsonObj = await postResult.json() as object;
+    const finalObj = plainToInstance(vst.VSResultBody, jsonObj);
 
     if (downloadIcons !== 'none') {
       finalObj.results.map((result) => {
@@ -96,11 +96,11 @@ export class VsThemeService {
     ext: vst.VSExtension,
     progress?: (loaded: number, total: number) => void
   ) {
-    const fileArray: any[] = ext.versions[0].files;
+    const fileArray = ext.versions[0].files;
     const pkglink: string = fileArray.find(
       (thing) =>
         thing['assetType'] === 'Microsoft.VisualStudio.Services.VSIXPackage'
-    )['source'];
+    )!['source'];
 
     const zip = await this.getPackageFile(pkglink, progress);
 
@@ -176,7 +176,7 @@ export class VsThemeService {
   }
 
   blobToBase64(blob: Blob): Promise<string | null | ArrayBuffer> {
-    return new Promise((resolve, _) => {
+    return new Promise((resolve) => {
       const reader = new FileReader();
       reader.onloadend = () => resolve(reader.result);
       reader.readAsDataURL(blob);
@@ -276,7 +276,7 @@ export class VsThemeService {
   }
 
   setDefaultColorScheme(): void {
-    let cs = new ColorScheme('light');
+    const cs = new ColorScheme('light');
 
     cs.theme900 = '#ded8c4';
     cs.theme600 = '#c7c4a8';

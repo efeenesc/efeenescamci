@@ -58,7 +58,7 @@ export class MarkdownEditorComponent {
   }
 
   ngOnInit() {
-    document.addEventListener('selectionchange', (ev) => {
+    document.addEventListener('selectionchange', () => {
       const sel = window.getSelection();
       if (sel!.anchorOffset !== sel!.focusOffset) {
         if (this.selectedLine) {
@@ -83,12 +83,12 @@ export class MarkdownEditorComponent {
     return finalText;
   }
 
-  keyDownEvent(e: KeyboardEvent) {
+  keyDownEvent() {
     setTimeout(() => this.assignCurrentLine(), 0);
     this.textChanged.next(null);
   }
 
-  clickEvent(e: MouseEvent) {
+  clickEvent() {
     setTimeout(() => this.assignCurrentLine(), 0);
   }
 

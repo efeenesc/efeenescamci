@@ -3,7 +3,6 @@ import {
   Component,
   ContentChildren,
   ElementRef,
-  Query,
   QueryList,
   ViewChild,
 } from '@angular/core';
@@ -52,9 +51,9 @@ export class CarouselComponent implements AfterViewInit {
   }
   
   ngOnViewInit() {
-    this.children.changes.subscribe((children: QueryList<any>) => {
-      this.childrenChanged(children);
-    });
+    // this.children.changes.subscribe((children: QueryList<any>) => {
+    //   this.childrenChanged(children);
+    // });
   }
 
   onWindowSizeChange() {
@@ -73,15 +72,15 @@ export class CarouselComponent implements AfterViewInit {
     this.woSvc.mousePositionObservable.subscribe((event) => this.drag(event));
     this.woSvc.mouseUpObservable.subscribe(() => this.stopDragging());
 
-    this.childrenChanged(this.children);
+    // this.childrenChanged(this.children);
     this.onWindowSizeChange();
   }
 
-  childrenChanged(children: QueryList<any>) {
-    children.forEach((child) => {
-      return;
-    });
-  }
+  // childrenChanged(children: QueryList<any>) {
+  //   children.forEach(() => {
+  //     return;
+  //   });
+  // }
   
   getDragPosition(e: MouseEvent | TouchEvent): number {
     if (e instanceof TouchEvent) {

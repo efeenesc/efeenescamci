@@ -53,9 +53,9 @@ export const typeMap: { [key: string]: MdNodeType } = {
   '*': 'i',
   '**': 'b',
   '***': 'bi',
-  '_': 'i',
-  '__': 'b',
-  '___': 'bi',
+  _: 'i',
+  __: 'b',
+  ___: 'bi',
   '`': 'code',
   '~~': 'st',
 };
@@ -89,11 +89,11 @@ export function lex(mdstr: string): string[][] {
   let lines: string[] | string[][] = mdstr.split('\n');
   lines.pop();
   lines = lines.map((line: string) => {
-    let tokens: string[] = line.split(' ');
-    let processedTokens: string[] = [];
+    const tokens: string[] = line.split(' ');
+    const processedTokens: string[] = [];
 
     tokens.map((token) => {
-      let newTokens: string[] = [];
+      const newTokens: string[] = [];
       let buf: string[] = [];
       let isSpecial = false;
       let specialRepeat = 0;
@@ -150,13 +150,13 @@ export function lex(mdstr: string): string[][] {
 }
 
 export function parse(l: string[][]): MdNode {
-  let rootNode: MdNode = new MdNode('document', []);
+  const rootNode: MdNode = new MdNode('document', []);
   let prevIsNewline = false;
   const arrLen = l.length;
 
   for (let idx = 0; idx < arrLen; idx++) {
     const line = l[idx];
-    let rootContent = rootNode.content as MdNode[];
+    const rootContent = rootNode.content as MdNode[];
 
     if (line.length === 0) {
       if (prevIsNewline) {
@@ -171,17 +171,19 @@ export function parse(l: string[][]): MdNode {
     const result = processTokens(line);
 
     switch (result.nodes[0].type) {
-      case "li":
-
-      case "ul":
+      case 'li':
+      case 'ul': {
         let newNode;
-        if (rootContent[rootContent.length-1].type !== 'ol') {
+        if (rootContent[rootContent.length - 1].type !== 'ol') {
           newNode = new MdNode('ol', [...result.nodes]);
           rootContent.push(newNode);
         } else {
-          (rootContent[rootContent.length-1].content as MdNode[]).push(...result.nodes);
+          (rootContent[rootContent.length - 1].content as MdNode[]).push(
+            ...result.nodes
+          );
         }
         break;
+      }
 
       default:
         rootContent.push(...result.nodes);
@@ -192,11 +194,14 @@ export function parse(l: string[][]): MdNode {
   return rootNode;
 }
 
-function lookAheadFind(targetToken: string, tokens: string[], startFrom: number) : number {
+function lookAheadFind(
+  targetToken: string,
+  tokens: string[],
+  startFrom: number
+): number {
   const arrLen = tokens.length;
   for (; startFrom < arrLen; startFrom++) {
-    if (tokens[startFrom] === targetToken)
-      return startFrom;
+    if (tokens[startFrom] === targetToken) return startFrom;
   }
   return -1;
 }
@@ -205,7 +210,7 @@ function processTokens(
   tokens: string[],
   index: number = 0,
   closingToken?: string
-): { nodes: MdNode[]; index: number; } {
+): { nodes: MdNode[]; index: number } {
   const arrlen = tokens.length;
   const nodes: MdNode[] = [];
   let textBuffer: string[] = [];
@@ -231,7 +236,8 @@ function processTokens(
       const closingToken = getClosingToken(token);
       let tokenClosed = true;
       if (closingToken) {
-        tokenClosed = lookAheadFind(closingToken, tokens, index + 1) === -1 ? false : true;
+        tokenClosed =
+          lookAheadFind(closingToken, tokens, index + 1) === -1 ? false : true;
       }
 
       if (tokenClosed) {
@@ -240,13 +246,13 @@ function processTokens(
           index + 1,
           closingToken
         );
-  
+
         nodes.push(new MdNode(nodeType, childNodes));
         index = newIndex;
         continue;
       }
-    } 
-    
+    }
+
     textBuffer.push(token);
   }
 
@@ -257,21 +263,23 @@ function processTokens(
 function getNodeType(token: string): MdNodeType | undefined {
   const result = typeMap[token];
 
-  if (result)
-    return result;
+  if (result) return result;
 
-  if (token.endsWith(".") && !isNaN(Number(token.substring(0, token.length-1)))) {
-    return "li";
+  if (
+    token.endsWith('.') &&
+    !isNaN(Number(token.substring(0, token.length - 1)))
+  ) {
+    return 'li';
   }
 
   return;
 }
 
 function getClosingToken(token: string): string | undefined {
-  switch(token) {
-    case "*":
-    case "**":
-    case "***":
+  switch (token) {
+    case '*':
+    case '**':
+    case '***':
     case '_':
     case '__':
     case '___':

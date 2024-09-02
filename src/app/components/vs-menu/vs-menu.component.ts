@@ -1,11 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
-import { ScopeFinder } from '../../classes/scopefinder';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { VsThemeService } from '../../services/vs-theme.service';
 import * as vst from '../../types/vs-types';
 import anime from 'animejs';
-import { LocalStorageService } from '../../services/local-storage.service';
 import { LoadingBarComponent } from '../loading-bar/loading-bar.component';
 import { GetSetObj } from '../../classes/getsetobj';
 import { VsCardComponent } from '../vs-card/vs-card.component';

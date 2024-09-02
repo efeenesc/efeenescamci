@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { VSExtension } from '../../types/vs-types';
 import { SkeletonLoaderComponent } from "../skeleton-loader/skeleton-loader.component";
 import { ArrowUpRightFromSquareComponent } from '../../icons/arrow-up-right-from-square/arrow-up-right-from-square.component';

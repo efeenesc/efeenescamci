@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import anime from 'animejs';
 import { ReplaySubject } from 'rxjs';
 
