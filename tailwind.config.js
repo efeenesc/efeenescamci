@@ -4,9 +4,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "darkest": "var(--darkest)",
-        "darker": "var(--darker)",
-        "dark": "var(--dark)",
+        "theme-900": "var(--theme-900)",
+        "theme-600": "var(--theme-600)",
+        "theme-300": "var(--theme-300)",
         "foreground": "var(--foreground)",
         "accent1": "var(--accent1)",
         "accent2": "var(--accent2",
@@ -14,7 +14,12 @@ module.exports = {
         "contrast": "var(--contrast)",
         "inverse": "var(--inverse)",
         "highlight": "var(--highlight)",
-        "system": "var(--system)"
+        "system": "var(--system)",
+        "system-900": "var(--system-900)",
+        "system-700": "var(--system-700)",
+        "system-600": "var(--system-600)",
+        "system-300": "var(--system-300)",
+        "system-200": "var(--system-200)"
       },
       fontFamily: {
         "fantasque": "Fantasque Sans Mono, monospace",

@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { VsSearchComponent } from '../vs-search/vs-search.component';
 import anime from 'animejs';
-import { WindowObserverService, WindowSize } from '../../services/scroll-observer.service';
+import { WindowObserverService, WindowSize } from '../../services/window-observer.service';
 import { MagnifyingGlassComponent } from "../../icons/magnifying-glass/magnifying-glass.component";
 import { SiteLogoComponent } from "../../icons/site-logo/site-logo.component";
 
@@ -23,6 +23,7 @@ export class TopBarComponent {
   @Output()
   themeButtonClicked: EventEmitter<boolean> = new EventEmitter();
 
+  topbarScrollProgress!: number;
   topbarExtended: boolean = true;
   mobileMode: boolean = false;
   minScrollY: number = 0;
@@ -43,16 +44,14 @@ export class TopBarComponent {
     if (newYval < this.minScrollY) {
       return;
     }
-
-    let topbarScrollProgress;
     
     if (newYval > this.maxScrollY) {
-      topbarScrollProgress = 0;
+      this.topbarScrollProgress = 0;
     } else {
-      topbarScrollProgress = 1 - (newYval / this.maxScrollY);
+      this.topbarScrollProgress = 1 - (newYval / this.maxScrollY);
     }
 
-    this.playNewTopBarAnimation(topbarScrollProgress);
+    this.playNewTopBarAnimation(this.topbarScrollProgress);
   }
 
   // This relies on the window size to determine whether the user is on mobile or not.

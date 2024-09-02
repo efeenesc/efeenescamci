@@ -29,8 +29,7 @@ export class ThemesComponent {
     "71f8bc18-fb5f-401f-aa46-5a5484e605a7", //Pink-Cat-Boo Theme
     "469aea7c-9f56-40d2-bf75-2874886663be", //C64 Purple Pro
     "043cbe69-59a0-4952-a548-2366587a1226", //Github Theme
-    "26a529c9-2654-4b95-a63f-02f6a52429e6", //One Dark Pro
-    "undefined"
+    "26a529c9-2654-4b95-a63f-02f6a52429e6", //One dark Pro
   ];
   placeholders = [...this.favoriteThemes.map(() => { return {} as VSExtension; })]
   currentThemeId?: string;
@@ -69,9 +68,5 @@ export class ThemesComponent {
       return;
 
     return response!.results[0];
-  }
-
-  itemSelected(ext: VSExtension) {
-    this.vs.changeTheme(ext);
   }
 }

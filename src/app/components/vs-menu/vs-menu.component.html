@@ -1,18 +1,16 @@
-<div class="flex items-center justify-center font-inter">
+<div class="flex items-center justify-center font-inter h-full">
   <div
     id="inner-fullscreen"
-    class="w-full h-full flex p-2 lg:p-4 gap-2 flex-col"
+    class="w-full h-full flex lg:p-4 gap-2 flex-col relative"
   >
-    <div id="placeholder_card" class="w-1/6 h-0"></div>
-
     <div
-      class="flex w-full lg:w-1/2 h-12 transition-color bg-[#262628] rounded-lg p-2 gap-2"
+      class="flex w-full lg:w-1/2 h-12 transition-color bg-system-700 rounded-lg p-2 gap-2"
     >
       <magnifying-glass
-        class="h-full aspect-square p-2 outline-none [&_svg]:fill-white"
+        class="h-full aspect-square p-2 outline-none [&_svg]:fill-system-200"
       />
       <input
-        class="w-full bg-[#262628] focus:outline-none placeholder:text-white"
+        class="w-full bg-system-700 focus:outline-none placeholder:text-system-200 font-bold text-contrast"
         [formControl]="searchControl"
         placeholder="Search themes in Visual Studio marketplace"
       />
@@ -20,23 +18,23 @@
 
     <div
       id="content"
-      class="transition-color flex-grow flex h-full relative rounded-lg justify-center"
+      class="transition-color flex-grow flex h-full relative rounded-lg justify-center overflow-y-scroll pr-3 mb-3"
     >
       <div
         id="contentbody"
-        class="grid justify-between grid-cols-2 lg:grid-cols-3 auto-rows-[50vh] lg:auto-rows-[30vh] pt-4 flex-grow gap-5"
+        class="grid justify-between grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 auto-rows-[30vh] lg:auto-rows-[30vh] lg:pt-4 flex-grow gap-5"
       >
         @if (searching || searchResults === undefined) { @for (i of
         [1,1,1,1,1,1,1,1,1]; track i) {
         <div
-          class="w-full h-full bg-[#262628] rounded-lg shadow-lg overflow-hidden"
+          class="w-full h-full bg-system-700 rounded-lg shadow-md-alt overflow-hidden"
         >
           <skeleton-loader class="w-full h-full"></skeleton-loader>
         </div>
         } } @else { @for (ext of searchResults!.results[0].extensions; track
         ext.extensionId) {
         <vs-card
-        class="w-full h-full"
+        class="w-full h-full rounded-lg shadow-md-alt"
           [cardInfo]="ext"
           [cardType]="'large'"
           (selected)="this.themeSelected(ext, true)"
