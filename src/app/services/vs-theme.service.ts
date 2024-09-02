@@ -215,9 +215,9 @@ export class VsThemeService {
     const sf = new ScopeFinder('plist', pfile);
     const cs = new ColorScheme(colorTheme);
 
-    cs.darkest = sf.GetForeground('background')!;
-    cs.darker = sf.GetForeground('editor.background')!;
-    cs.dark = sf.GetForeground('input.background') || cs.darker;
+    cs.theme900 = sf.GetForeground('background')!;
+    cs.theme600 = sf.GetForeground('editor.background')!;
+    cs.theme300 = sf.GetForeground('input.background') || cs.theme600;
     cs.text = sf.GetForeground('foreground')! || sf.GetForeground('constant.other')! || sf.GetForeground('variable.other.constant')! || sf.GetForeground('constant.other.color')! || sf.GetForeground('constant')!;
     cs.accent1 = sf.GetForeground('constant.language')!;
     cs.accent2 = sf.GetForeground('variable.parameter')!;
@@ -240,9 +240,9 @@ export class VsThemeService {
     const sf = new ScopeFinder('json', tokenc);
     const cs = new ColorScheme(colorTheme);
 
-    cs.darkest = themec['sideBar.background'];
-    cs.darker = themec['editor.background'];
-    cs.dark = themec['input.background'] || cs.darker;
+    cs.theme900 = themec['sideBar.background'];
+    cs.theme600 = themec['editor.background'];
+    cs.theme300 = themec['input.background'] || cs.theme300;
     cs.text = sf.GetForeground('constant.other')! || sf.GetForeground('variable.other.constant')! || sf.GetForeground('constant.other.color')! || sf.GetForeground('constant')!;
     cs.accent1 = sf.GetForeground('string')!;
     cs.accent2 = sf.GetForeground('variable.parameter')!;
@@ -257,9 +257,9 @@ export class VsThemeService {
   changeColorVariables(cs: ColorScheme) {
     const root = document.documentElement;
 
-    root.style.setProperty('--darkest', cs.darkest);
-    root.style.setProperty('--darker', cs.darker);
-    root.style.setProperty('--dark', cs.dark);
+    root.style.setProperty('--theme-900', cs.theme900);
+    root.style.setProperty('--theme-600', cs.theme600);
+    root.style.setProperty('--theme-300', cs.theme300);
     root.style.setProperty('--foreground', cs.text);
     root.style.setProperty('--accent1', cs.accent1 === cs.text ? cs.accent2 || cs.accent1 : cs.accent1);
     root.style.setProperty('--accent2', cs.accent2);
@@ -269,8 +269,8 @@ export class VsThemeService {
     root.style.setProperty('--inverse', cs.inverse);
     
     root.style.setProperty('--highlight', cs.highlight);
-    root.style.setProperty('--system', `color-mix(in srgb, ${cs.darkest} 50%, ${cs.system} 50%)`);
-    
+    root.style.setProperty('--system', `color-mix(in srgb, ${cs.theme900} 50%, ${cs.system} 50%)`);
+    document.documentElement.setAttribute('data-theme', cs.theme)
     
     this.saveToLocalStorage(cs);
   }
@@ -278,9 +278,9 @@ export class VsThemeService {
   setDefaultColorScheme(): void {
     let cs = new ColorScheme('light');
 
-    cs.darkest = '#ded8c4';
-    cs.darker = '#c7c4a8';
-    cs.dark = '#c7c4a8';
+    cs.theme900 = '#ded8c4';
+    cs.theme600 = '#c7c4a8';
+    cs.theme300 = '#c7c4a8';
     cs.text = '#3d3929';
     cs.accent1 = "#ad8b63";
     cs.accent2 = "#4b4848";

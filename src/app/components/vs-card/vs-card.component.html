@@ -1,9 +1,9 @@
 <div
   (click)="themeSelected()"
-  class="flex flex-col w-full h-full {{this.bgClass}} items-center p-2 justify-center bg-dark rounded-lg 
+  class="flex flex-col w-full h-full items-center p-2 justify-center bg-theme-300 rounded-lg 
   transition-all relative cursor-pointer overflow-hidden {{ this.cardType == 'large' ? 'text-md md:text-lg' : 'text-lg md:text-xl' }}"
 >
-  <div class="transition-colors {{this.bgClass}} w-full h-full flex flex-col items-center justify-center relative p-1 z-10 overflow-hidden">
+  <div class="transition-colors bg-theme-300 w-full h-full flex flex-col items-center justify-center relative p-1 z-10 overflow-hidden rounded-lg">
     <div class="p-2 h-full flex items-center justify-center rounded-lg overflow-hidden">
       <!-- BEGIN ICON -->
       @defer (when this.cardInfo.extensionIcon !== undefined) {
@@ -25,7 +25,7 @@
         
       } @placeholder {
         <div class="object-contain w-fit h-full flex-grow rounded-lg overflow-hidden" >
-          <skeleton-loader class="h-full w-full bg-[#1c1c1e] aspect-square block" />
+          <skeleton-loader class="h-full w-full bg-theme-900 aspect-square block" />
         </div>
       }
     <!-- END ICON -->
@@ -69,7 +69,8 @@
     </div>
   </div>
   <div
-      class="absolute left-0 top-0 h-full w-full"
+      id="loading-div"
+      class="absolute left-0 top-0 bg-theme-300 h-full w-full"
       [style]="this.calculatedGradient"
     ></div>
 </div>

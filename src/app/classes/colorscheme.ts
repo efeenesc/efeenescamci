@@ -16,9 +16,9 @@ export class ColorScheme {
   name!: string;
 
   theme!: ColorTheme;
-  darkest!: string;
-  darker!: string;
-  dark!: string;
+  theme900!: string;
+  theme600!: string;
+  theme300!: string;
   text!: string;
   accent1!: string;
   accent2!: string;
@@ -26,7 +26,7 @@ export class ColorScheme {
   contrast: string;
   inverse: string;
   highlight!: string;
-  // Default border colors in the GitHub default Dark and Light themes
+  // Default border colors in the GitHub default dark and Light themes
   border1: string;
   system: string;
 }

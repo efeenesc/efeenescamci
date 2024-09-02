@@ -1,15 +1,13 @@
-<div class="flex flex-row gap-2 rounded-full bg-darkest py-2 pl-2 pr-6 transition-all select-none cursor-pointer" [style]="this.internalStyle">
+<div id="vs-search-main" class="flex flex-row gap-2 rounded-full bg-theme-900 py-2 pl-2 pr-6 select-none cursor-pointer" [style]="this.internalStyle">
   <img
     id="theme_icon"
-    class="object-contain h-full aspect-square rounded-full bg-dark"
+    class="object-contain h-full aspect-square rounded-full bg-theme-300 select-none"
     [src]="this.themeIcon"
   />
   <div class="flex flex-col h-full text-contrast justify-center">
-    <span class="transition-color text-nowrap font-extrabold {{this.internalStyle == '' ? '' : 'font-normal'}}">{{
+    <span id="theme-name" class="transition-color relative text-nowrap font-extrabold {{this.internalStyle == '' ? '' : 'font-normal'}}">{{
       this.themeName
     }}</span>
-    @if (this.internalStyle == '') {
-      <span class="transition-color">{{ this.themeAuthor }}</span>
-    }
+      <span id="theme-author" class="transition-color opacity-100">{{ this.themeAuthor }}</span>
   </div>
 </div>
