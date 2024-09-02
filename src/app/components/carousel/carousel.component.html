@@ -1,14 +1,12 @@
 <div
   #carousel
-  class="flex w-screen will-change-transform select-none cursor-grab active:cursor-grabbing"
+  class="flex h-full will-change-transform select-none cursor-grab active:cursor-grabbing"
+  draggable
   (mousedown)="this.startDragging($event)"
-  (mousemove)="this.drag($event)"
-  (mouseup)="this.stopDragging()"
-  (mouseleave)="this.stopDragging()"
 >
   <div
     #content
-    class="grid grid-flow-col ml-2 lg:ml-[25vh] auto-cols-[20vh] lg:auto-cols-[30vh] w-max gap-2 lg:gap-5 bg-darker p-2 lg:p-10 rounded-2xl"
+    class="grid grid-flow-col lg:ml-[25vh] auto-cols-[30vh] lg:auto-cols-[30vh] bg-theme-600 shadow-lg-alt w-max rounded-2xl gap-2 lg:gap-5 p-2 lg:p-10"
   >
     <ng-content></ng-content>
   </div>

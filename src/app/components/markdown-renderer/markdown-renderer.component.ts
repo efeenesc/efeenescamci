@@ -30,7 +30,7 @@ import { MdNode } from '../../classes/markdownparser';
     </li>
     } @case ('h1') {
     <h1>
-      <markdown-renderer class="text-5xl lg:text-6xl font-extrabold" [parsedContent]="node.content"></markdown-renderer>
+      <markdown-renderer class="text-[45px] md:text-5xl lg:text-6xl font-extrabold" [parsedContent]="node.content"></markdown-renderer>
     </h1>
     } @case ('h2') {
     <h2>

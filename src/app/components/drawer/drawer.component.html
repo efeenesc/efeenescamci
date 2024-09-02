@@ -5,30 +5,28 @@
   <div
     id="drawerMain"
     #drawerMain
-    class="w-4/5 h-full p-2 rounded-[2rem] bg-[#1c1c1e] text-contrast relative top-full left-0 z-20 flex flex-col justify-center items-center"
+    class="w-full lg:w-4/5 h-screen p-2 rounded-[2rem] bg-system-900 text-contrast relative top-full left-0 z-20 flex flex-col items-center select-none"
   >
-    <div class="flex w-full h-full flex-col">
+    <div class="flex w-full h-[98vh] flex-col overflow-hidden">
       <div
-        class="flex justify-center cursor-grab active:cursor-grabbing"
+        id="grabberDiv"
+        class="flex justify-end cursor-grab active:cursor-grabbing h-[6vh]"
         (mousedown)="this.startDragging($event)"
-        (mousemove)="this.drag($event)"
-        (mouseup)="this.stopDragging()"
-        (mouseleave)="this.stopDragging()"
       >
-        <div class="w-full h-4 justify-center items-center flex">
-          <div class="w-1/5 h-2 bg-[#616368] rounded-full"></div>
-        </div>
+          <div id="grabberImg" class="w-1/5 h-2 bg-system-300 rounded-full mt-2 absolute left-1/2 -translate-x-1/2"></div>
         <div
-          class="self-end rounded-full aspect-square h-14 bg-[#2c2c2e] cursor-pointer"
+          class="rounded-full aspect-square h-12 lg:h-14 bg-system-600 cursor-pointer justify-end"
           (click)="this.clickedOutside()"
         >
           <xmark
-            class="fill-[#616368]"
+            class="fill-system-300"
             [internalClasses]="'h-full w-full p-2'"
           />
         </div>
       </div>
-      <ng-content></ng-content>
+      <div class="h-[93vh] mb-2">
+        <ng-content></ng-content>
+      </div>
     </div>
   </div>
 

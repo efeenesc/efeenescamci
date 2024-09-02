@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { CarouselItemComponent } from '../carousel-item/carousel-item.component';
 import anime from 'animejs';
+import { WindowObserverService } from '../../services/window-observer.service';
 
 interface MousePosition {
   x: number;
@@ -44,6 +45,8 @@ export class CarouselComponent implements AfterViewInit {
   private currentMousePos: MousePosition | null = { x: 0, time: 0 };
   private prevMousePos: MousePosition | null = { x: 0, time: 0 };
 
+  constructor(private woSvc : WindowObserverService) {}
+
   ngOnInit() {
     window.addEventListener('resize', () => this.onWindowSizeChange());
   }
@@ -67,14 +70,8 @@ export class CarouselComponent implements AfterViewInit {
       'touchstart',
       (event: MouseEvent | TouchEvent) => this.startDragging(event)
     );
-    this.carousel.addEventListener(
-      'touchmove',
-      (event: MouseEvent | TouchEvent) => this.drag(event)
-    );
-    this.carousel.addEventListener(
-      'touchend',
-      (event: MouseEvent | TouchEvent) => this.stopDragging()
-    );
+    this.woSvc.mousePositionObservable.subscribe((event) => this.drag(event));
+    this.woSvc.mouseUpObservable.subscribe(() => this.stopDragging());
 
     this.childrenChanged(this.children);
     this.onWindowSizeChange();

@@ -1,5 +1,6 @@
 <div
-  class="w-full h-full flex flex-grow flex-col items-center justify-center gap-10 relative"
+  defer (deferLoad)="this.beginLoading()"
+  class="w-full min-h-full flex flex-grow flex-col items-center justify-center gap-10 relative"
 >
   <div class="p-3 w-full lg:w-3/4 flex flex-col gap-5 text-3xl lg:text-4xl">
     <h4>
@@ -14,7 +15,7 @@
   <carousel class="select-none self-start">
     @for (ext of placeholders; track ext) {
     <carousel-item>
-      <vs-card class="h-full w-full" [cardInfo]="ext" [bgClass]="ext.extensionId === this.currentThemeId ? 'bg-highlight' : 'bg-dark'" (selected)="this.itemSelected(ext)"></vs-card>
+      <vs-card class="h-full w-full" [cardInfo]="ext" [bgClass]="ext.extensionId === this.currentThemeId ? 'bg-highlight' : 'bg-theme-300'"></vs-card>
     </carousel-item>
     }
   </carousel>
@@ -22,7 +23,7 @@
 
 <!-- <carousel-item>
   <div
-    class="flex flex-col w-full h-full shadow-xl items-center justify-center py-6 px-2 overflow-hidden cursor-pointer bg-dark {{
+    class="flex flex-col w-full h-full shadow-xl items-center justify-center py-6 px-2 overflow-hidden cursor-pointer bg-theme-300 {{
       ext.extensionId === this.currentThemeId ? 'bg-highlight' : ''
     }}"
     (click)="this.itemSelected(ext)"
@@ -45,7 +46,7 @@
     /></a>
 
     } @placeholder (minimum 5s) {
-    <div class="w-full h-full bg-dark">
+    <div class="w-full h-full bg-theme-300">
       <skeleton-loader class="w-full h-full"></skeleton-loader>
     </div>
     }
