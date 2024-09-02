@@ -95,7 +95,7 @@ export class AppComponent {
   restoreLastTheme(resetToDefault: boolean = false) {
     const cs = this.vsSvc.getFromLocalStorage();
 
-    if (!cs || resetToDefault) {
+    if (!cs || resetToDefault || Object.keys(cs).includes("darkest")) {
       return this.vsSvc.setDefaultColorScheme();
     }
 

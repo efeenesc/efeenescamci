@@ -22,7 +22,7 @@ export interface ThemeInfo {
   providedIn: 'root',
 })
 export class VsThemeService {
-  
+
   constructor(private _lss: LocalStorageService) {}
 
   getFilteredResults = async (
