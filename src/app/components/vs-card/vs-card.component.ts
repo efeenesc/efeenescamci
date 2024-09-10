@@ -16,7 +16,9 @@ export class VsCardComponent {
   @Input() cardType: 'small' | 'large' = 'small'
   @Input() bgClass: string = 'bg-system-700';
   calculatedGradient: string = '';
+  currentProgress: number = 0;
   downloadProgress: number = 0;
+  downloadProgressObj = { current: 0 };
 
   constructor (private vs : VsThemeService) {}
 
@@ -27,7 +29,7 @@ export class VsCardComponent {
   itemSelected(ext: VSExtension) {
     this.vs.changeTheme(ext, (loaded, total) => {
       
-      const progress = loaded / total;
+      const progress = parseInt((loaded / total) + '');
       if (this.downloadProgress > progress)
         return;
 
@@ -42,16 +44,60 @@ export class VsCardComponent {
     });
   }
 
+  private easeOutQuad(x: number): number {
+    return 1 - (1 - x) * (1 - x);
+  }
+
+  animateValue(
+    startValue: number,
+    endValue: number,
+    duration: number,
+    callback: (value: number) => void
+  ) {
+    const startTime = performance.now();
+
+    const animate = (currentTime: number) => {
+      const elapsedTime = currentTime - startTime;
+      const progress = Math.min(elapsedTime / duration, 1);
+      const easedProgress = this.easeOutQuad(progress);
+
+      const currentValue = startValue + (endValue - startValue) * easedProgress;
+      callback(currentValue);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  }
+
   setCalculatedGradient(downloadProgress: number) {
+    // this.animateValue(this.currentProgress, downloadProgress, 100, (newVal) => {
+    //   if (newVal < this.currentProgress) {
+    //     console.log("ERROR:", newVal, this.currentProgress)
+    //     return;
+    //   }
+    //   this.currentProgress = newVal;
+    //   const percentDone = parseInt(this.currentProgress * 100 + '');
+    //   const percentLeft = 1 - percentDone;
+    //   this.calculatedGradient = `background: conic-gradient(#3b82f6 ${percentDone}% 0, transparent ${percentLeft}%)`;
+    // });
+    
     anime({
-      targets: { progress: 0 },
-      progress: downloadProgress,
+      targets: this.downloadProgressObj,
+      current: downloadProgress,
       easing: 'easeOutQuad',
       duration: 100,
-      update: (anim) => {
-        const currentProgress = Number(anim.animations[0].currentValue); // Get the animated value
-        console.log(currentProgress);
-        this.calculatedGradient = `background: conic-gradient(#3b82f6 ${currentProgress * 100}% 0, transparent ${(1 - currentProgress) * 100}%)`;
+      update: () => {
+        if (this.downloadProgressObj.current < this.currentProgress) {
+          // console.log("ERROR:", this.downloadProgressObj.current, this.currentProgress)
+          return;
+        }
+        this.currentProgress = this.downloadProgressObj.current;
+        const percentDone = parseInt(this.currentProgress * 100 + '');
+        const percentLeft = 0;
+        this.calculatedGradient = `background: conic-gradient(#3b82f6 ${percentDone}% 0, transparent ${percentLeft}%)`;
       }
     });
   }
