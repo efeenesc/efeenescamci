@@ -103,20 +103,12 @@ export class AppComponent {
     this.vsSvc.changeColorVariables(cs);
   }
 
-  isTouchDevice() {
-    return (
-      'ontouchstart' in window ||
-      navigator.maxTouchPoints > 0 ||
-      (navigator as any).msMaxTouchPoints > 0
-    );
-  }
-
   checkTouchDevice() {
-    if (!this.isTouchDevice()) {
+    if (!this.woSvc.isTouchDevice()) {
       this.woSvc.scrollObservable.subscribe((newYval) => {
         this.animatePageScroll(newYval);
       });
-    } else {
+    } else {  
       this.woSvc.scrollObservable.subscribe((newYval) => {
         this.normalPageScroll(newYval);
       });

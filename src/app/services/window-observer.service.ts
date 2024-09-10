@@ -15,6 +15,10 @@ export class WindowObserverService implements OnDestroy {
   mouseUpObservable!: Subject<void>;
   mousePositionObservable!: Subject<MouseEvent | TouchEvent>;
 
+  /**
+   * Tracks window events and forwards them to subscribers.
+   * `mouseUpObservable`, `mousePositionObservable`, `scrollObservable`, and `sizeObservable` are provided by this service.
+   */
   constructor() {
     this.scrollObservable = new Subject();
     this.sizeObservable = new Subject();
@@ -35,11 +39,18 @@ export class WindowObserverService implements OnDestroy {
     window.removeEventListener('scroll', this.onWindowScroll);
   }
 
-  // Use arrow functions here else "this" doesn't work
+  /**
+   * Scroll event handler that emits the current scroll position (Y-coordinate)
+   * to the `scrollObservable` subject.
+   */
   private onWindowScroll = () => {
-    this.scrollObservable.next(window.scrollY);
+    this.scrollObservable.next(window.scrollY); // Used an anon function here, else 'this' doesn't work
   }
 
+  /**
+   * Resize event handler that calculates the current window size and emits it
+   * to the `sizeObservable` subject if the body's overflow style is not set to 'hidden'.
+   */
   private onWindowResize = () => {
     const windowSize = this.getWindowSize();
 
@@ -48,10 +59,28 @@ export class WindowObserverService implements OnDestroy {
     }
   }
 
+  /**
+   * Returns the current size of the window.
+   * 
+   * @returns An object containing the width (`x`) and height (`y`) of the window.
+   */
   getWindowSize() : WindowSize {
     return {
       x: window.innerWidth,
       y: window.innerHeight
     }
+  }
+
+  /**
+   * Determines if the current device is a touch-enabled device.
+   * 
+   * @returns `true` if the device supports touch events; otherwise, `false`.
+   */
+  isTouchDevice() {
+    return (
+      'ontouchstart' in window ||
+      navigator.maxTouchPoints > 0 ||
+      (navigator as any).msMaxTouchPoints > 0
+    );
   }
 }

@@ -34,7 +34,7 @@ export class VSFilterBody {
 export class VSFilters {
   criteria: VSCriteria[] = [];
   pageNumber: number = 1;
-  pageSize: number = 10;
+  pageSize: number = 20;
   sortBy: number = 0;
   sortOrder: number = 0;
 }

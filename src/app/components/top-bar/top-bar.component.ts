@@ -33,8 +33,8 @@ export class TopBarComponent {
   constructor(private woSvc: WindowObserverService) { }
 
   ngOnInit() {
-    this.woSvc.scrollObservable.subscribe((newYval) => this.trackScroll(newYval))
-    this.woSvc.sizeObservable.subscribe((newWndSize) => this.setTopBarMode(newWndSize))
+    this.woSvc.scrollObservable.subscribe((newYval) => this.trackScroll(newYval));
+    this.woSvc.sizeObservable.subscribe((newWndSize) => this.setTopBarMode(newWndSize));
   }
 
   emitThemeBarClickedEvent() {

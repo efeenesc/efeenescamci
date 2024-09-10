@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import anime from 'animejs';
 import { Subject } from 'rxjs';
 import { XMarkComponent } from "../../icons/xmark/xmark.component";
@@ -12,7 +12,7 @@ interface VerticalMousePosition {
   selector: 'drawer-component',
   standalone: true,
   imports: [XMarkComponent],
-  templateUrl: './drawer.component.html',
+  templateUrl: './drawer.component.html'
 })
 export class DrawerComponent {
   @ViewChild('drawerMain') set _dm(content: ElementRef) {
