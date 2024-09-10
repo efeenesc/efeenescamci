@@ -39,6 +39,7 @@ export class CarouselComponent implements AfterViewInit {
   dragStartTime: number = 0;
   dragStartPos: number = 0;
   translatePos: number = 0;
+  elTranslatePos: {current: number} = {current: 0};
   carouselRect!: DOMRect;
   carouselBounds!: [number, number];
   private currentMousePos: MousePosition | null = { x: 0, time: 0 };
@@ -60,7 +61,7 @@ export class CarouselComponent implements AfterViewInit {
     this.carouselRect = this.carousel.getBoundingClientRect();
     this.carouselBounds = [
       this.contentDiv.clientWidth * 0.8,
-      this.contentDiv.clientWidth * 0.1,
+      0
     ];
   }
 
@@ -148,8 +149,13 @@ export class CarouselComponent implements AfterViewInit {
 
   private updateCarouselPosition(duration: number): void {
     anime({
-      targets: this.carousel,
-      translateX: this.translatePos,
+      targets: this.elTranslatePos,
+      current: this.translatePos,
+      update: (() => {
+        const newStyle = "translateX(" + this.elTranslatePos.current + "px)";
+        this.carousel.style.transform = newStyle;
+        this.carousel.style.webkitTransform = newStyle;
+      }),
       duration: duration,
       easing: 'easeOutExpo',
     });

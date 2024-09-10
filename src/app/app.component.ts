@@ -52,6 +52,7 @@ export class AppComponent {
   blendClass?: string;
   markdown?: MdNode;
   scrollPos: number = 0;
+  elTranslatePos: {current: number} = {current: 0};
   themeBarStyle: string = '';
   drawerOpened: boolean = false;
 
@@ -132,8 +133,13 @@ export class AppComponent {
 
   animatePageScroll(scrollY: number) {
     anime({
-      targets: this.main,
-      translateY: -scrollY,
+      targets: this.elTranslatePos,
+      current: -scrollY,
+      update: (() => {
+        const newPos = 'translateY(' + this.elTranslatePos.current + 'px)';
+        this.main.style.transform = newPos;
+        this.main.style.webkitTransform = newPos;
+      }),
       easing: 'easeOutExpo',
       duration: 200,
     });
@@ -163,6 +169,7 @@ export class AppComponent {
 
   normalPageScroll(scrollY: number) {
     this.main.style.transform = 'translateY(' + -scrollY + 'px)';
+    this.main.style.webkitTransform = 'translateY(' + -scrollY +'px)';
   }
 
   setMainHeight() {

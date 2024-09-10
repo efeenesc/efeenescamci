@@ -4,8 +4,8 @@
     class="object-contain h-full aspect-square rounded-full bg-theme-300 select-none"
     [src]="this.themeIcon"
   />
-  <div class="flex flex-col h-full text-contrast justify-center">
-    <span id="theme-name" class="transition-color relative text-nowrap font-extrabold {{this.internalStyle == '' ? '' : 'font-normal'}}">{{
+  <div class="flex flex-col h-full text-contrast justify-center overflow-hidden">
+    <span id="theme-name" class="transition-color text-ellipsis relative text-nowrap font-extrabold {{this.internalStyle == '' ? '' : 'font-normal'}}">{{
       this.themeName
     }}</span>
       <span id="theme-author" class="transition-color opacity-100">{{ this.themeAuthor }}</span>

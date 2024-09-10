@@ -1,38 +1,39 @@
 <div
-    id="topbar"
-    #topbar
-    class="w-full h-[10vh] px-2 lg:px-0 overflow-hidden flex py-2 text-inverse relative z-10 gap-5"
-  >
-    <site-logo></site-logo>
-    <nav
-      class="flex justify-center gap-4 text-contrast [&>a]:flex [&>a]:h-full"
-    >
-      <a href="#">
-        <div
-          class="rounded-full flex items-center bg-theme-900 justify-center py-2 px-8"
-        >
-          HOME
-        </div>
-      </a>
-      <a href="#">
-        <div
-          class="rounded-full flex items-center bg-theme-900 justify-center py-2 px-8"
-        >
-          BLOG
-        </div> </a
-      ><a href="#">
-        <div
-          class="rounded-full flex items-center bg-theme-900 justify-center py-2 px-8"
-        >
-          PROJECTS
-        </div>
-      </a>
-    </nav>
-    <div class="flex-1"></div>
-    <vs-search
-      class="w-fit h-full overflow-hidden flex flex-row justify-self-end"
-      [internalStyle]="this.themeBarStyle"
-      [animationSeekAt]="this.topbarScrollProgress"
-      (click)="this.emitThemeBarClickedEvent()"
-    />
+  id="topbar"
+  #topbar
+  class="w-full h-[10vh] px-2 lg:px-0 overflow-hidden flex py-2 text-inverse relative z-10 gap-2 sm:gap-3 md:gap-4 lg:gap-5"
+>
+  <site-logo></site-logo>
+  <div id="hamburger-menu" class="rounded-full flex items-center bg-theme-900 justify-center px-8 py-3">
+    <hamburger-menu class="h-full aspect-square outline-none [&_svg]:fill-contrast flex items-center"></hamburger-menu>
   </div>
+  <!-- <nav class="flex justify-center gap-4 text-contrast [&>a]:flex [&>a]:h-full">
+    <a href="#">
+      <div
+        class="rounded-full flex items-center bg-theme-900 justify-center py-2 px-8"
+      >
+        HOME
+      </div>
+    </a>
+    <a href="#">
+      <div
+        class="rounded-full flex items-center bg-theme-900 justify-center py-2 px-8"
+      >
+        BLOG
+      </div> </a
+    ><a href="#">
+      <div
+        class="rounded-full flex items-center bg-theme-900 justify-center py-2 px-8"
+      >
+        PROJECTS
+      </div>
+    </a>
+  </nav> -->
+  <div class="flex-1"></div>
+  <vs-search
+    class="w-fit h-full overflow-hidden flex flex-row justify-self-end"
+    [internalStyle]="this.themeBarStyle"
+    [animationSeekAt]="this.topbarScrollProgress"
+    (click)="this.emitThemeBarClickedEvent()"
+  />
+</div>

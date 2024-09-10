@@ -24,22 +24,25 @@
         id="contentbody"
         class="grid justify-between grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 auto-rows-[30vh] lg:auto-rows-[30vh] lg:pt-4 flex-grow gap-5"
       >
-        @if (searching || searchResults === undefined) { @for (i of
-        [1,1,1,1,1,1,1,1,1]; track i) {
-        <div
-          class="w-full h-full bg-system-700 rounded-lg shadow-md-alt overflow-hidden"
-        >
-          <skeleton-loader class="w-full h-full"></skeleton-loader>
-        </div>
-        } } @else { @for (ext of searchResults!.results[0].extensions; track
-        ext.extensionId) {
-        <vs-card
-        class="w-full h-full rounded-lg shadow-md-alt"
-          [cardInfo]="ext"
-          [cardType]="'large'"
-          (selected)="this.themeSelected(ext, true)"
-        ></vs-card>
-        } }
+        @if (searching || searchResults === undefined) {
+          @for (i of [1,1,1,1,1,1,1,1,1]; track i) {
+            <div
+              class="w-full h-full bg-system-700 rounded-lg shadow-md-alt overflow-hidden"
+            >
+              <skeleton-loader class="w-full h-full"></skeleton-loader>
+            </div>
+          } 
+        } @else {
+          @for (ext of searchResults!.results[0].extensions;
+          track ext.extensionId) {
+            <vs-card
+              class="w-full h-full rounded-lg shadow-md-alt"
+              [cardInfo]="ext"
+              [cardType]="'large'"
+              (selected)="this.themeSelected(ext, true)"
+            ></vs-card>
+          }
+        }
       </div>
     </div>
   </div>

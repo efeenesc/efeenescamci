@@ -14,7 +14,7 @@ interface VerticalMousePosition {
   imports: [XMarkComponent],
   templateUrl: './drawer.component.html',
 })
-export class DrawerComponent implements AfterViewInit {
+export class DrawerComponent {
   @ViewChild('drawerMain') set _dm(content: ElementRef) {
     this.drawerMain = content.nativeElement as HTMLDivElement;
   }
@@ -35,7 +35,8 @@ export class DrawerComponent implements AfterViewInit {
   dragStartTime: number = 0;
   dragStartPos: number = 0;
   translatePos: number = 0;
-  carouselBounds!: [number, number];
+  elTranslatePos: {current: number} = {current: 0};
+  carouselBounds: [number, number] = [90, 2];
   private currentMousePos: VerticalMousePosition | null = { y: 0, time: 0 };
   private prevMousePos: VerticalMousePosition | null = { y: 0, time: 0 };
 
@@ -53,18 +54,6 @@ export class DrawerComponent implements AfterViewInit {
     window.addEventListener('touchstart', (event) => this.startDragging(event));
     this.woSvc.mousePositionObservable.subscribe((event) => this.drag(event));
     this.woSvc.mouseUpObservable.subscribe(() => this.stopDragging());
-    this.woSvc.sizeObservable.subscribe(() => this.onWindowSizeChange());
-  }
-
-  ngAfterViewInit(): void {
-    this.onWindowSizeChange();
-  }
-
-  onWindowSizeChange() {
-    this.carouselBounds = [
-      95,
-      2,
-    ];
   }
 
   ngOnDestroy() {
@@ -85,13 +74,10 @@ export class DrawerComponent implements AfterViewInit {
     const overlay = document.getElementById('mainOverlay')!;
     dkbg.style.opacity = '0.4';
     overlay.style.pointerEvents = 'auto';
-    
-    anime({
-      targets: '#drawerMain',
-      top: '2vh',
-      easing: 'easeOutExpo',
-      duration: 600
-    })
+
+    this.translatePos = 2; // Set target to 2vh
+    this.elTranslatePos = {current: 100}; // Set current position to 100vh - bottom of page
+    this.updateCarouselPosition(600, false, 'easeOutExpo');
   }
 
   closeOverlay() {
@@ -103,19 +89,8 @@ export class DrawerComponent implements AfterViewInit {
   }
 
   slideDown() {
-    this.closeOverlay();
-
-    anime({
-      targets: '#drawerMain',
-      top: '100vh',
-      easing: 'easeInQuad',
-      duration: 300,
-      complete: () => {
-        this.closed.emit();
-        this.resetMouseVariables();
-        this.translatePos = 0;
-      }
-    })
+    this.translatePos = 100;
+    this.updateCarouselPosition(300, true, 'easeInQuad');
   }
 
   clickedOutside() {
@@ -165,7 +140,7 @@ export class DrawerComponent implements AfterViewInit {
     let closeAfter = false;
 
     if (this.translatePos > this.carouselBounds[0]) {
-      this.translatePos = 110;
+      this.translatePos = 100;
       closeAfter = true
     }
 
@@ -201,15 +176,18 @@ export class DrawerComponent implements AfterViewInit {
     this.updateCarouselPosition(750, closeAfter);
   }
 
-  private updateCarouselPosition(duration: number, closeAfter: boolean = false): void {
+  private updateCarouselPosition(duration: number, closeAfter: boolean = false, easing: string = 'easeOutExpo'): void {
     if (closeAfter)
       this.closeOverlay();
 
     anime({
-      targets: this.drawerMain,
-      top: this.translatePos,
-      duration: duration,
-      easing: 'easeOutExpo',
+      targets: this.elTranslatePos,
+      current: this.translatePos,
+      duration,
+      easing,
+      update: (() => {
+        this.drawerMain.style.top = this.elTranslatePos.current + 'vh';
+      }),
       complete: () => {
         if (closeAfter) {
           this.closed.emit();
