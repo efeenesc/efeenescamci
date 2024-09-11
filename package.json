@@ -19,7 +19,6 @@
     "@angular/platform-browser-dynamic": "^18.2.2",
     "@angular/router": "^18.2.2",
     "animejs": "^3.2.2",
-    "class-transformer": "^0.5.1",
     "jszip": "^3.10.1",
     "plist": "^3.1.0",
     "rxjs": "~7.8.0",
