@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { VSExtension } from '../../types/vs-types';
 import { SkeletonLoaderComponent } from "../skeleton-loader/skeleton-loader.component";
 import { ArrowUpRightFromSquareComponent } from '../../icons/arrow-up-right-from-square/arrow-up-right-from-square.component';
@@ -12,6 +12,10 @@ import anime from 'animejs';
   templateUrl: './vs-card.component.html'
 })
 export class VsCardComponent {
+  @ViewChild('themeinfo') set _dm(content: ElementRef) {
+    this.themeInfoDiv = content.nativeElement;
+  }
+  themeInfoDiv!: HTMLDivElement;
   @Input() cardInfo!: VSExtension;
   @Input() cardType: 'small' | 'large' = 'small'
   @Input() bgClass: string = 'bg-system-700';
@@ -27,77 +31,51 @@ export class VsCardComponent {
   }
 
   itemSelected(ext: VSExtension) {
+    this.startLoadingAnimation();
     this.vs.changeTheme(ext, (loaded, total) => {
-      
-      const progress = parseInt((loaded / total) + '');
-      if (this.downloadProgress > progress)
+      const progress = parseInt((loaded / total) * 100 + ''); // Working with float in JS is never good. Convert to string then int
+
+      if (this.downloadProgress > progress) // Failsafe
         return;
 
       this.downloadProgress = progress;
       this.setCalculatedGradient(this.downloadProgress);
-      if (progress === 1) {
-        console.log(progress);
-        setTimeout(() => {
-          this.calculatedGradient = '';
-        }, 250)
-      }
     });
   }
 
-  private easeOutQuad(x: number): number {
-    return 1 - (1 - x) * (1 - x);
+  startLoadingAnimation() {
+    anime({
+      targets: this.themeInfoDiv,
+      scale: '0.95',
+      duration: 250,
+      easing: 'easeInOutQuad'
+    });
   }
 
-  animateValue(
-    startValue: number,
-    endValue: number,
-    duration: number,
-    callback: (value: number) => void
-  ) {
-    const startTime = performance.now();
-
-    const animate = (currentTime: number) => {
-      const elapsedTime = currentTime - startTime;
-      const progress = Math.min(elapsedTime / duration, 1);
-      const easedProgress = this.easeOutQuad(progress);
-
-      const currentValue = startValue + (endValue - startValue) * easedProgress;
-      callback(currentValue);
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
-    };
-
-    requestAnimationFrame(animate);
+  stopLoadingAnimation() {
+    anime({
+      targets: this.themeInfoDiv,
+      scale: '1.0',
+      duration: 250,
+      easing: 'easeInOutQuad'
+    });
   }
 
   setCalculatedGradient(downloadProgress: number) {
-    // this.animateValue(this.currentProgress, downloadProgress, 100, (newVal) => {
-    //   if (newVal < this.currentProgress) {
-    //     console.log("ERROR:", newVal, this.currentProgress)
-    //     return;
-    //   }
-    //   this.currentProgress = newVal;
-    //   const percentDone = parseInt(this.currentProgress * 100 + '');
-    //   const percentLeft = 1 - percentDone;
-    //   this.calculatedGradient = `background: conic-gradient(#3b82f6 ${percentDone}% 0, transparent ${percentLeft}%)`;
-    // });
-    
     anime({
       targets: this.downloadProgressObj,
       current: downloadProgress,
       easing: 'easeOutQuad',
       duration: 100,
       update: () => {
-        if (this.downloadProgressObj.current < this.currentProgress) {
-          // console.log("ERROR:", this.downloadProgressObj.current, this.currentProgress)
-          return;
-        }
         this.currentProgress = this.downloadProgressObj.current;
-        const percentDone = parseInt(this.currentProgress * 100 + '');
-        const percentLeft = 0;
-        this.calculatedGradient = `background: conic-gradient(#3b82f6 ${percentDone}% 0, transparent ${percentLeft}%)`;
+        this.calculatedGradient = `background: conic-gradient(#3b82f6 ${this.currentProgress}% 0, transparent 0%)`;
+        if (this.currentProgress === 100) {
+          setTimeout(() => {
+            console.log(this.currentProgress);
+          this.stopLoadingAnimation();
+          }, 25)
+        }
       }
     });
   }
