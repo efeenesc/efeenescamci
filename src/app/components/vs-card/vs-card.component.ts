@@ -5,6 +5,37 @@ import { ArrowUpRightFromSquareComponent } from '../../icons/arrow-up-right-from
 import { VsThemeService } from '../../services/vs-theme.service';
 import anime from 'animejs';
 
+export type VsCardStyleProps = {
+  bg900Class?: string,
+  bg300Class?: string,
+  fgTextClass?: string,
+  fgTextAccent?: string
+}
+
+export class VsCardStyle {
+  bg900: string = "bg-system-900";
+  bg300: string = "bg-system-300";
+  fgText: string = "text-contrast";
+  fgAccent: string = "text-contrast text-bold";
+  constructor (
+    props?: VsCardStyleProps
+  ) {
+    if (!props) return;
+
+    if (props.bg900Class)
+      this.bg900 = props.bg900Class;
+
+    if (props.bg300Class)
+      this.bg900 = props.bg300Class;
+
+    if (props.fgTextClass)
+      this.fgText = props.fgTextClass;
+
+    if (props.fgTextAccent)
+      this.fgAccent = props.fgTextAccent;
+  }
+}
+
 @Component({
   selector: 'vs-card',
   standalone: true,
@@ -16,9 +47,26 @@ export class VsCardComponent {
     this.themeInfoDiv = content.nativeElement;
   }
   themeInfoDiv!: HTMLDivElement;
+
+  @ViewChild('loadingcontainer') set _lc(content: ElementRef) {
+    this.loadingContainerDiv = content.nativeElement;
+  }
+  loadingContainerDiv!: HTMLDivElement;
+
   @Input() cardInfo!: VSExtension;
   @Input() cardType: 'small' | 'large' = 'small'
-  @Input() bgClass: string = 'bg-system-700';
+  @Input('cardStyle') set _style(content: VsCardStyle) {
+    this.bg900 = content.bg900;
+    this.bg300 = content.bg300;
+    this.fgText = content.fgText;
+    this.fgAccent = content.fgAccent;
+  }
+
+  bg900: string = "bg-system-900";
+  bg300: string = "bg-system-300";
+  fgText: string = "text-contrast";
+  fgAccent: string = "text-contrast text-bold";
+
   calculatedGradient: string = '';
   currentProgress: number = 0;
   downloadProgress: number = 0;
@@ -45,6 +93,11 @@ export class VsCardComponent {
 
   startLoadingAnimation() {
     anime({
+      targets: this.loadingContainerDiv,
+      opacity: '1.0',
+      duration: 50
+    })
+    anime({
       targets: this.themeInfoDiv,
       scale: '0.95',
       duration: 250,
@@ -53,6 +106,11 @@ export class VsCardComponent {
   }
 
   stopLoadingAnimation() {
+    anime({
+      targets: this.loadingContainerDiv,
+      opacity: '0.0',
+      duration: 50
+    })
     anime({
       targets: this.themeInfoDiv,
       scale: '1.0',

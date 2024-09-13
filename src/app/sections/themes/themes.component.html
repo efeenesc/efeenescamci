@@ -15,11 +15,16 @@
   <carousel class="select-none self-start">
     @for (ext of placeholders; track ext) {
     <carousel-item>
-      <vs-card class="h-full w-full" [cardInfo]="ext" [bgClass]="ext.extensionId === this.currentThemeId ? 'bg-highlight' : 'bg-theme-300'"></vs-card>
+      <vs-card class="h-full w-full" [cardInfo]="ext" 
+        [cardStyle]="this.vsCardTheme"
+      ></vs-card>
     </carousel-item>
     }
   </carousel>
 </div>
+
+<!-- THIS WAS USED IN VS-CARD TO HIGHLIGHT THE CURRENTLY USED THEME CARD -->
+<!-- [bgClass]="ext.extensionId === this.currentThemeId ? 'bg-highlight' : 'bg-theme-300'" -->
 
 <!-- <carousel-item>
   <div

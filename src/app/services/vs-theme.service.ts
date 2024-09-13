@@ -90,7 +90,6 @@ export class VsThemeService {
 
       client.onprogress = (prog) => {
         if (prog.lengthComputable && progressCallback) {
-          // console.log(`${prog.loaded} | ${prog.total}`);
           progressCallback(prog.loaded, prog.total);
         }
       };
