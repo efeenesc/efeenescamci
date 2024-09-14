@@ -3,7 +3,7 @@
   class="flex flex-col w-full h-full items-center justify-center rounded-lg
   transition-all relative cursor-pointer overflow-hidden {{ this.cardType == 'large' ? 'text-md md:text-lg' : 'text-lg md:text-xl' }}"
 >
-  <div #themeinfo class="transition-colors w-full h-full flex flex-col items-center z-20 p-1 rounded-lg justify-center overflow-hidden">
+  <div #themeinfo class="transition-colors w-full h-full flex flex-col items-center z-20 p-1 rounded-lg justify-center overflow-hidden" [class]="[this.bg300]">
     <div class="p-2 h-full flex items-center justify-center overflow-hidden">
       <!-- BEGIN ICON -->
       @defer (when this.cardInfo.extensionIcon !== undefined) {
@@ -19,13 +19,13 @@
           <!-- If extensionIcon is not false (and is therefore a string per the type definition): -->
           <img id="theme_icon"
             draggable="false"
-            class="overflow-hidden block mb-2 touch-none select-none object-contain w-fit flex-grow rounded-lg aspect-square h-full"
+            class="overflow-hidden block touch-none select-none object-contain w-fit flex-grow rounded-lg aspect-square h-full"
             [src]="this.cardInfo.extensionIcon"/>
         } 
         
       } @placeholder {
         <div class="object-contain w-fit h-full flex-grow rounded-lg overflow-hidden" >
-          <skeleton-loader class="h-full w-full bg-theme-900 aspect-square block" />
+          <skeleton-loader class="h-full w-full aspect-square block" [class]="[this.bg900]" />
         </div>
       }
     <!-- END ICON -->
@@ -37,7 +37,7 @@
     <div class="flex flex-col h-full w-full items-center justify-center overflow-hidden">
       @defer (when this.cardInfo.displayName !== undefined) {
 
-        <span class="text-foreground transition-color">{{
+        <span class="transition-color" [class]="this.fgText">{{
           this.cardInfo.displayName
         }}</span>
         <a
@@ -45,7 +45,8 @@
           href="https://marketplace.visualstudio.com/publishers/{{
             this.cardInfo.publisher.publisherName
           }}"
-          class="relative flex w-fit items-center text-accent1 flex-nowrap gap-2 border-b-[1px] border-accent1 transition-colors hover:border-contrast 
+          [class]="this.fgAccent"
+          class="relative flex w-fit items-center flex-nowrap gap-2 border-b-[1px] border-accent1 transition-colors hover:border-contrast 
                   hover:text-contrast [&_svg]:transition-colors [&_svg]:fill-accent1 [&_svg]:hover:fill-contrast"
           ><span>{{ this.cardInfo.publisher.displayName }}</span><icon-arrow-up-right-from-square class="w-[1rem] aspect-square" />
         </a>

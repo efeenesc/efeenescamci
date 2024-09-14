@@ -39,18 +39,18 @@ export class CarouselComponent implements AfterViewInit {
   dragStartTime: number = 0;
   dragStartPos: number = 0;
   translatePos: number = 0;
-  elTranslatePos: {current: number} = {current: 0};
+  elTranslatePos: { current: number } = { current: 0 };
   carouselRect!: DOMRect;
   carouselBounds!: [number, number];
   private currentMousePos: MousePosition | null = { x: 0, time: 0 };
   private prevMousePos: MousePosition | null = { x: 0, time: 0 };
 
-  constructor(private woSvc : WindowObserverService) {}
+  constructor(private woSvc: WindowObserverService) {}
 
   ngOnInit() {
     window.addEventListener('resize', () => this.onWindowSizeChange());
   }
-  
+
   ngOnViewInit() {
     // this.children.changes.subscribe((children: QueryList<any>) => {
     //   this.childrenChanged(children);
@@ -59,10 +59,7 @@ export class CarouselComponent implements AfterViewInit {
 
   onWindowSizeChange() {
     this.carouselRect = this.carousel.getBoundingClientRect();
-    this.carouselBounds = [
-      this.contentDiv.clientWidth * 0.8,
-      0
-    ];
+    this.carouselBounds = [this.contentDiv.clientWidth * 0.8, 0];
   }
 
   ngAfterViewInit(): void {
@@ -82,7 +79,7 @@ export class CarouselComponent implements AfterViewInit {
   //     return;
   //   });
   // }
-  
+
   getDragPosition(e: MouseEvent | TouchEvent): number {
     if (e instanceof TouchEvent) {
       return e.changedTouches[0].clientX - this.carouselRect.left;
@@ -92,8 +89,7 @@ export class CarouselComponent implements AfterViewInit {
   }
 
   setPrevMousePosition(x: number, time: number): void {
-    if (this.currentMousePos)
-      this.prevMousePos = { ...this.currentMousePos };
+    if (this.currentMousePos) this.prevMousePos = { ...this.currentMousePos };
 
     this.currentMousePos = { x, time };
   }
@@ -151,11 +147,11 @@ export class CarouselComponent implements AfterViewInit {
     anime({
       targets: this.elTranslatePos,
       current: this.translatePos,
-      update: (() => {
-        const newStyle = "translateX(" + this.elTranslatePos.current + "px)";
+      update: () => {
+        const newStyle = 'translateX(' + this.elTranslatePos.current + 'px)';
         this.carousel.style.transform = newStyle;
         this.carousel.style.webkitTransform = newStyle;
-      }),
+      },
       duration: duration,
       easing: 'easeOutExpo',
     });

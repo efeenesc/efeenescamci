@@ -14,7 +14,7 @@ export type VsCardStyleProps = {
 
 export class VsCardStyle {
   bg900: string = "bg-system-900";
-  bg300: string = "bg-system-300";
+  bg300: string = "bg-system-700";
   fgText: string = "text-contrast";
   fgAccent: string = "text-contrast text-bold";
   constructor (
@@ -26,7 +26,7 @@ export class VsCardStyle {
       this.bg900 = props.bg900Class;
 
     if (props.bg300Class)
-      this.bg900 = props.bg300Class;
+      this.bg300 = props.bg300Class;
 
     if (props.fgTextClass)
       this.fgText = props.fgTextClass;
@@ -63,7 +63,7 @@ export class VsCardComponent {
   }
 
   bg900: string = "bg-system-900";
-  bg300: string = "bg-system-300";
+  bg300: string = "bg-system-700";
   fgText: string = "text-contrast";
   fgAccent: string = "text-contrast text-bold";
 
