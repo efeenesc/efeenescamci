@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as vst from '../types/vs-types';
-import plist from 'plist';
+import * as plist from '@plist/parse';
 import stripJsonComments from 'strip-json-comments';
 import { ScopeFinder } from '../classes/scopefinder';
 import JSZip from 'jszip';
