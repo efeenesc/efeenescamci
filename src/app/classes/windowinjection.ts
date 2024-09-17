@@ -1,10 +1,8 @@
-import { isPlatformBrowser } from '@angular/common';
 import { InjectionToken } from '@angular/core';
-import { PLATFORM_ID } from '@angular/core';
 
 export const WINDOW = new InjectionToken<Window>('WindowToken', {
   factory: () => {
-    if (isPlatformBrowser(PLATFORM_ID)) {
+    if (typeof window !== 'undefined') {
       return window;
     }
     return new Window();

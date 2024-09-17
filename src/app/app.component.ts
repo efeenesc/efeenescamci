@@ -55,7 +55,7 @@ export class AppComponent {
   elTranslatePos: {current: number} = {current: 0};
   themeBarStyle: string = '';
   drawerOpened: boolean = false;
-  mainResizeObserver: ResizeObserver = new ResizeObserver((entries) => this.onMainResized(entries));;
+  mainResizeObserver?: ResizeObserver;
 
   constructor(private lss: LocalStorageService, private vsSvc: VsThemeService, private woSvc: WindowObserverService) {
     afterNextRender(() => {
@@ -66,6 +66,7 @@ export class AppComponent {
 
       this.checkTouchDevice();
 
+      this.mainResizeObserver = new ResizeObserver((entries) => this.onMainResized(entries));
       this.mainResizeObserver.observe(document.getElementById('main')!)
 
       this.animateLogo();
@@ -75,16 +76,17 @@ export class AppComponent {
         this.setMainHeight();
       })
 
-    this.lss.valueChanges.subscribe((newVal) => {
-      if (newVal.key === 'theme_val') {
-        const themeObj = JSON.parse(newVal.value);
-        this.blendClass =
-          themeObj['theme'] === 'dark'
-            ? 'bg-blend-soft-light'
-            : 'bg-blend-hard-light';
-      }
-    });
-  })}
+      this.lss.valueChanges.subscribe((newVal) => {
+        if (newVal.key === 'theme_val') {
+          const themeObj = JSON.parse(newVal.value);
+          this.blendClass =
+            themeObj['theme'] === 'dark'
+              ? 'bg-blend-soft-light'
+              : 'bg-blend-hard-light';
+        }
+      });
+    })
+  }
 
   onMainResized(entries: ResizeObserverEntry[]) {
     const main = entries.find((e) => e.target.id === "main");
