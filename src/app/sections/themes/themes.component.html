@@ -20,35 +20,3 @@
     }
   </carousel>
 </div>
-
-<!-- <carousel-item>
-  <div
-    class="flex flex-col w-full h-full shadow-xl items-center justify-center py-6 px-2 overflow-hidden cursor-pointer bg-theme-300 {{
-      ext.extensionId === this.currentThemeId ? 'bg-highlight' : ''
-    }}"
-    (click)="this.itemSelected(ext)"
-  >
-    @defer (when ext.displayName) {
-    <img
-      draggable="false"
-      class="rounded-lg overflow-hidden object-cover block mb-2 touch-none select-none"
-      [src]="ext.extensionIcon"
-    />
-    <span class="text-foreground">{{ ext.displayName }}</span>
-    <a
-      target="_blank"
-      href="https://marketplace.visualstudio.com/publishers/{{
-        ext.publisher.publisherName
-      }}"
-      class="relative flex items-center text-accent1 flex-nowrap gap-2 border-b-[1px] border-accent1 transition-colors hover:border-contrast hover:text-contrast [&_svg]:transition-colors [&_svg]:fill-accent1 [&_svg]:hover:fill-contrast"
-      ><span>{{ ext.publisher.displayName }}</span
-      ><icon-arrow-up-right-from-square class="w-[1rem] aspect-square"
-    /></a>
-
-    } @placeholder (minimum 5s) {
-    <div class="w-full h-full bg-theme-300">
-      <skeleton-loader class="w-full h-full"></skeleton-loader>
-    </div>
-    }
-  </div>
-</carousel-item> -->

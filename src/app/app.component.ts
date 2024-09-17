@@ -55,6 +55,7 @@ export class AppComponent {
   elTranslatePos: {current: number} = {current: 0};
   themeBarStyle: string = '';
   drawerOpened: boolean = false;
+  mainResizeObserver: ResizeObserver = new ResizeObserver((entries) => this.onMainResized(entries));;
 
   constructor(private lss: LocalStorageService, private vsSvc: VsThemeService, private woSvc: WindowObserverService) {}
 
@@ -68,6 +69,8 @@ export class AppComponent {
   }
 
   ngAfterContentInit() {
+    this.mainResizeObserver.observe(document.getElementById('main')!)
+
     this.animateLogo();
     this.setMainHeight();
 
@@ -84,6 +87,14 @@ export class AppComponent {
             : 'bg-blend-hard-light';
       }
     });
+  }
+
+  onMainResized(entries: ResizeObserverEntry[]) {
+    const main = entries.find((e) => e.target.id === "main");
+    if (!main) return;
+
+    const rect = main.contentRect;
+    document.body.style.height = rect.height + 'px';
   }
 
   checkIfDefaultThemeEnabled(): boolean {
