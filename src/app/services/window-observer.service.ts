@@ -1,5 +1,6 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { inject, Injectable, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
+import { WINDOW } from '../classes/windowinjection';
 
 export interface WindowSize {
   x: number
@@ -14,6 +15,7 @@ export class WindowObserverService implements OnDestroy {
   sizeObservable!: Subject<WindowSize>;
   mouseUpObservable!: Subject<void>;
   mousePositionObservable!: Subject<MouseEvent | TouchEvent>;
+  private wnd = inject(WINDOW);
 
   /**
    * Tracks window events and forwards them to subscribers.
@@ -25,18 +27,18 @@ export class WindowObserverService implements OnDestroy {
     this.mouseUpObservable = new Subject();
     this.mousePositionObservable = new Subject();
 
-    window.addEventListener('mousemove', (event: MouseEvent | TouchEvent) => this.mousePositionObservable.next(event));
-    window.addEventListener('touchmove', (event: MouseEvent | TouchEvent) => this.mousePositionObservable.next(event));
-    window.addEventListener('touchend', () => this.mouseUpObservable.next());
-    window.addEventListener('mouseup', () => this.mouseUpObservable.next());
+    this.wnd.addEventListener('mousemove', (event: MouseEvent | TouchEvent) => this.mousePositionObservable.next(event));
+    this.wnd.addEventListener('touchmove', (event: MouseEvent | TouchEvent) => this.mousePositionObservable.next(event));
+    this.wnd.addEventListener('touchend', () => this.mouseUpObservable.next());
+    this.wnd.addEventListener('mouseup', () => this.mouseUpObservable.next());
 
-    window.addEventListener('resize', this.onWindowResize);
-    window.addEventListener('scroll', this.onWindowScroll);
+    this.wnd.addEventListener('resize', this.onWindowResize);
+    this.wnd.addEventListener('scroll', this.onWindowScroll);
   }
   
   ngOnDestroy(): void {
-    window.removeEventListener('resize', this.onWindowResize);
-    window.removeEventListener('scroll', this.onWindowScroll);
+    this.wnd.removeEventListener('resize', this.onWindowResize);
+    this.wnd.removeEventListener('scroll', this.onWindowScroll);
   }
 
   /**
@@ -44,7 +46,7 @@ export class WindowObserverService implements OnDestroy {
    * to the `scrollObservable` subject.
    */
   private onWindowScroll = () => {
-    this.scrollObservable.next(window.scrollY); // Used an anon function here, else 'this' doesn't work
+    this.scrollObservable.next(this.wnd.scrollY); // Used an anon function here, else 'this' doesn't work
   }
 
   /**
@@ -60,14 +62,14 @@ export class WindowObserverService implements OnDestroy {
   }
 
   /**
-   * Returns the current size of the window.
+   * Returns the current size of the this.wnd.
    * 
-   * @returns An object containing the width (`x`) and height (`y`) of the window.
+   * @returns An object containing the width (`x`) and height (`y`) of the this.wnd.
    */
   getWindowSize() : WindowSize {
     return {
-      x: window.innerWidth,
-      y: window.innerHeight
+      x: this.wnd.innerWidth,
+      y: this.wnd.innerHeight
     }
   }
 

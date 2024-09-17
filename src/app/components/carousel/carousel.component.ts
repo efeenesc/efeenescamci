@@ -1,4 +1,5 @@
 import {
+  afterNextRender,
   AfterViewInit,
   Component,
   ContentChildren,
@@ -23,7 +24,7 @@ interface MousePosition {
   imports: [],
   templateUrl: './carousel.component.html'
 })
-export class CarouselComponent implements AfterViewInit {
+export class CarouselComponent {
   @ViewChild('carousel') set _carouselDiv(content: ElementRef) {
     this.carousel = content.nativeElement as HTMLDivElement;
   }
@@ -48,10 +49,19 @@ export class CarouselComponent implements AfterViewInit {
   private prevMousePos: MousePosition | null = { x: 0, time: 0 };
   private wnd = inject(WINDOW);
 
-  constructor(private woSvc : WindowObserverService) {}
-
-  ngOnInit() {
-    this.wnd.addEventListener('resize', () => this.onWindowSizeChange());
+  constructor(private woSvc : WindowObserverService) {
+    afterNextRender(() => {
+      this.wnd.addEventListener('resize', () => this.onWindowSizeChange());
+      this.carousel.addEventListener(
+        'touchstart',
+        (event: MouseEvent | TouchEvent) => this.startDragging(event)
+      );
+      this.woSvc.mousePositionObservable.subscribe((event) => this.drag(event));
+      this.woSvc.mouseUpObservable.subscribe(() => this.stopDragging());
+  
+      // this.childrenChanged(this.children);
+      this.onWindowSizeChange();
+    })
   }
   
   ngOnViewInit() {
@@ -66,18 +76,6 @@ export class CarouselComponent implements AfterViewInit {
       this.contentDiv.clientWidth * 0.8,
       0
     ];
-  }
-
-  ngAfterViewInit(): void {
-    this.carousel.addEventListener(
-      'touchstart',
-      (event: MouseEvent | TouchEvent) => this.startDragging(event)
-    );
-    this.woSvc.mousePositionObservable.subscribe((event) => this.drag(event));
-    this.woSvc.mouseUpObservable.subscribe(() => this.stopDragging());
-
-    // this.childrenChanged(this.children);
-    this.onWindowSizeChange();
   }
 
   // childrenChanged(children: QueryList<any>) {

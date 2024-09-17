@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { afterNextRender, Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { VsSearchComponent } from './components/vs-search/vs-search.component';
 import { MarkdownEditorComponent } from './components/markdown-editor/markdown-editor.component';
@@ -56,34 +56,32 @@ export class AppComponent {
   themeBarStyle: string = '';
   drawerOpened: boolean = false;
 
-  constructor(private lss: LocalStorageService, private vsSvc: VsThemeService, private woSvc: WindowObserverService) {}
+  constructor(private lss: LocalStorageService, private vsSvc: VsThemeService, private woSvc: WindowObserverService) {
+    afterNextRender(() => {
+      // Reset to default theme if the current theme is default theme
+      // This is to make sure any changes to the default theme are reflected on-device
+      const resetToDefaultTheme = this.checkIfDefaultThemeEnabled();
+      this.restoreLastTheme(resetToDefaultTheme)
 
-  ngOnInit() {
-    // Reset to default theme if the current theme is default theme
-    // This is to make sure any changes to the default theme are reflected on-device
-    const resetToDefaultTheme = this.checkIfDefaultThemeEnabled();
-    this.restoreLastTheme(resetToDefaultTheme)
+      this.checkTouchDevice();
 
-    this.checkTouchDevice();
-  }
-
-  ngAfterContentInit() {
-    this.animateLogo();
-    this.setMainHeight();
-
-    this.woSvc.sizeObservable.subscribe(() => {
+      this.animateLogo();
       this.setMainHeight();
-    })
 
-    this.lss.valueChanges.subscribe((newVal) => {
-      if (newVal.key === 'theme_val') {
-        const themeObj = JSON.parse(newVal.value);
-        this.blendClass =
-          themeObj['theme'] === 'dark'
-            ? 'bg-blend-soft-light'
-            : 'bg-blend-hard-light';
-      }
-    });
+      this.woSvc.sizeObservable.subscribe(() => {
+        this.setMainHeight();
+      })
+
+      this.lss.valueChanges.subscribe((newVal) => {
+        if (newVal.key === 'theme_val') {
+          const themeObj = JSON.parse(newVal.value);
+          this.blendClass =
+            themeObj['theme'] === 'dark'
+              ? 'bg-blend-soft-light'
+              : 'bg-blend-hard-light';
+        }
+      });
+    })
   }
 
   checkIfDefaultThemeEnabled(): boolean {

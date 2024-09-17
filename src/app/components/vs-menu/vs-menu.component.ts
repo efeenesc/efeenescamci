@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { afterNextRender, Component, ViewChild } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { VsThemeService } from '../../services/vs-theme.service';
@@ -51,20 +51,20 @@ export class VsMenuComponent {
 
   constructor(
     private vsSvc: VsThemeService
-  ) {}
-
-  ngOnInit() {
-    this.searchControl = new FormControl('');
-    this.searchControl.valueChanges
-      .pipe(debounceTime(this.searchDebounce), distinctUntilChanged())
-      .subscribe((query: string) => {
-        this.searching = true;
-        this.searchVSMarketplace(query)
-        .then(() => this.searching = false);
-      });
-    this.getFeaturedThemes();
+  ) {
+    afterNextRender(() => {
+      this.searchControl = new FormControl('');
+      this.searchControl.valueChanges
+        .pipe(debounceTime(this.searchDebounce), distinctUntilChanged())
+        .subscribe((query: string) => {
+          this.searching = true;
+          this.searchVSMarketplace(query)
+          .then(() => this.searching = false);
+        });
+      this.getFeaturedThemes();
+    })
   }
-
+  
   async getFeaturedThemes() {
     const requestedFilter = new vst.VSFilterBody;
     const results = await this.vsSvc.getFilteredResults(requestedFilter, 'small');

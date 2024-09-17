@@ -1,8 +1,9 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { afterNextRender, Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import anime from 'animejs';
 import { Subject } from 'rxjs';
 import { XMarkComponent } from "../../icons/xmark/xmark.component";
 import { WindowObserverService } from '../../services/window-observer.service';
+import { WINDOW } from '../../classes/windowinjection';
 
 interface VerticalMousePosition {
   y: number;
@@ -39,21 +40,22 @@ export class DrawerComponent {
   carouselBounds: [number, number] = [90, 2];
   private currentMousePos: VerticalMousePosition | null = { y: 0, time: 0 };
   private prevMousePos: VerticalMousePosition | null = { y: 0, time: 0 };
+  private wnd = inject(WINDOW);
 
-  constructor(private woSvc : WindowObserverService) {}
+  constructor(private woSvc : WindowObserverService) {
+    afterNextRender(() => {
+      document.body.style.overflow = 'hidden';
+      if (this.closeEvent) {
+        this.closeEvent.subscribe(() => {
+          this.slideDown();
+        })
+      }
+      this.slideUp();
 
-  ngOnInit() {
-    document.body.style.overflow = 'hidden';
-    if (this.closeEvent) {
-      this.closeEvent.subscribe(() => {
-        this.slideDown();
-      })
-    }
-    this.slideUp();
-
-    window.addEventListener('touchstart', (event) => this.startDragging(event));
-    this.woSvc.mousePositionObservable.subscribe((event) => this.drag(event));
-    this.woSvc.mouseUpObservable.subscribe(() => this.stopDragging());
+      this.wnd.addEventListener('touchstart', (event) => this.startDragging(event));
+      this.woSvc.mousePositionObservable.subscribe((event) => this.drag(event));
+      this.woSvc.mouseUpObservable.subscribe(() => this.stopDragging());
+    })
   }
 
   ngOnDestroy() {

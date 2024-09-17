@@ -1,4 +1,4 @@
-import { Component, ElementRef, Output, EventEmitter, ViewChild, Input, inject } from '@angular/core';
+import { Component, ElementRef, Output, EventEmitter, ViewChild, Input, inject, afterNextRender } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, Subject } from 'rxjs';
 import * as vst from '../../types/vs-types';
@@ -39,39 +39,39 @@ export class MarkdownEditorComponent {
   // example: string = '# Markdown Benchmark Text\n\n## Basic Formatting\n\nThis is *italic*, **bold**, and ***bold italic***. Some ~~strikethrough~~.\n\n## Lists\n\n1. Ordered list\n2. With nested unordered list:\n   * Item A\n   * Item B\n3. And continuation\n   of the ordered list\n\n- Unordered list\n- With nested ordered list:\n  1. Sub-item 1\n  2. Sub-item 2\n- And continuation\n\n## Code\n\nInline `code` and ``code with `backticks` inside``.\n\n```python\ndef tricky_function():\n    print("This is a code block")\n    # With a comment\n    return None\n```\n\n    Indented code block\n    without language specification\n\n## Blockquotes\n\n> Single-level quote\n>> Nested quote\n> \n> Quote continuation after blank line\n\n## Horizontal Rules\n\n---\n***\n___\n\n## Tables\n\n| Left-aligned | Center-aligned | Right-aligned |\n|:-------------|:--------------:|---------------:|\n| Left | Center | Right |\n| Long cell content | Short | Content |\n\n## Task Lists\n\n- [x] Completed task\n- [ ] Incomplete task\n  - [x] Nested completed task\n  - [ ] Nested incomplete task\n\n## Escaping and Edge Cases\n\n\*Not italic\* and \`not code\`\n\n*Italic with\* escaped asterisk*\n\n**Bold with\** escaped asterisks**\n\nA a \ backslash\n\n<span>HTML tag</span>\n\n<!-- HTML comment -->\n\n### Heading with *italic* and **bold**\n\n[Link](https://example.com/(nested_parentheses))\n\n`Inline code with <html> tags`\n\n    Code block with <html> tags\n    And *asterisks* that should not be italic\n\n> Blockquote with # heading\n> \n> And a [link](https://example.com)\n\n1\. Not a list item\n\n- List item with\n  multiple lines\n  \n  And a paragraph break\n\n* [ ] Task list item with \[escaped\] brackets';
 
   constructor() {
-    if (typeof Worker !== 'undefined') {
-      // Create a new
-      const worker = new Worker(new URL('../../workers/markdown-runner.worker.ts', import.meta.url));
-      worker.onmessage = ({ data }) => {
-        if (this.showRenderer)
-          this.mdTree = data
-
-        this.result.emit(data);
-      };
-
-      this.textChanged.pipe(debounceTime(this.debounce)).subscribe(() => {
-        worker.postMessage(this.getText());
-      })
-    } else {
-      this.textChanged.pipe(debounceTime(this.debounce)).subscribe(() => {
-        this.processMd(this.getText());
-      })
-    }
-  }
-
-  ngOnInit() {
-    document.addEventListener('selectionchange', (ev) => {
-      const sel = this.wnd.getSelection();
-      if (sel!.anchorOffset !== sel!.focusOffset) {
-        if (this.selectedLine) {
-          this.selectedLine.style.removeProperty('background-color');
-          this.selectedLine = null;
-        }
-        return;
+    afterNextRender(() => {
+      if (typeof Worker !== 'undefined') {
+        // Create a new
+        const worker = new Worker(new URL('../../workers/markdown-runner.worker.ts', import.meta.url));
+        worker.onmessage = ({ data }) => {
+          if (this.showRenderer)
+            this.mdTree = data
+  
+          this.result.emit(data);
+        };
+  
+        this.textChanged.pipe(debounceTime(this.debounce)).subscribe(() => {
+          worker.postMessage(this.getText());
+        })
+      } else {
+        this.textChanged.pipe(debounceTime(this.debounce)).subscribe(() => {
+          this.processMd(this.getText());
+        })
       }
-      
-      this.getCursorLine(sel!);
-    });
+
+      document.addEventListener('selectionchange', () => {
+        const sel = this.wnd.getSelection();
+        if (sel!.anchorOffset !== sel!.focusOffset) {
+          if (this.selectedLine) {
+            this.selectedLine.style.removeProperty('background-color');
+            this.selectedLine = null;
+          }
+          return;
+        }
+        
+        this.getCursorLine(sel!);
+      });
+    })
   }
 
   getText() {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { afterNextRender, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { VsSearchComponent } from '../vs-search/vs-search.component';
 import anime from 'animejs';
 import { WindowObserverService, WindowSize } from '../../services/window-observer.service';
@@ -30,11 +30,11 @@ export class TopBarComponent {
   minScrollY: number = 0;
   maxScrollY: number = 200;
 
-  constructor(private woSvc: WindowObserverService) { }
-
-  ngOnInit() {
-    this.woSvc.scrollObservable.subscribe((newYval) => this.trackScroll(newYval));
-    this.woSvc.sizeObservable.subscribe((newWndSize) => this.setTopBarMode(newWndSize));
+  constructor(private woSvc: WindowObserverService) {
+    afterNextRender(() => {
+      this.woSvc.scrollObservable.subscribe((newYval) => this.trackScroll(newYval));
+      this.woSvc.sizeObservable.subscribe((newWndSize) => this.setTopBarMode(newWndSize));
+    })
   }
 
   emitThemeBarClickedEvent() {
