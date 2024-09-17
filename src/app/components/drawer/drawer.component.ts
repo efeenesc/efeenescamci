@@ -1,7 +1,8 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import anime from 'animejs';
 import { Subject } from 'rxjs';
 import { XMarkComponent } from "../../icons/xmark/xmark.component";
+import { WindowObserverService } from '../../services/window-observer.service';
 
 interface VerticalMousePosition {
   y: number;
@@ -11,9 +12,9 @@ interface VerticalMousePosition {
   selector: 'drawer-component',
   standalone: true,
   imports: [XMarkComponent],
-  templateUrl: './drawer.component.html',
+  templateUrl: './drawer.component.html'
 })
-export class DrawerComponent implements AfterViewInit {
+export class DrawerComponent {
   @ViewChild('drawerMain') set _dm(content: ElementRef) {
     this.drawerMain = content.nativeElement as HTMLDivElement;
   }
@@ -34,10 +35,12 @@ export class DrawerComponent implements AfterViewInit {
   dragStartTime: number = 0;
   dragStartPos: number = 0;
   translatePos: number = 0;
-  carouselRect!: DOMRect;
-  carouselBounds!: [number, number];
+  elTranslatePos: {current: number} = {current: 0};
+  carouselBounds: [number, number] = [90, 2];
   private currentMousePos: VerticalMousePosition | null = { y: 0, time: 0 };
   private prevMousePos: VerticalMousePosition | null = { y: 0, time: 0 };
+
+  constructor(private woSvc : WindowObserverService) {}
 
   ngOnInit() {
     document.body.style.overflow = 'hidden';
@@ -47,18 +50,10 @@ export class DrawerComponent implements AfterViewInit {
       })
     }
     this.slideUp();
-  }
 
-  ngAfterViewInit(): void {
-      this.onWindowSizeChange();
-  }
-
-  onWindowSizeChange() {
-    this.carouselRect = this.drawerMain.getBoundingClientRect();
-    this.carouselBounds = [
-      this.drawerMain.clientHeight * 0.8,
-      this.drawerMain.clientHeight * 0.1,
-    ];
+    window.addEventListener('touchstart', (event) => this.startDragging(event));
+    this.woSvc.mousePositionObservable.subscribe((event) => this.drag(event));
+    this.woSvc.mouseUpObservable.subscribe(() => this.stopDragging());
   }
 
   ngOnDestroy() {
@@ -67,39 +62,39 @@ export class DrawerComponent implements AfterViewInit {
     }
   }
 
+  resetMouseVariables() {
+    this.dragStartTime = 0;
+    this.dragStartPos = 0;
+    this.currentMousePos = null;
+    this.prevMousePos = null;
+  }
+
   slideUp() {
     const dkbg = document.getElementById('darkenedBg')!;
     const overlay = document.getElementById('mainOverlay')!;
     dkbg.style.opacity = '0.4';
     overlay.style.pointerEvents = 'auto';
-    
-    anime({
-      targets: '#drawerMain',
-      top: '5vh',
-      easing: 'easeOutExpo',
-      duration: 600
-    })
+
+    this.translatePos = 2; // Set target to 2vh
+    this.elTranslatePos = {current: 100}; // Set current position to 100vh - bottom of page
+    this.updateCarouselPosition(600, false, 'easeOutExpo');
   }
 
-  slideDown() {
+  closeOverlay() {
     const dkbg = document.getElementById('darkenedBg')!;
     const overlay = document.getElementById('mainOverlay')!;
     dkbg.style.removeProperty('opacity');
     overlay.style.removeProperty('pointer-events');
     document.body.style.removeProperty('overflow');
+  }
 
-    anime({
-      targets: '#drawerMain',
-      top: '100vh',
-      easing: 'easeInQuad',
-      duration: 300,
-      complete: () => {
-        this.closed.emit();
-      }
-    })
+  slideDown() {
+    this.translatePos = 100;
+    this.updateCarouselPosition(300, true, 'easeInQuad');
   }
 
   clickedOutside() {
+    this.isDragging = false;
     this.slideDown();
   }
 
@@ -118,30 +113,38 @@ export class DrawerComponent implements AfterViewInit {
     this.currentMousePos = { y, time };
   }
 
-  clearMousePosition() {
-    this.prevMousePos = null;
-    this.currentMousePos = null;
-  }
-
   startDragging(e: MouseEvent | TouchEvent): void {
+    if ((e.target as HTMLDivElement).id !== "grabberDiv" &&
+        (e.target as HTMLDivElement).id !== "grabberImg"
+      )
+      return;
+      
     if (this.isDragging) return;
-    this.isDragging = true;
-    this.clearMousePosition();
 
+    this.resetMouseVariables();
     this.dragStartPos = this.getDragPosition(e);
     this.setPrevMousePosition(this.dragStartPos, e.timeStamp);
+
+    this.isDragging = true;
   }
 
   drag(e: MouseEvent | TouchEvent): void {
     if (!this.isDragging) return;
 
     const offsetY = this.getDragPosition(e);
+
     const dragDistance = offsetY - this.dragStartPos;
 
-    this.translatePos += dragDistance;
+    this.translatePos += dragDistance * 0.1;
     this.dragStartPos = offsetY;
+    let closeAfter = false;
 
-    this.updateCarouselPosition(150);
+    if (this.translatePos > this.carouselBounds[0]) {
+      this.translatePos = 100;
+      closeAfter = true
+    }
+
+    this.updateCarouselPosition(150, closeAfter);
     this.setPrevMousePosition(offsetY, e.timeStamp);
   }
 
@@ -155,24 +158,43 @@ export class DrawerComponent implements AfterViewInit {
     const { y: prevY, time: prevTime } = this.prevMousePos;
 
     const dt = curTime - prevTime;
-    const dx = curY - prevY;
+    const dy = curY - prevY;
 
-    const vel = Math.round((dx / dt) * 100);
+    const vel = Math.round((dy / dt) * 2);
     this.translatePos += vel;
-    this.translatePos = Math.max(
-      Math.min(this.translatePos, this.carouselBounds[1]),
-      -this.carouselBounds[0]
-    );
 
-    this.updateCarouselPosition(750);
+    let closeAfter = false;
+
+    if (this.translatePos > this.carouselBounds[0]) {
+      this.translatePos = 110;
+      closeAfter = true;
+    } else {
+      this.translatePos = Math.max(this.translatePos, this.carouselBounds[1]);
+    }
+    
+    this.resetMouseVariables();
+    this.updateCarouselPosition(750, closeAfter);
   }
 
-  private updateCarouselPosition(duration: number): void {
+  private updateCarouselPosition(duration: number, closeAfter: boolean = false, easing: string = 'easeOutExpo'): void {
+    if (closeAfter)
+      this.closeOverlay();
+
     anime({
-      targets: this.drawerMain,
-      top: this.translatePos,
-      duration: duration,
-      easing: 'easeOutExpo',
+      targets: this.elTranslatePos,
+      current: this.translatePos,
+      duration,
+      easing,
+      update: (() => {
+        this.drawerMain.style.top = this.elTranslatePos.current + 'vh';
+      }),
+      complete: () => {
+        if (closeAfter) {
+          this.closed.emit();
+          this.resetMouseVariables();
+          this.translatePos = 0;
+        }
+      }
     });
   }
 }

@@ -1,11 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
-import { ScopeFinder } from '../../classes/scopefinder';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { VsThemeService } from '../../services/vs-theme.service';
 import * as vst from '../../types/vs-types';
 import anime from 'animejs';
-import { LocalStorageService } from '../../services/local-storage.service';
 import { LoadingBarComponent } from '../loading-bar/loading-bar.component';
 import { GetSetObj } from '../../classes/getsetobj';
 import { VsCardComponent } from '../vs-card/vs-card.component';
@@ -16,7 +14,26 @@ import { SkeletonLoaderComponent } from "../skeleton-loader/skeleton-loader.comp
   selector: 'vs-menu',
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, LoadingBarComponent, VsCardComponent, MagnifyingGlassComponent, SkeletonLoaderComponent],
-  templateUrl: './vs-menu.component.html'
+  templateUrl: './vs-menu.component.html',
+  styles: `
+  ::-webkit-scrollbar {
+    background-color: var(--system);
+    width: 5px;
+    height: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: var(--system-900);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #babac0;
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-button {
+    display:none;
+  }`
 })
 export class VsMenuComponent {
   @ViewChild('themebtn') themeBtn!: HTMLElement;
@@ -45,6 +62,13 @@ export class VsMenuComponent {
         this.searchVSMarketplace(query)
         .then(() => this.searching = false);
       });
+    this.getFeaturedThemes();
+  }
+
+  async getFeaturedThemes() {
+    const requestedFilter = new vst.VSFilterBody;
+    const results = await this.vsSvc.getFilteredResults(requestedFilter, 'small');
+    this.searchResults = results;
   }
 
   playLoadingAnimation(show: boolean) {

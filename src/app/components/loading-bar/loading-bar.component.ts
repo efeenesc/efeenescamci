@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import anime from 'animejs';
 import { ReplaySubject } from 'rxjs';
 
@@ -7,7 +7,7 @@ import { ReplaySubject } from 'rxjs';
   standalone: true,
   imports: [],
   template:`
-  <div class="w-full h-full rounded-full outline outline-1 outline-border1 bg-dark overflow-hidden block items-center justify-center">
+  <div class="w-full h-full rounded-full outline outline-1 outline-border1 bg-theme-300 overflow-hidden block items-center justify-center">
     <div id="progressbar" class="h-full bg-blue-500 w-0"></div>
   </div>
   `

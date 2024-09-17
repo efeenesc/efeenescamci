@@ -4,13 +4,13 @@ import {
   ContentChildren,
   ElementRef,
   inject,
-  Query,
   QueryList,
   ViewChild,
 } from '@angular/core';
 import { CarouselItemComponent } from '../carousel-item/carousel-item.component';
 import anime from 'animejs';
 import { WINDOW } from '../../classes/windowinjection';
+import { WindowObserverService } from '../../services/window-observer.service';
 
 interface MousePosition {
   x: number;
@@ -41,27 +41,30 @@ export class CarouselComponent implements AfterViewInit {
   dragStartTime: number = 0;
   dragStartPos: number = 0;
   translatePos: number = 0;
+  elTranslatePos: {current: number} = {current: 0};
   carouselRect!: DOMRect;
   carouselBounds!: [number, number];
   private currentMousePos: MousePosition | null = { x: 0, time: 0 };
   private prevMousePos: MousePosition | null = { x: 0, time: 0 };
   private wnd = inject(WINDOW);
 
+  constructor(private woSvc : WindowObserverService) {}
+
   ngOnInit() {
     this.wnd.addEventListener('resize', () => this.onWindowSizeChange());
   }
   
   ngOnViewInit() {
-    this.children.changes.subscribe((children: QueryList<any>) => {
-      this.childrenChanged(children);
-    });
+    // this.children.changes.subscribe((children: QueryList<any>) => {
+    //   this.childrenChanged(children);
+    // });
   }
 
   onWindowSizeChange() {
     this.carouselRect = this.carousel.getBoundingClientRect();
     this.carouselBounds = [
       this.contentDiv.clientWidth * 0.8,
-      this.contentDiv.clientWidth * 0.1,
+      0
     ];
   }
 
@@ -70,24 +73,18 @@ export class CarouselComponent implements AfterViewInit {
       'touchstart',
       (event: MouseEvent | TouchEvent) => this.startDragging(event)
     );
-    this.carousel.addEventListener(
-      'touchmove',
-      (event: MouseEvent | TouchEvent) => this.drag(event)
-    );
-    this.carousel.addEventListener(
-      'touchend',
-      (event: MouseEvent | TouchEvent) => this.stopDragging()
-    );
+    this.woSvc.mousePositionObservable.subscribe((event) => this.drag(event));
+    this.woSvc.mouseUpObservable.subscribe(() => this.stopDragging());
 
-    this.childrenChanged(this.children);
+    // this.childrenChanged(this.children);
     this.onWindowSizeChange();
   }
 
-  childrenChanged(children: QueryList<any>) {
-    children.forEach((child) => {
-      return;
-    });
-  }
+  // childrenChanged(children: QueryList<any>) {
+  //   children.forEach(() => {
+  //     return;
+  //   });
+  // }
   
   getDragPosition(e: MouseEvent | TouchEvent): number {
     if (e instanceof TouchEvent) {
@@ -155,8 +152,13 @@ export class CarouselComponent implements AfterViewInit {
 
   private updateCarouselPosition(duration: number): void {
     anime({
-      targets: this.carousel,
-      translateX: this.translatePos,
+      targets: this.elTranslatePos,
+      current: this.translatePos,
+      update: (() => {
+        const newStyle = "translateX(" + this.elTranslatePos.current + "px)";
+        this.carousel.style.transform = newStyle;
+        this.carousel.style.webkitTransform = newStyle;
+      }),
       duration: duration,
       easing: 'easeOutExpo',
     });

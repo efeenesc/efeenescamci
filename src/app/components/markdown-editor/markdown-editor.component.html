@@ -3,7 +3,7 @@
 >
   @if (this.showRenderer) {
   <div
-    class="preview bg-darker flex-1 justify-center overflow-auto flex p-5 flex-col transition-colors text-nowrap text-foreground"
+    class="preview bg-theme-600 flex-1 justify-center overflow-auto flex p-5 flex-col transition-colors text-nowrap text-foreground"
   >
     @if (this.mdTree) {
     <markdown-renderer
@@ -14,7 +14,7 @@
   }
 
   <div
-    class="editor bg-dark h-full w-full flex-1 flex p-2 text-contrast relative overflow-y-auto font-fantasque"
+    class="editor bg-theme-300 h-full w-full flex-1 flex p-2 text-contrast relative overflow-y-auto font-fantasque"
   >
     <div
       class="w-8 h-full flex flex-col pointer-events-none select-none left-0"
@@ -27,8 +27,8 @@
       [contentEditable]="true"
       #markdownArea
       (paste)="this.onPaste($event)"
-      (keydown)="this.keyDownEvent($event)"
-      (click)="this.clickEvent($event)"
+      (keydown)="this.keyDownEvent()"
+      (click)="this.clickEvent()"
       id="markdownArea"
       class="w-full flex flex-col h-max min-h-full flex-grow bg-transparent outline-none border-none resize-none text-nowrap overflow-x-auto justify-stretch items-stretch justify-items-stretch place-content-stretch [&>div]:min-w-full"
     >

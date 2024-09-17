@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { WindowObserverService } from './scroll-observer.service';
+import { WindowObserverService } from './window-observer.service';
 
 describe('WindowObserverService', () => {
   let service: WindowObserverService;

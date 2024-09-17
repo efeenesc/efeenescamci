@@ -3,15 +3,43 @@
 @tailwind utilities;
 
 :root {
-  --darkest: #737163;
-  --darker: #c7c4a8;
-  --dark: #c7c4a8;
+  --theme-900: #737163;
+  --theme-600: #c7c4a8;
+  --theme-300: #c7c4a8;
   --foreground: #3d3929;
   --accent1: #c8915e;
   --accent2: #4b4848;
   --border1: #747474;
   --contrast: #000000;
   --highlight: #f3c092;
+
+  --light-system-900: #fafafa;
+  --light-system-700: #ebebeb;
+  --light-system-600: #d3d3d3;
+  --light-system-300: #808082;
+  --light-system-200: #89888a;
+
+  --dark-system-900: #1c1c1e;
+  --dark-system-700: #262628;
+  --dark-system-600: #2c2c2e;
+  --dark-system-300: #616368;
+  --dark-system-200: #787b81;
+}
+
+[data-theme='light'] {
+  --system-900: var(--light-system-900);
+  --system-700: var(--light-system-700);
+  --system-600: var(--light-system-600);
+  --system-300: var(--light-system-300);
+  --system-200: var(--light-system-200);
+}
+
+[data-theme='dark'] {
+  --system-900: var(--dark-system-900);
+  --system-700: var(--dark-system-700);
+  --system-600: var(--dark-system-600);
+  --system-300: var(--dark-system-300);
+  --system-200: var(--dark-system-200);
 }
 
 html,
@@ -46,7 +74,7 @@ body {
 }
 
 blockquote {
-  @apply rounded-lg p-3 bg-dark;
+  @apply rounded-lg p-3 bg-theme-300;
   margin-block-start: 1em;
   margin-block-end: 1em;
   margin-inline-start: 40px;

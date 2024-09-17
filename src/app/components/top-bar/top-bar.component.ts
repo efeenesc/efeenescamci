@@ -1,14 +1,15 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { VsSearchComponent } from '../vs-search/vs-search.component';
 import anime from 'animejs';
-import { WindowObserverService, WindowSize } from '../../services/scroll-observer.service';
+import { WindowObserverService, WindowSize } from '../../services/window-observer.service';
 import { MagnifyingGlassComponent } from "../../icons/magnifying-glass/magnifying-glass.component";
 import { SiteLogoComponent } from "../../icons/site-logo/site-logo.component";
+import { HamburgerMenuComponent } from "../../icons/menu/hamburger-menu.component";
 
 @Component({
   selector: 'top-bar',
   standalone: true,
-  imports: [VsSearchComponent, MagnifyingGlassComponent, SiteLogoComponent],
+  imports: [VsSearchComponent, MagnifyingGlassComponent, SiteLogoComponent, HamburgerMenuComponent],
   templateUrl: './top-bar.component.html'
 })
 export class TopBarComponent {
@@ -18,21 +19,22 @@ export class TopBarComponent {
   topbar!: HTMLDivElement;
 
   @Input()
-  themeBarStyle?: string; 
+  themeBarStyle?: string;
 
   @Output()
   themeButtonClicked: EventEmitter<boolean> = new EventEmitter();
 
+  topbarScrollProgress!: number;
   topbarExtended: boolean = true;
   mobileMode: boolean = false;
   minScrollY: number = 0;
   maxScrollY: number = 200;
 
-  constructor(private woSvc: WindowObserverService) {}
+  constructor(private woSvc: WindowObserverService) { }
 
   ngOnInit() {
-    this.woSvc.scrollObservable.subscribe((newYval) => this.trackScroll(newYval))
-    this.woSvc.sizeObservable.subscribe((newWndSize) => this.setTopBarMode(newWndSize))
+    this.woSvc.scrollObservable.subscribe((newYval) => this.trackScroll(newYval));
+    this.woSvc.sizeObservable.subscribe((newWndSize) => this.setTopBarMode(newWndSize));
   }
 
   emitThemeBarClickedEvent() {
@@ -44,15 +46,13 @@ export class TopBarComponent {
       return;
     }
 
-    let topbarScrollProgress;
-    
     if (newYval > this.maxScrollY) {
-      topbarScrollProgress = 0;
+      this.topbarScrollProgress = 0;
     } else {
-      topbarScrollProgress = 1 - (newYval / this.maxScrollY);
+      this.topbarScrollProgress = 1 - (newYval / this.maxScrollY);
     }
 
-    this.playNewTopBarAnimation(topbarScrollProgress);
+    this.playNewTopBarAnimation(this.topbarScrollProgress);
   }
 
   // This relies on the window size to determine whether the user is on mobile or not.
@@ -72,7 +72,20 @@ export class TopBarComponent {
       targets: '#topbar',
       height: newHeight,
       easing: 'spring(0, 80, 50, 10)'
-    })
+    });
+
+    const basePadY = 0.25;
+    const extraPadY = progress * 0.50;
+
+    const finalPadY = basePadY + extraPadY + 'rem';
+
+    anime({
+      targets: '#hamburger-menu',
+      paddingTop: finalPadY,
+      paddingBottom: finalPadY,
+      easing: 'linear',
+      duration: 50
+    });
   }
 
   //! UNUSED

@@ -92,7 +92,7 @@ function mdNodeParse(
   i: number = 0,
   terminateAt?: string
 ): { newNodes: MdNode[]; incr?: number } {
-  let thisNode: MdNode = new MdNode('document', '');
+  const thisNode: MdNode = new MdNode('document', '');
   let newNodes: MdNode[] = [];
   const root: boolean = i === 0;
   let buf: string[] = [];
@@ -100,7 +100,6 @@ function mdNodeParse(
   let lastChar: string | undefined;
 
   let isSpecial = false;
-  let isParagraph = false;
 
   function addTextNode() {
     if (buf.length > 0) {

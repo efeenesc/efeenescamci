@@ -15,7 +15,7 @@ import { ProjectsComponent } from './sections/projects/projects.component';
 import { DrawerComponent } from './components/drawer/drawer.component';
 import { VsMenuComponent } from "./components/vs-menu/vs-menu.component";
 import { TopBarComponent } from './components/top-bar/top-bar.component';
-import { WindowObserverService } from './services/scroll-observer.service';
+import { WindowObserverService } from './services/window-observer.service';
 
 @Component({
   selector: 'app-root',
@@ -52,6 +52,7 @@ export class AppComponent {
   blendClass?: string;
   markdown?: MdNode;
   scrollPos: number = 0;
+  elTranslatePos: {current: number} = {current: 0};
   themeBarStyle: string = '';
   drawerOpened: boolean = false;
 
@@ -60,7 +61,7 @@ export class AppComponent {
   ngOnInit() {
     // Reset to default theme if the current theme is default theme
     // This is to make sure any changes to the default theme are reflected on-device
-    let resetToDefaultTheme = this.checkIfDefaultThemeEnabled();
+    const resetToDefaultTheme = this.checkIfDefaultThemeEnabled();
     this.restoreLastTheme(resetToDefaultTheme)
 
     this.checkTouchDevice();
@@ -69,6 +70,10 @@ export class AppComponent {
   ngAfterContentInit() {
     this.animateLogo();
     this.setMainHeight();
+
+    this.woSvc.sizeObservable.subscribe(() => {
+      this.setMainHeight();
+    })
 
     this.lss.valueChanges.subscribe((newVal) => {
       if (newVal.key === 'theme_val') {
@@ -91,27 +96,19 @@ export class AppComponent {
   restoreLastTheme(resetToDefault: boolean = false) {
     const cs = this.vsSvc.getFromLocalStorage();
 
-    if (!cs || resetToDefault) {
+    if (!cs || resetToDefault || Object.keys(cs).includes("darkest")) {
       return this.vsSvc.setDefaultColorScheme();
     }
 
     this.vsSvc.changeColorVariables(cs);
   }
 
-  isTouchDevice() {
-    return (
-      'ontouchstart' in window ||
-      navigator.maxTouchPoints > 0 ||
-      (navigator as any).msMaxTouchPoints > 0
-    );
-  }
-
   checkTouchDevice() {
-    if (!this.isTouchDevice()) {
+    if (!this.woSvc.isTouchDevice()) {
       this.woSvc.scrollObservable.subscribe((newYval) => {
         this.animatePageScroll(newYval);
       });
-    } else {
+    } else {  
       this.woSvc.scrollObservable.subscribe((newYval) => {
         this.normalPageScroll(newYval);
       });
@@ -128,8 +125,13 @@ export class AppComponent {
 
   animatePageScroll(scrollY: number) {
     anime({
-      targets: this.main,
-      translateY: -scrollY,
+      targets: this.elTranslatePos,
+      current: -scrollY,
+      update: (() => {
+        const newPos = 'translateY(' + this.elTranslatePos.current + 'px)';
+        this.main.style.transform = newPos;
+        this.main.style.webkitTransform = newPos;
+      }),
       easing: 'easeOutExpo',
       duration: 200,
     });
@@ -139,7 +141,7 @@ export class AppComponent {
     const targetpath = document.getElementById('website-logo-path');
 
     setTimeout(() => {
-      let timeline = anime.timeline();
+      const timeline = anime.timeline();
 
       timeline.add({
         targets: targetpath,
@@ -159,6 +161,7 @@ export class AppComponent {
 
   normalPageScroll(scrollY: number) {
     this.main.style.transform = 'translateY(' + -scrollY + 'px)';
+    this.main.style.webkitTransform = 'translateY(' + -scrollY +'px)';
   }
 
   setMainHeight() {

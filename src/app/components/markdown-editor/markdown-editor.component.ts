@@ -85,12 +85,12 @@ export class MarkdownEditorComponent {
     return finalText;
   }
 
-  keyDownEvent(e: KeyboardEvent) {
+  keyDownEvent() {
     setTimeout(() => this.assignCurrentLine(), 0);
     this.textChanged.next(null);
   }
 
-  clickEvent(e: MouseEvent) {
+  clickEvent() {
     setTimeout(() => this.assignCurrentLine(), 0);
   }
 
