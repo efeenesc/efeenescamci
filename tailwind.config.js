@@ -35,7 +35,8 @@ module.exports = {
         "md-alt": "0 0 6px 1px rgb(0 0 0 / 0.1), 0 0 4px 1px rgb(0 0 0 / 0.1)",
         "lg-alt": "0 0 15px 2px rgb(0 0 0 / 0.1), 0 0 6px 2px rgb(0 0 0 / 0.1)",
         "xl-alt": "0 0 25px 4px rgb(0 0 0 / 0.1), 0 0 10px 4px rgb(0 0 0 / 0.1)",
-        "2xl-alt": "0 0 50px 6px rgb(0 0 0 / 0.25)"
+        "2xl-alt": "0 0 50px 6px rgb(0 0 0 / 0.25)",
+        "deep": "0px 22px 70px 4px rgba(0, 0, 0, 0.56)"
       }
     },
   },

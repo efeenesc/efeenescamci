@@ -42,7 +42,7 @@ export class CarouselComponent {
   dragStartTime: number = 0;
   dragStartPos: number = 0;
   translatePos: number = 0;
-  elTranslatePos: {current: number} = {current: 0};
+  elTranslatePos: { current: number } = { current: 0 };
   carouselRect!: DOMRect;
   carouselBounds!: [number, number];
   private currentMousePos: MousePosition | null = { x: 0, time: 0 };
@@ -63,7 +63,7 @@ export class CarouselComponent {
       this.onWindowSizeChange();
     })
   }
-  
+
   ngOnViewInit() {
     // this.children.changes.subscribe((children: QueryList<any>) => {
     //   this.childrenChanged(children);
@@ -83,7 +83,7 @@ export class CarouselComponent {
   //     return;
   //   });
   // }
-  
+
   getDragPosition(e: MouseEvent | TouchEvent): number {
     if (e instanceof TouchEvent) {
       return e.changedTouches[0].clientX - this.carouselRect.left;
@@ -93,8 +93,7 @@ export class CarouselComponent {
   }
 
   setPrevMousePosition(x: number, time: number): void {
-    if (this.currentMousePos)
-      this.prevMousePos = { ...this.currentMousePos };
+    if (this.currentMousePos) this.prevMousePos = { ...this.currentMousePos };
 
     this.currentMousePos = { x, time };
   }
@@ -152,11 +151,11 @@ export class CarouselComponent {
     anime({
       targets: this.elTranslatePos,
       current: this.translatePos,
-      update: (() => {
-        const newStyle = "translateX(" + this.elTranslatePos.current + "px)";
+      update: () => {
+        const newStyle = 'translateX(' + this.elTranslatePos.current + 'px)';
         this.carousel.style.transform = newStyle;
         this.carousel.style.webkitTransform = newStyle;
-      }),
+      },
       duration: duration,
       easing: 'easeOutExpo',
     });

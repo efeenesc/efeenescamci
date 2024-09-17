@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import * as vst from '../types/vs-types';
-import { plainToInstance } from 'class-transformer';
 import plist from 'plist';
 import stripJsonComments from 'strip-json-comments';
 import { ScopeFinder } from '../classes/scopefinder';
@@ -50,8 +49,7 @@ export class VsThemeService {
       }
     );
 
-    const jsonObj = (await postResult.json()) as object;
-    const finalObj = plainToInstance(vst.VSResultBody, jsonObj);
+    const finalObj = (await postResult.json()) as vst.VSResultBody;
 
     if (downloadIcons !== 'none') {
       finalObj.results.map((result) => {

@@ -5,11 +5,12 @@ import { WindowObserverService, WindowSize } from '../../services/window-observe
 import { MagnifyingGlassComponent } from "../../icons/magnifying-glass/magnifying-glass.component";
 import { SiteLogoComponent } from "../../icons/site-logo/site-logo.component";
 import { HamburgerMenuComponent } from "../../icons/menu/hamburger-menu.component";
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'top-bar',
   standalone: true,
-  imports: [VsSearchComponent, MagnifyingGlassComponent, SiteLogoComponent, HamburgerMenuComponent],
+  imports: [VsSearchComponent, MagnifyingGlassComponent, SiteLogoComponent, HamburgerMenuComponent, RouterLink],
   templateUrl: './top-bar.component.html'
 })
 export class TopBarComponent {

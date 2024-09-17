@@ -53,17 +53,8 @@ export interface VSCriteria {
   value: string;
 };
 
-export class VSResultBody {
-  results: VSResult[] = [];
-
-  findInExtensions(query: string) : VSExtension | null {
-    for (const ext of this.results[0].extensions) {
-      if (ext.displayName === query)
-        return ext;
-    }
-
-    return null;
-  };
+export interface VSResultBody {
+  results: VSResult[];
 }
 
 export interface VSResult {
