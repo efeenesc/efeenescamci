@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as vst from '../types/vs-types';
-import * as plist from '@plist/parse';
 import stripJsonComments from 'strip-json-comments';
+import type JSZip from 'jszip'
 import { ScopeFinder } from '../classes/scopefinder';
-import JSZip from 'jszip';
 import { ColorScheme, ColorTheme } from '../classes/colorscheme';
 import { LocalStorageService } from './local-storage.service';
 import { ThemeMetadata, ThemePackage } from '../types/vs/manifest';
@@ -21,6 +20,9 @@ export interface ThemeInfo {
   providedIn: 'root',
 })
 export class VsThemeService {
+  private dJSZip?: JSZip; // Dynamically imported JSZip
+  private dPlistParse?: (input: string | ArrayBuffer) => any; // Dynamically imported 'parse' method of the '@plist/parse' library
+
   constructor(private _lss: LocalStorageService) {}
 
   /**
@@ -77,10 +79,14 @@ export class VsThemeService {
    * @param progressCallback - Optional callback function to track download progress.
    * @returns A promise resolving to the loaded JSZip object.
    */
-  getPackageFile = (
+  getPackageFile = async (
     requestedPackage: string,
     progressCallback?: (loaded: number, total: number) => void
-  ): Promise<JSZip> => {
+  ) : Promise<JSZip> => {
+    if (typeof this.dJSZip === 'undefined') {
+      this.dJSZip = (await import('jszip')).default;
+    }
+    
     return new Promise((resolve, reject) => {
       const client = new XMLHttpRequest();
       client.open('GET', requestedPackage, true);
@@ -95,7 +101,7 @@ export class VsThemeService {
       client.onload = async () => {
         if (client.status === 200) {
           try {
-            const zip = await JSZip.loadAsync(client.response);
+            const zip = await this.dJSZip!.loadAsync(client.response);
             resolve(zip);
           } catch (error) {
             reject(error);
@@ -198,7 +204,7 @@ export class VsThemeService {
         ].async('string');
 
         const colorScheme = themeFile.substring(0, 5).includes('<?xml')
-          ? this.readPlistFile(themeFile, colorTheme as ColorTheme)!
+          ? await this.readPlistFile(themeFile, colorTheme as ColorTheme)!
           : this.readJSONFile(themeFile, colorTheme as ColorTheme)!;
 
         colorScheme.name = theme.label;
@@ -285,8 +291,12 @@ export class VsThemeService {
    * @param colorTheme - The type of color theme ('dark' or 'light').
    * @returns A ColorScheme object with extracted color details.
    */
-  private readPlistFile(filestr: string, colorTheme: ColorTheme): ColorScheme {
-    const pfile = plist.parse(filestr);
+  private async readPlistFile(filestr: string, colorTheme: ColorTheme): Promise<ColorScheme> {
+    if (typeof this.dPlistParse === 'undefined') {
+      this.dPlistParse = await import('@plist/parse') as any; // I'm not going to spend 5 years trying to get TypeScript to comply. 'any' to the rescue
+    }
+
+    const pfile = this.dPlistParse!(filestr);
 
     const sf = new ScopeFinder('plist', pfile);
     const cs = new ColorScheme(colorTheme);
