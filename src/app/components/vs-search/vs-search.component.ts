@@ -1,4 +1,4 @@
-import { afterNextRender, Component, Input, ViewChild } from '@angular/core';
+import { afterNextRender, Component, inject, Input, ViewChild } from '@angular/core';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { LoadingBarComponent } from '../loading-bar/loading-bar.component';
 import { VsCardComponent } from '../vs-card/vs-card.component';
@@ -21,12 +21,15 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class VsSearchComponent {
   @ViewChild('themebtn') themeBtn!: HTMLElement;
+  private p_id = inject(PLATFORM_ID);
 
   @Input('animationSeekAt') set _seek(s: number) {
     this.animationSeekAt = s;
 
-    if (isPlatformBrowser(PLATFORM_ID))
+    if (isPlatformBrowser(this.p_id)) {
       this.playScrollAnimation(this.animationSeekAt);
+    }
+      
   }
   animationSeekAt: number = 0;
 
