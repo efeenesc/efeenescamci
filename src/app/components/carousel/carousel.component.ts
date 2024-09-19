@@ -7,8 +7,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CarouselItemComponent } from '../carousel-item/carousel-item.component';
-import anime from 'animejs';
 import { WindowObserverService } from '../../services/window-observer.service';
+import gsap from 'gsap';
 
 interface MousePosition {
   x: number;
@@ -144,16 +144,31 @@ export class CarouselComponent implements AfterViewInit {
   }
 
   private updateCarouselPosition(duration: number): void {
-    anime({
-      targets: this.elTranslatePos,
+    if (this.carouselTween)
+      this.carouselTween.kill();
+
+    this.carouselTween = gsap.to(this.elTranslatePos, {
       current: this.translatePos,
-      update: () => {
-        const newStyle = 'translateX(' + this.elTranslatePos.current + 'px)';
-        this.carousel.style.transform = newStyle;
-        this.carousel.style.webkitTransform = newStyle;
-      },
-      duration: duration,
-      easing: 'easeOutExpo',
+      duration: duration / 1000, // Convert milliseconds to seconds
+      ease: "expo.out",
+      onUpdate: () => {
+        const newStyle = `translateX(${this.elTranslatePos.current}px)`;
+        gsap.set(this.carousel, {
+          transform: newStyle,
+          webkitTransform: newStyle
+        });
+      }
     });
+    // this.carouselAnimeInstance = anime({
+    //   targets: this.elTranslatePos,
+    //   current: this.translatePos,
+    //   update: () => {
+    //     const newStyle = 'translateX(' + this.elTranslatePos.current + 'px)';
+    //     this.carousel.style.transform = newStyle;
+    //     this.carousel.style.webkitTransform = newStyle;
+    //   },
+    //   duration: duration,
+    //   easing: 'easeOutExpo',
+    // });
   }
 }

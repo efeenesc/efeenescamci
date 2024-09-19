@@ -30,6 +30,8 @@ export class TopBarComponent {
   mobileMode: boolean = false;
   minScrollY: number = 0;
   maxScrollY: number = 200;
+  private topBarAnimeInstance!: anime.AnimeInstance;
+  private hamburgerAnimeInstance!: anime.AnimeInstance;
 
   constructor(private woSvc: WindowObserverService) { }
 
@@ -69,7 +71,7 @@ export class TopBarComponent {
     const finalHeight = baseHeight + extraHeight;
     const newHeight = finalHeight + 'vh';
 
-    anime({
+    this.topBarAnimeInstance = anime({
       targets: '#topbar',
       height: newHeight,
       easing: 'spring(0, 80, 50, 10)'
@@ -80,7 +82,7 @@ export class TopBarComponent {
 
     const finalPadY = basePadY + extraPadY + 'rem';
 
-    anime({
+    this.hamburgerAnimeInstance = anime({
       targets: '#hamburger-menu',
       paddingTop: finalPadY,
       paddingBottom: finalPadY,

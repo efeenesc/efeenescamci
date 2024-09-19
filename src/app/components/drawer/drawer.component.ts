@@ -77,7 +77,7 @@ export class DrawerComponent {
 
     this.translatePos = 2; // Set target to 2vh
     this.elTranslatePos = {current: 100}; // Set current position to 100vh - bottom of page
-    this.updateCarouselPosition(600, false, 'easeOutExpo');
+    this.updateDrawerPosition(600, false, 'easeOutExpo');
   }
 
   closeOverlay() {
@@ -90,7 +90,7 @@ export class DrawerComponent {
 
   slideDown() {
     this.translatePos = 100;
-    this.updateCarouselPosition(300, true, 'easeInQuad');
+    this.updateDrawerPosition(300, true, 'easeInQuad');
   }
 
   clickedOutside() {
@@ -144,7 +144,7 @@ export class DrawerComponent {
       closeAfter = true
     }
 
-    this.updateCarouselPosition(150, closeAfter);
+    this.updateDrawerPosition(150, closeAfter);
     this.setPrevMousePosition(offsetY, e.timeStamp);
   }
 
@@ -173,14 +173,14 @@ export class DrawerComponent {
     }
     
     this.resetMouseVariables();
-    this.updateCarouselPosition(750, closeAfter);
+    this.updateDrawerPosition(750, closeAfter);
   }
 
-  private updateCarouselPosition(duration: number, closeAfter: boolean = false, easing: string = 'easeOutExpo'): void {
+  private updateDrawerPosition(duration: number, closeAfter: boolean = false, easing: string = 'easeOutExpo'): void {
     if (closeAfter)
       this.closeOverlay();
 
-    anime({
+    this.drawerAnimeInstance = anime({
       targets: this.elTranslatePos,
       current: this.translatePos,
       duration,

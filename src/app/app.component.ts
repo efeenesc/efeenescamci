@@ -13,9 +13,10 @@ import anime from 'animejs';
 import { ThemesComponent } from './sections/themes/themes.component';
 import { ProjectsComponent } from './sections/projects/projects.component';
 import { DrawerComponent } from './components/drawer/drawer.component';
-import { VsMenuComponent } from "./components/vs-menu/vs-menu.component";
+import { VsMenuComponent } from './components/vs-menu/vs-menu.component';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { WindowObserverService } from './services/window-observer.service';
+import { gsap } from "gsap";
 
 @Component({
   selector: 'app-root',
@@ -32,8 +33,8 @@ import { WindowObserverService } from './services/window-observer.service';
     ProjectsComponent,
     DrawerComponent,
     VsMenuComponent,
-    TopBarComponent
-],
+    TopBarComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
@@ -52,7 +53,7 @@ export class AppComponent {
   blendClass?: string;
   markdown?: MdNode;
   scrollPos: number = 0;
-  elTranslatePos: {current: number} = {current: 0};
+  elTranslatePos: { current: number } = { current: 0 };
   themeBarStyle: string = '';
   drawerOpened: boolean = false;
   mainResizeObserver: ResizeObserver = new ResizeObserver((entries) => this.onMainResized(entries));;
@@ -90,7 +91,7 @@ export class AppComponent {
   }
 
   onMainResized(entries: ResizeObserverEntry[]) {
-    const main = entries.find((e) => e.target.id === "main");
+    const main = entries.find((e) => e.target.id === 'main');
     if (!main) return;
 
     const rect = main.contentRect;
@@ -107,7 +108,7 @@ export class AppComponent {
   restoreLastTheme(resetToDefault: boolean = false) {
     const cs = this.vsSvc.getFromLocalStorage();
 
-    if (!cs || resetToDefault || Object.keys(cs).includes("darkest")) {
+    if (!cs || resetToDefault || Object.keys(cs).includes('darkest')) {
       return this.vsSvc.setDefaultColorScheme();
     }
 
@@ -119,7 +120,7 @@ export class AppComponent {
       this.woSvc.scrollObservable.subscribe((newYval) => {
         this.animatePageScroll(newYval);
       });
-    } else {  
+    } else {
       this.woSvc.scrollObservable.subscribe((newYval) => {
         this.normalPageScroll(newYval);
       });
@@ -135,16 +136,21 @@ export class AppComponent {
   }
 
   animatePageScroll(scrollY: number) {
-    anime({
-      targets: this.elTranslatePos,
+    if (this.pageScrollTween) {
+      this.pageScrollTween.kill();
+    }
+  
+    this.pageScrollTween = gsap.to(this.elTranslatePos, {
       current: -scrollY,
-      update: (() => {
-        const newPos = 'translateY(' + this.elTranslatePos.current + 'px)';
-        this.main.style.transform = newPos;
-        this.main.style.webkitTransform = newPos;
-      }),
-      easing: 'easeOutExpo',
-      duration: 200,
+      duration: 0.2,
+      ease: "power4.out",
+      onUpdate: () => {
+        const newPos = `translateY(${this.elTranslatePos.current}px)`;
+        gsap.set(this.main, {
+          transform: newPos,
+          webkitTransform: newPos
+        });
+      }
     });
   }
 
@@ -158,8 +164,8 @@ export class AppComponent {
         targets: targetpath,
         strokeDashoffset: [anime.setDashoffset, 0],
         easing: 'easeInQuad',
-        duration: 3000
-      })
+        duration: 3000,
+      });
 
       timeline.add({
         targets: targetpath,
@@ -172,7 +178,7 @@ export class AppComponent {
 
   normalPageScroll(scrollY: number) {
     this.main.style.transform = 'translateY(' + -scrollY + 'px)';
-    this.main.style.webkitTransform = 'translateY(' + -scrollY +'px)';
+    this.main.style.webkitTransform = 'translateY(' + -scrollY + 'px)';
   }
 
   setMainHeight() {
