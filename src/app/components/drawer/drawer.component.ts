@@ -1,9 +1,9 @@
 import { afterNextRender, Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
-import anime from 'animejs';
 import { Subject } from 'rxjs';
 import { XMarkComponent } from "../../icons/xmark/xmark.component";
 import { WindowObserverService } from '../../services/window-observer.service';
 import { WINDOW } from '../../classes/windowinjection';
+import gsap from 'gsap';
 
 interface VerticalMousePosition {
   y: number;
@@ -41,6 +41,7 @@ export class DrawerComponent {
   private currentMousePos: VerticalMousePosition | null = { y: 0, time: 0 };
   private prevMousePos: VerticalMousePosition | null = { y: 0, time: 0 };
   private wnd = inject(WINDOW);
+  private drawerTween?: gsap.core.Tween;
 
   constructor(private woSvc : WindowObserverService) {
     afterNextRender(() => {
@@ -79,7 +80,7 @@ export class DrawerComponent {
 
     this.translatePos = 2; // Set target to 2vh
     this.elTranslatePos = {current: 100}; // Set current position to 100vh - bottom of page
-    this.updateCarouselPosition(600, false, 'easeOutExpo');
+    this.updateDrawerPosition(600, false, "expo.out");
   }
 
   closeOverlay() {
@@ -92,7 +93,7 @@ export class DrawerComponent {
 
   slideDown() {
     this.translatePos = 100;
-    this.updateCarouselPosition(300, true, 'easeInQuad');
+    this.updateDrawerPosition(300, true, "power2.in");
   }
 
   clickedOutside() {
@@ -146,7 +147,7 @@ export class DrawerComponent {
       closeAfter = true
     }
 
-    this.updateCarouselPosition(150, closeAfter);
+    this.updateDrawerPosition(150, closeAfter);
     this.setPrevMousePosition(offsetY, e.timeStamp);
   }
 
@@ -175,22 +176,24 @@ export class DrawerComponent {
     }
     
     this.resetMouseVariables();
-    this.updateCarouselPosition(750, closeAfter);
+    this.updateDrawerPosition(750, closeAfter);
   }
 
-  private updateCarouselPosition(duration: number, closeAfter: boolean = false, easing: string = 'easeOutExpo'): void {
+  private updateDrawerPosition(duration: number, closeAfter: boolean = false, easing: string = "expo.out"): void {
     if (closeAfter)
       this.closeOverlay();
 
-    anime({
-      targets: this.elTranslatePos,
+    if (this.drawerTween)
+      this.drawerTween.kill();
+
+    this.drawerTween = gsap.to(this.elTranslatePos, {
       current: this.translatePos,
-      duration,
-      easing,
-      update: (() => {
+      duration: duration / 1000, // GSAP uses seconds for duration
+      ease: easing,
+      onUpdate: () => {
         this.drawerMain.style.top = this.elTranslatePos.current + 'vh';
-      }),
-      complete: () => {
+      },
+      onComplete: () => {
         if (closeAfter) {
           this.closed.emit();
           this.resetMouseVariables();
@@ -198,5 +201,6 @@ export class DrawerComponent {
         }
       }
     });
+    
   }
 }

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import anime from 'animejs';
 import { ReplaySubject } from 'rxjs';
+import gsap from 'gsap';
 
 @Component({
   selector: 'loading-bar',
@@ -19,12 +19,11 @@ export class LoadingBarComponent {
 
   ngOnInit() {
     this.progress$.subscribe(() => {
-      anime({
-        targets: "#progressbar",
-        width: this.pProgress + "%",
-        duration: 50,
-        easing: 'easeInOutQuad'
-      })
+      gsap.to("#progressbar", {
+        width: this.pProgress + "%", 
+        duration: 0.05,
+        ease: 'power1.inOut'
+      });
     })
   }
 

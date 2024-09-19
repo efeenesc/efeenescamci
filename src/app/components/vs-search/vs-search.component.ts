@@ -5,7 +5,7 @@ import { VsCardComponent } from '../vs-card/vs-card.component';
 import { MagnifyingGlassComponent } from '../../icons/magnifying-glass/magnifying-glass.component';
 import { SkeletonLoaderComponent } from '../skeleton-loader/skeleton-loader.component';
 import { PLATFORM_ID } from '@angular/core';
-import anime from 'animejs';
+import gsap from 'gsap';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
@@ -69,31 +69,26 @@ export class VsSearchComponent {
   playScrollAnimation(progress: number) {
     const pad = progress * 8 + 'px';
 
-    anime({
-      targets: '#vs-search-main',
+    gsap.to('#vs-search-main', {
       paddingLeft: pad,
       paddingTop: pad,
       paddingBottom: pad,
-      duration: 10,
-      easing: 'linear',
+      duration: 0.01,
+      ease: 'none'
     });
-
-    const opacity = progress;
-
-    anime({
-      targets: '#theme-author',
-      opacity,
-      duration: 10,
-      easing: 'linear',
+    
+    gsap.to('#theme-author', {
+      opacity: progress,
+      duration: 0.01,
+      ease: 'none'
     });
-
+    
     const top = (1 - progress) * 1.2;
-
-    anime({
-      targets: '#theme-name',
+    
+    gsap.to('#theme-name', {
       top: top + 'vh',
-      duration: 10,
-      easing: 'linear',
+      duration: 0.01,
+      ease: 'none'
     });
   }
 }
