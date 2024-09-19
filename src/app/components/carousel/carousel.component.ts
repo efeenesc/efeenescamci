@@ -44,6 +44,7 @@ export class CarouselComponent implements AfterViewInit {
   carouselBounds!: [number, number];
   private currentMousePos: MousePosition | null = { x: 0, time: 0 };
   private prevMousePos: MousePosition | null = { x: 0, time: 0 };
+  private carouselTween?: gsap.core.Tween;
 
   constructor(private woSvc: WindowObserverService) {}
 

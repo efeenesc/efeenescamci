@@ -9,7 +9,6 @@ import { MarkdownRendererComponent } from './components/markdown-renderer/markdo
 import { CarouselItemComponent } from './components/carousel-item/carousel-item.component';
 import { VsThemeService } from './services/vs-theme.service';
 import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-loader.component';
-import anime from 'animejs';
 import { ThemesComponent } from './sections/themes/themes.component';
 import { ProjectsComponent } from './sections/projects/projects.component';
 import { DrawerComponent } from './components/drawer/drawer.component';
@@ -56,7 +55,8 @@ export class AppComponent {
   elTranslatePos: { current: number } = { current: 0 };
   themeBarStyle: string = '';
   drawerOpened: boolean = false;
-  mainResizeObserver: ResizeObserver = new ResizeObserver((entries) => this.onMainResized(entries));;
+  mainResizeObserver: ResizeObserver = new ResizeObserver((entries) => this.onMainResized(entries));
+  private pageScrollTween?: gsap.core.Tween;
 
   constructor(private lss: LocalStorageService, private vsSvc: VsThemeService, private woSvc: WindowObserverService) {}
 
@@ -72,7 +72,6 @@ export class AppComponent {
   ngAfterContentInit() {
     this.mainResizeObserver.observe(document.getElementById('main')!)
 
-    this.animateLogo();
     this.setMainHeight();
 
     this.woSvc.sizeObservable.subscribe(() => {
@@ -152,28 +151,6 @@ export class AppComponent {
         });
       }
     });
-  }
-
-  animateLogo() {
-    const targetpath = document.getElementById('website-logo-path');
-
-    setTimeout(() => {
-      const timeline = anime.timeline();
-
-      timeline.add({
-        targets: targetpath,
-        strokeDashoffset: [anime.setDashoffset, 0],
-        easing: 'easeInQuad',
-        duration: 3000,
-      });
-
-      timeline.add({
-        targets: targetpath,
-        fill: '#fff',
-        duration: 1000,
-        easing: 'easeOutQuad',
-      });
-    }, 50);
   }
 
   normalPageScroll(scrollY: number) {
