@@ -1,11 +1,11 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { VsSearchComponent } from '../vs-search/vs-search.component';
-import anime from 'animejs';
 import { WindowObserverService, WindowSize } from '../../services/window-observer.service';
 import { MagnifyingGlassComponent } from "../../icons/magnifying-glass/magnifying-glass.component";
 import { SiteLogoComponent } from "../../icons/site-logo/site-logo.component";
 import { HamburgerMenuComponent } from "../../icons/menu/hamburger-menu.component";
 import { RouterLink } from '@angular/router';
+import gsap from 'gsap';
 
 @Component({
   selector: 'top-bar',
@@ -30,6 +30,8 @@ export class TopBarComponent {
   mobileMode: boolean = false;
   minScrollY: number = 0;
   maxScrollY: number = 200;
+  private topBarTween!: gsap.core.Tween;
+  private hamburgerTween!: gsap.core.Tween;
 
   constructor(private woSvc: WindowObserverService) { }
 
@@ -69,10 +71,12 @@ export class TopBarComponent {
     const finalHeight = baseHeight + extraHeight;
     const newHeight = finalHeight + 'vh';
 
-    anime({
-      targets: '#topbar',
+    if (this.topBarTween)
+      this.topBarTween.kill();
+
+    this.topBarTween = gsap.to('#topbar', {
       height: newHeight,
-      easing: 'spring(0, 80, 50, 10)'
+      ease: 'spring(1, 0.8, 10, 50)' // Using GSAP's spring easing with similar parameters
     });
 
     const basePadY = 0.25;
@@ -80,29 +84,14 @@ export class TopBarComponent {
 
     const finalPadY = basePadY + extraPadY + 'rem';
 
-    anime({
-      targets: '#hamburger-menu',
+    if (this.hamburgerTween)
+      this.hamburgerTween.kill();
+
+    this.hamburgerTween = gsap.to('#hamburger-menu', {
       paddingTop: finalPadY,
       paddingBottom: finalPadY,
-      easing: 'linear',
-      duration: 50
+      duration: 0.05,
+      ease: 'none'
     });
-  }
-
-  //! UNUSED
-  playTopBarAnimation(forward: boolean) {
-    this.topbarExtended = forward;
-    const newHeight = forward ? '10vh' : '5vh';
-
-    const themeBarStyle = forward ? '' : 'padding: 0; padding-right: 10px; font-size: 1em';
-
-    this.themeBarStyle = themeBarStyle;
-
-    anime({
-      targets: '#topbar',
-      height: newHeight,
-      duration: 100,
-      easing: 'easeInOutQuad'
-    })
   }
 }
