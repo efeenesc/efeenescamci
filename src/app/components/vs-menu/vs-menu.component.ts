@@ -9,11 +9,10 @@ import { MagnifyingGlassComponent } from "../../icons/magnifying-glass/magnifyin
 import { SkeletonLoaderComponent } from "../skeleton-loader/skeleton-loader.component";
 
 @Component({
-  selector: 'vs-menu',
-  standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, LoadingBarComponent, VsCardComponent, MagnifyingGlassComponent, SkeletonLoaderComponent],
-  templateUrl: './vs-menu.component.html',
-  styles: `
+    selector: 'vs-menu',
+    imports: [FormsModule, ReactiveFormsModule, LoadingBarComponent, VsCardComponent, MagnifyingGlassComponent, SkeletonLoaderComponent],
+    templateUrl: './vs-menu.component.html',
+    styles: `
   ::-webkit-scrollbar {
     background-color: var(--system);
     width: 5px;

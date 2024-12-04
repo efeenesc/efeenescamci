@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'skeleton-loader',
-  standalone: true,
-  imports: [],
-  styles: `
+    selector: 'skeleton-loader',
+    imports: [],
+    styles: `
   :host {
     overflow: hidden;
     display: block;
@@ -25,7 +24,7 @@ import { Component } from '@angular/core';
     }
   }
   `,
-  template: `
+    template: `
   <div class="skeleton w-full h-full"></div>
   `
 })

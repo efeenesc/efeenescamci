@@ -3,10 +3,9 @@ import { ReplaySubject } from 'rxjs';
 import gsap from 'gsap';
 
 @Component({
-  selector: 'loading-bar',
-  standalone: true,
-  imports: [],
-  template:`
+    selector: 'loading-bar',
+    imports: [],
+    template: `
   <div class="w-full h-full rounded-full outline outline-1 outline-border1 bg-theme-300 overflow-hidden block items-center justify-center">
     <div id="progressbar" class="h-full bg-blue-500 w-0"></div>
   </div>

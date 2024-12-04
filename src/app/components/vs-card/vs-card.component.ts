@@ -37,10 +37,9 @@ export class VsCardStyle {
 }
 
 @Component({
-  selector: 'vs-card',
-  standalone: true,
-  imports: [SkeletonLoaderComponent, ArrowUpRightFromSquareComponent],
-  templateUrl: './vs-card.component.html'
+    selector: 'vs-card',
+    imports: [SkeletonLoaderComponent, ArrowUpRightFromSquareComponent],
+    templateUrl: './vs-card.component.html'
 })
 export class VsCardComponent {
   @ViewChild('themeinfo') set _dm(content: ElementRef) {

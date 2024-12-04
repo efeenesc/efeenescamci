@@ -10,11 +10,10 @@ import { VsCardComponent, VsCardStyle } from "../../components/vs-card/vs-card.c
 import { DeferLoadDirective } from '../../classes/deferload';
 
 @Component({
-  selector: 'themes-section',
-  standalone: true,
-  imports: [CarouselComponent, ArrowUpRightFromSquareComponent, CarouselItemComponent, SkeletonLoaderComponent, VsCardComponent, DeferLoadDirective],
-  templateUrl: './themes.component.html',
-  styles: `
+    selector: 'themes-section',
+    imports: [CarouselComponent, ArrowUpRightFromSquareComponent, CarouselItemComponent, SkeletonLoaderComponent, VsCardComponent, DeferLoadDirective],
+    templateUrl: './themes.component.html',
+    styles: `
   :host {
     display: flex;
     width: 100%;

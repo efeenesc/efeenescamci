@@ -14,24 +14,23 @@ import { VsMenuComponent } from "../../components/vs-menu/vs-menu.component";
 import { TopBarComponent } from '../../components/top-bar/top-bar.component';
 
 @Component({
-  selector: 'home-page',
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    VsSearchComponent,
-    MarkdownEditorComponent,
-    MarkdownRendererComponent,
-    CarouselComponent,
-    CarouselItemComponent,
-    SkeletonLoaderComponent,
-    ThemesComponent,
-    ProjectsComponent,
-    DrawerComponent,
-    VsMenuComponent,
-    TopBarComponent
-],
-  templateUrl: './home-page.component.html',
-  styleUrl: './home-page.component.css',
+    selector: 'home-page',
+    imports: [
+        RouterOutlet,
+        VsSearchComponent,
+        MarkdownEditorComponent,
+        MarkdownRendererComponent,
+        CarouselComponent,
+        CarouselItemComponent,
+        SkeletonLoaderComponent,
+        ThemesComponent,
+        ProjectsComponent,
+        DrawerComponent,
+        VsMenuComponent,
+        TopBarComponent
+    ],
+    templateUrl: './home-page.component.html',
+    styleUrl: './home-page.component.css'
 })
 export class HomePageComponent {
   markdown?: MdNode;

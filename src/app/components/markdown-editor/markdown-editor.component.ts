@@ -6,10 +6,9 @@ import { lex, parse, MdNode } from '../../classes/markdownparser';
 import { MarkdownRendererComponent } from '../markdown-renderer/markdown-renderer.component';
 
 @Component({
-  selector: 'markdown-editor',
-  standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, MarkdownRendererComponent],
-  templateUrl: './markdown-editor.component.html'
+    selector: 'markdown-editor',
+    imports: [FormsModule, ReactiveFormsModule, MarkdownRendererComponent],
+    templateUrl: './markdown-editor.component.html'
 })
 export class MarkdownEditorComponent {
   @ViewChild('markdownArea') set content(content: ElementRef) {

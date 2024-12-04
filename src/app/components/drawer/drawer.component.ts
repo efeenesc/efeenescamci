@@ -9,10 +9,9 @@ interface VerticalMousePosition {
   time: number;
 }
 @Component({
-  selector: 'drawer-component',
-  standalone: true,
-  imports: [XMarkComponent],
-  templateUrl: './drawer.component.html'
+    selector: 'drawer-component',
+    imports: [XMarkComponent],
+    templateUrl: './drawer.component.html'
 })
 export class DrawerComponent {
   @ViewChild('drawerMain') set _dm(content: ElementRef) {

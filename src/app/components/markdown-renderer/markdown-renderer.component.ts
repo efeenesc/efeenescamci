@@ -2,9 +2,8 @@ import { Component, Input } from '@angular/core';
 import { MdNode } from '../../classes/markdownparser';
 
 @Component({
-  selector: 'markdown-renderer',
-  standalone: true,
-  template: `
+    selector: 'markdown-renderer',
+    template: `
     @if (this.parsedNode !== undefined) { 
     @for (node of this.parsedNode; track node) 
     { 
@@ -86,7 +85,7 @@ import { MdNode } from '../../classes/markdownparser';
     } } } }
     <ng-content></ng-content>
   `,
-  imports: [],
+    imports: []
 })
 export class MarkdownRendererComponent {
   parsedNode: MdNode[] | undefined;

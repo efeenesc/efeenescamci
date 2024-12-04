@@ -7,10 +7,9 @@ import { SkeletonLoaderComponent } from "../skeleton-loader/skeleton-loader.comp
 import gsap from 'gsap';
 
 @Component({
-  selector: 'vs-search',
-  standalone: true,
-  imports: [LoadingBarComponent, VsCardComponent, MagnifyingGlassComponent, SkeletonLoaderComponent],
-  templateUrl: './vs-search.component.html'
+    selector: 'vs-search',
+    imports: [LoadingBarComponent, VsCardComponent, MagnifyingGlassComponent, SkeletonLoaderComponent],
+    templateUrl: './vs-search.component.html'
 })
 export class VsSearchComponent {
   @ViewChild('themebtn') themeBtn!: HTMLElement;

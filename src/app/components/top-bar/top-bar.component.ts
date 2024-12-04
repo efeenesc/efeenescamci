@@ -8,10 +8,9 @@ import { RouterLink } from '@angular/router';
 import gsap from 'gsap';
 
 @Component({
-  selector: 'top-bar',
-  standalone: true,
-  imports: [VsSearchComponent, MagnifyingGlassComponent, SiteLogoComponent, HamburgerMenuComponent, RouterLink],
-  templateUrl: './top-bar.component.html'
+    selector: 'top-bar',
+    imports: [VsSearchComponent, MagnifyingGlassComponent, SiteLogoComponent, HamburgerMenuComponent, RouterLink],
+    templateUrl: './top-bar.component.html'
 })
 export class TopBarComponent {
   @ViewChild('topbar') set _tb(content: ElementRef) {

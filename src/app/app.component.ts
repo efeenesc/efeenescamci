@@ -18,24 +18,23 @@ import { WindowObserverService } from './services/window-observer.service';
 import { gsap } from "gsap";
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    VsSearchComponent,
-    MarkdownEditorComponent,
-    MarkdownRendererComponent,
-    CarouselComponent,
-    CarouselItemComponent,
-    SkeletonLoaderComponent,
-    ThemesComponent,
-    ProjectsComponent,
-    DrawerComponent,
-    VsMenuComponent,
-    TopBarComponent,
-  ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+    selector: 'app-root',
+    imports: [
+        RouterOutlet,
+        VsSearchComponent,
+        MarkdownEditorComponent,
+        MarkdownRendererComponent,
+        CarouselComponent,
+        CarouselItemComponent,
+        SkeletonLoaderComponent,
+        ThemesComponent,
+        ProjectsComponent,
+        DrawerComponent,
+        VsMenuComponent,
+        TopBarComponent,
+    ],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css'
 })
 export class AppComponent {
   @ViewChild('main') set _m(content: ElementRef) {
