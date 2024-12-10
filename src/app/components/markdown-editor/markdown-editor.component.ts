@@ -18,17 +18,7 @@ import { MarkdownRendererComponent } from '../markdown-renderer/markdown-rendere
   encapsulation: ViewEncapsulation.None,
   imports: [FormsModule, ReactiveFormsModule, MarkdownRendererComponent],
   templateUrl: './markdown-editor.component.html',
-  styles: [
-    `
-      .selected {
-        background-color: var(--highlight);
-      }
-
-      .selected::before {
-        opacity: 1 !important;
-      }
-    `,
-  ],
+  styleUrl: './markdown-editor.component.css',
 })
 export class MarkdownEditorComponent {
   @ViewChild('markdownArea') set content(content: ElementRef) {

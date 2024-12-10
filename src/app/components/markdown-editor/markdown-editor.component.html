@@ -19,10 +19,10 @@
     <div
       class="w-8 h-full flex flex-col pointer-events-none select-none left-0"
     >
-      <!-- @for (i of this.lineCount; track i) {
-        <span class="opacity-50" [id]="'line-' + i">{{ i + 1 }}</span>
-      } -->
+      <!-- Empty area for line counter -->
     </div>
+
+    <!-- Pseudoclasses and attributes of markdownArea are declared in the css file -->
     <div
       [contentEditable]="true"
       #markdownArea
@@ -31,10 +31,7 @@
       (click)="this.clickEvent()"
       id="markdownArea"
       class="w-full flex flex-col h-max min-h-full flex-grow bg-transparent outline-none border-none resize-none text-wrap overflow-x-auto 
-      justify-stretch items-stretch justify-items-stretch place-content-stretch [&>div]:min-w-full [&_*]:font-normal [&_*]:not-italic [&_img]:hidden
-      counter-reset [&_div]:counter-increment [&_div]:before:counter-result
-      [&_div]:before:absolute [&_div]:before:block [&_div]:before:opacity-50 [&_div]:before:z-50 [&_div]:before:left-2
-      [&_div]:before:counter-increment-line [&_div]:before [&_*]:bg-none"
+      justify-stretch items-stretch justify-items-stretch place-content-stretch"
     >
     </div>
   </div>
