@@ -41,8 +41,6 @@ module.exports = {
       }
     },
   },
-  plugins: [
-    require('tailwindcss-counter')()
-  ],
+  plugins: [],
 }
 
