@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LocalStorageService } from './services/local-storage.service';
-import { MdNode } from './classes/markdown/Markdown.interface';
+import { MdNode } from './classes/markdown/index.interface';
 import { VsThemeService } from './services/vs-theme.service';
 import { DrawerComponent } from './components/drawer/drawer.component';
 import { VsMenuComponent } from './components/vs-menu/vs-menu.component';

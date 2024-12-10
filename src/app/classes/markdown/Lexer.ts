@@ -1,4 +1,4 @@
-import { MdWrapChar } from "./Markdown.interface";
+import { MdWrapChar } from "./index.interface";
 
 export function lex(mdstr: string): string[][] {
   // Split the input string into lines

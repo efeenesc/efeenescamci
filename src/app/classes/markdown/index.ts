@@ -1,5 +1,5 @@
 import { lex } from "./Lexer";
-import { MdNode } from "./Markdown.interface";
+import { MdNode } from "./index.interface";
 import { parse } from "./Parser";
 
 export { MdNode };

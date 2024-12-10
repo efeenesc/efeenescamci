@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { MdNode } from '../../classes/markdown/Markdown';
+import { MdNode } from '../../classes/markdown';
 
 @Component({
   selector: 'markdown-renderer',
@@ -96,6 +96,8 @@ import { MdNode } from '../../classes/markdown/Markdown';
               <a [href]="node.url" target="_blank">
                 <markdown-renderer [parsedContent]="node.content"></markdown-renderer>
               </a>
+            } @case ('img') {
+              <img [src]="node.url" [alt]="node.content">
             }
           } 
         } 
@@ -142,6 +144,11 @@ import { MdNode } from '../../classes/markdown/Markdown';
     display: block;
     height: 10px;
     width: 100px;
+  }
+
+  img {
+    max-width: 50%;
+    border-radius: 10%;
   }
 
   blockquote {

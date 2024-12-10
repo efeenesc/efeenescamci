@@ -10,7 +10,7 @@ import {
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, Subject } from 'rxjs';
 import * as vst from '../../types/vs-types';
-import { ConvertToHtmlTree, MdNode } from '../../classes/markdown/Markdown';
+import { ConvertToHtmlTree, MdNode } from '../../classes/markdown';
 import { MarkdownRendererComponent } from '../markdown-renderer/markdown-renderer.component';
 
 @Component({

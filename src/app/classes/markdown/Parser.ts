@@ -1,209 +1,218 @@
-import { MdNode, MdNodeType, typeMap } from "./Markdown.interface";
-
+import { MdNode, MdNodeType, typeMap } from "./index.interface";
 
 export function parse(l: string[][]): MdNode {
-    const rootNode: MdNode = new MdNode("document", []);
-    let prevIsNewline = false;
-    const arrLen = l.length;
+	// Initialize the root node of type "document" with an empty content array
+	const rootNode: MdNode = new MdNode("document", []);
+	let prevIsNewline = false; // Tracks if the previous line was empty
+	const arrLen = l.length;
 
-    for (let idx = 0; idx < arrLen; idx++) {
-        const line = l[idx];
-        const rootContent = rootNode.content as MdNode[];
+	for (let idx = 0; idx < arrLen; idx++) {
+		const line = l[idx];
+		const rootContent = rootNode.content as MdNode[];
 
-        if (line.length === 0) {
-            if (prevIsNewline) {
-                prevIsNewline = false;
-                rootContent.push(new MdNode("br", ""));
-            }
+		if (line.length === 0) {
+			// Handle consecutive empty lines by adding a line break node ("br")
+			if (prevIsNewline) {
+				prevIsNewline = false;
+				rootContent.push(new MdNode("br", ""));
+			}
 
-            prevIsNewline = true;
-            continue;
-        }
+			prevIsNewline = true;
+			continue;
+		}
 
-        const result = processTokens(line);
+		// Process the tokens in the current line
+		const result = processTokens(line);
 
-        switch (result.nodes[0].type) {
-            case "li":
-            case "ul":
-                handleListItems(rootContent, result);
-                break;
+		switch (result.nodes[0].type) {
+			case "li": // List item
+			case "ul": // Unordered list
+				// Delegate handling of list items to a dedicated function
+				handleListItems(rootContent, result);
+				break;
 
-            default:
-                rootContent.push(...result.nodes);
-                break;
-        }
-    }
+			default:
+				// For other types, simply append the processed nodes to root content
+				rootContent.push(...result.nodes);
+				break;
+		}
+	}
 
-    rootNode.content = mergeTextObjects(rootNode.content);
-    return rootNode;
+	// Merge consecutive text nodes to optimize the output structure
+	rootNode.content = mergeTextObjects(rootNode.content);
+	return rootNode;
 }
 
 function convertUlToLi(nodes: MdNode[]): MdNode[] {
-    return nodes.map((node) =>
-        node.type === "ul" ? new MdNode("li", node.content) : node
-    );
+	// Converts all "ul" nodes in the array to "li" nodes
+	return nodes.map((node) =>
+		node.type === "ul" ? new MdNode("li", node.content) : node
+	);
 }
 
 function handleListItems(rootContent: MdNode[], result: { nodes: MdNode[] }) {
-    const firstNode = result.nodes[0];
-    const listType = firstNode.type === "ul" ? "ul" : "ol";
-    const lastNode = rootContent[rootContent.length - 1];
+	const firstNode = result.nodes[0];
+	const listType = firstNode.type === "ul" ? "ul" : "ol"; // Determine list type
+	const lastNode = rootContent[rootContent.length - 1];
 
-    // Convert 'ul' nodes to 'li' nodes
-    const processedNodes = convertUlToLi(result.nodes);
+	// Convert "ul" nodes to "li" nodes for consistency
+	const processedNodes = convertUlToLi(result.nodes);
 
-    if (lastNode && lastNode.type === listType) {
-        // If the last node is the same type of list, append to it
-        (lastNode.content as MdNode[]).push(...processedNodes);
-    } else {
-        // Otherwise, create a new list node
-        const newNode = new MdNode(listType, processedNodes);
-        rootContent.push(newNode);
-    }
+	if (lastNode && lastNode.type === listType) {
+		// If the last node is of the same list type, append to it
+		(lastNode.content as MdNode[]).push(...processedNodes);
+	} else {
+		// Otherwise, create a new list node and add it to the root content
+		const newNode = new MdNode(listType, processedNodes);
+		rootContent.push(newNode);
+	}
 }
 
 function mergeTextObjects(objects: MdNode[] | string): MdNode[] | string {
-    if (typeof objects === "string") return objects;
+	// Combines consecutive "text" nodes into a single node to reduce redundancy
+	if (typeof objects === "string") return objects;
 
-    return objects.reduce(
-        (acc: MdNode[], curr: MdNode, index: number, array: MdNode[]) => {
-            if (
-                curr.type === "text" &&
-                index > 0 &&
-                array[index - 1].type === "text"
-            ) {
-                // If current element is text and previous element is also text,
-                // combine their content and add a space
-                (acc[acc.length - 1].content as string) += " " + curr.content;
-            } else if (curr.type === "text") {
-                // If it's a text element but not preceded by a text element, just add it
-                acc.push({ ...curr });
-            } else {
-                // For non-text elements, recursively process their content if it's an array
-                acc.push({
-                    ...curr,
-                    content: Array.isArray(curr.content)
-                        ? mergeTextObjects(curr.content)
-                        : curr.content,
-                });
-            }
-            return acc;
-        },
-        []
-    );
+	return objects.reduce(
+		(acc: MdNode[], curr: MdNode, index: number, array: MdNode[]) => {
+			if (
+				curr.type === "text" &&
+				index > 0 &&
+				array[index - 1].type === "text"
+			) {
+				// Merge the content of consecutive text nodes with a space in between
+				(acc[acc.length - 1].content as string) += " " + curr.content;
+			} else if (curr.type === "text") {
+				// Add standalone text nodes directly
+				acc.push({ ...curr });
+			} else {
+				// Recursively process non-text nodes if they have array content
+				acc.push({
+					...curr,
+					content: Array.isArray(curr.content)
+						? mergeTextObjects(curr.content)
+						: curr.content,
+				});
+			}
+			return acc;
+		},
+		[]
+	);
 }
 
 function lookAheadFind(
-    targetToken: string,
-    tokens: string[],
-    startFrom: number
+	targetToken: string,
+	tokens: string[],
+	startFrom: number
 ): number {
-    const arrLen = tokens.length;
-    for (; startFrom < arrLen; startFrom++) {
-        if (tokens[startFrom] === targetToken) return startFrom;
-    }
-    return -1;
+	// Searches for the index of a target token starting from a specific position
+	const arrLen = tokens.length;
+	for (; startFrom < arrLen; startFrom++) {
+		if (tokens[startFrom] === targetToken) return startFrom;
+	}
+	return -1; // Return -1 if the token is not found
 }
 
 function processTokens(
-    tokens: string[],
-    index: number = 0,
-    closingToken?: string
+	tokens: string[],
+	index: number = 0,
+	closingToken?: string
 ): { nodes: MdNode[]; index: number } {
-    const arrlen = tokens.length;
-    const nodes: MdNode[] = [];
-    let textBuffer: string[] = [];
+	const arrlen = tokens.length;
+	const nodes: MdNode[] = []; // To store processed nodes
+	let textBuffer: string[] = []; // To accumulate text content
 
-    function flushTextBuffer() {
-        if (textBuffer.length > 0) {
-            nodes.push(new MdNode("text", textBuffer.join(" ")));
-            textBuffer = [];
-        }
-    }
+	function flushTextBuffer() {
+		// Converts the accumulated text buffer into a text node and clears the buffer
+		if (textBuffer.length > 0) {
+			nodes.push(new MdNode("text", textBuffer.join(" ")));
+			textBuffer = [];
+		}
+	}
 
-    for (; index < arrlen; index++) {
-        const token = tokens[index];
+	for (; index < arrlen; index++) {
+		const token = tokens[index];
 
-        if (closingToken && token === closingToken) {
-            flushTextBuffer();
-            return { nodes, index };
-        }
+		if (closingToken && token === closingToken) {
+			// If a closing token is encountered, finalize and return the nodes
+			flushTextBuffer();
+			return { nodes, index };
+		}
 
-        // Get node type. If node type is undefined, then this is not a special Markdown character - likely just text.
-        const nodeType = getNodeType(token);
-        if (nodeType) {
-            // Flush all text content and identify what token this is
-            flushTextBuffer();
-            const closingToken = getClosingToken(token);
+		// Determine the node type of the current token
+		const nodeType = getNodeType(token, index);
+		if (nodeType) {
+			// Flush any accumulated text before processing the new node type
+			flushTextBuffer();
+			const closingToken = getClosingToken(token);
 
-            let tokenClosed = true;
-            if (closingToken) {
-                tokenClosed =
-                    lookAheadFind(closingToken, tokens, index + 1) === -1
-                        ? false
-                        : true;
+      // If the token isn't closed and is a list indicator, treat it as a list
+      if (index === 0 && ["-", "*", "+"].includes(token)) {
+        const { nodes: childNodes, index: newIndex } = processTokens(
+          tokens,
+          index + 1,
+          closingToken
+        );
 
-                // If the * was not closed, and is the first character in the line, then this is likely just an unordered list.
-                // Read child nodes of the list item and add them as list items (<li>), then set the parent element to <ul>
-                if (
-                    !tokenClosed &&
-                    index === 0 &&
-                    ["-", "*", "+"].includes(token)
-                ) {
-                    const { nodes: childNodes, index: newIndex } =
-                        processTokens(tokens, index + 1, closingToken);
+        nodes.push(new MdNode("ul", childNodes));
+        index = newIndex;
+        continue;
+      }
 
-                    nodes.push(new MdNode("ul", childNodes));
-                    index = newIndex;
-                    continue;
-                }
+      let tokenClosed = true;
+      if (closingToken) {
+				// Check if the closing token exists further in the line
+				tokenClosed = lookAheadFind(closingToken, tokens, index + 1) !== -1;
+			}
+
+			if (tokenClosed) {
+				// Process the content enclosed by the token
+				const { nodes: childNodes, index: newIndex } = processTokens(
+					tokens,
+					index + 1,
+					closingToken
+				);
+
+        const prevNode = nodes[nodes.length - 1];
+
+				switch (nodeType) {
+					case "ad": // Anchor (link)
+            if (prevNode && prevNode.type === 'text' && prevNode.content === "!") {
+              nodes.pop();
+              nodes.push(new MdNode("img", childNodes));
+            } else {
+              nodes.push(new MdNode("a", childNodes));
             }
+						
+						break;
 
-            // If token was closed (i.e. * .... *), then process the text content inside tokens
-            // This will then assign an element name (i.e. <i>)
-            if (tokenClosed) {
-                const { nodes: childNodes, index: newIndex } = processTokens(
-                    tokens,
-                    index + 1,
-                    closingToken
-                );
+					case "al": // Link content
+						if (prevNode && prevNode.type === "a") {
+							prevNode.url = childNodes[0].content as string;
+						} else if (prevNode && prevNode.type === "img") {
+              prevNode.url = childNodes[0].content as string;
+            } else {
+							nodes.push(new MdNode("text", childNodes[0].content as string));
+						}
+						break;
 
-                switch (nodeType) {
-                    case "ad":
-                        nodes.push(new MdNode("a", childNodes));
-                        break;
+					default:
+						// Handle other node types (e.g., italic, bold)
+						nodes.push(new MdNode(nodeType, childNodes));
+						break;
+				}
 
-                    case "al":
-                        if (nodes[nodes.length - 1].type === "a") {
-                            nodes[nodes.length - 1].url = childNodes[0]
-                                .content as string;
-                            break;
-                        } else {
-                            nodes.push(
-                                new MdNode(
-                                    "text",
-                                    childNodes[0].content as string
-                                )
-                            );
-                        }
-                        // ! This break was added without testing!
-                        break;
+				index = newIndex;
+				continue;
+			}
+		}
 
-                    default:
-                        nodes.push(new MdNode(nodeType, childNodes));
-                        break;
-                }
+		// If no special node type is detected, treat the token as plain text
+		textBuffer.push(token);
+	}
 
-                index = newIndex;
-                continue;
-            }
-        }
-
-        textBuffer.push(token);
-    }
-
-    flushTextBuffer();
-    return { nodes, index };
+	// Finalize any remaining text content
+	flushTextBuffer();
+	return { nodes, index };
 }
 
 /**
@@ -211,22 +220,20 @@ function processTokens(
  * @param token
  * @returns
  */
-function getNodeType(token: string): MdNodeType | undefined {
-    const result = typeMap[token];
+function getNodeType(token: string, index: number): MdNodeType | undefined {
+	const result = typeMap[token];
 
-    if (result) return result;
+  if ((result === 'ul' || result === 'bq') && index !== 0) return;
 
-    const substr = token.substring(0, token.length - 1);
+	if (result) return result;
 
-    if (
-        token.endsWith(".") &&
-        substr !== "" &&
-        isNaN(Number(substr)) === false
-    ) {
-        return "li";
-    }
+	const substr = token.substring(0, token.length - 1);
 
-    return;
+	if (token.endsWith(".") && substr !== "" && isNaN(Number(substr)) === false) {
+		return "li";
+	}
+
+	return;
 }
 
 /**
@@ -235,24 +242,24 @@ function getNodeType(token: string): MdNodeType | undefined {
  * @returns
  */
 function getClosingToken(token: string): string | undefined {
-    switch (token) {
-        case "*":
-        case "**":
-        case "***":
-        case "_":
-        case "__":
-        case "___":
-        case "`":
-        case "~~":
-            return token;
+	switch (token) {
+		case "*":
+		case "**":
+		case "***":
+		case "_":
+		case "__":
+		case "___":
+		case "`":
+		case "~~":
+			return token;
 
-        case "[":
-            return "]";
+		case "[":
+			return "]";
 
-        case "(":
-            return ")";
+		case "(":
+			return ")";
 
-        default:
-            return;
-    }
+		default:
+			return;
+	}
 }
