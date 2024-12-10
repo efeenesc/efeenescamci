@@ -144,7 +144,7 @@ export class DrawerComponent {
       closeAfter = true
     }
 
-    this.updateDrawerPosition(150, closeAfter);
+    this.updateDrawerPosition(150, closeAfter, '');
     this.setPrevMousePosition(offsetY, e.timeStamp);
   }
 
@@ -173,10 +173,10 @@ export class DrawerComponent {
     }
     
     this.resetMouseVariables();
-    this.updateDrawerPosition(750, closeAfter);
+    this.updateDrawerPosition(400, closeAfter, "expo.out");
   }
 
-  private updateDrawerPosition(duration: number, closeAfter: boolean = false, easing: string = "expo.out"): void {
+  private updateDrawerPosition(duration: number, closeAfter: boolean = false, easing: string = "sine.inOut"): void {
     if (closeAfter)
       this.closeOverlay();
 
@@ -198,6 +198,5 @@ export class DrawerComponent {
         }
       }
     });
-    
   }
 }

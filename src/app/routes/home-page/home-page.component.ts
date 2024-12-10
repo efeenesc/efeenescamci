@@ -1,41 +1,44 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { VsSearchComponent } from '../../components/vs-search/vs-search.component';
+import { Component, ViewChild } from '@angular/core';
 import { MarkdownEditorComponent } from '../../components/markdown-editor/markdown-editor.component';
-import { CarouselComponent } from '../../components/carousel/carousel.component';
-import { MdNode } from '../../classes/markdownparser';
+import { MdNode } from '../../classes/markdown/Markdown';
 import { MarkdownRendererComponent } from '../../components/markdown-renderer/markdown-renderer.component';
-import { CarouselItemComponent } from '../../components/carousel-item/carousel-item.component';
-import { SkeletonLoaderComponent } from '../../components/skeleton-loader/skeleton-loader.component';
-import { ThemesComponent } from '../../sections/themes/themes.component';
-import { ProjectsComponent } from '../../sections/projects/projects.component';
-import { DrawerComponent } from '../../components/drawer/drawer.component';
-import { VsMenuComponent } from "../../components/vs-menu/vs-menu.component";
-import { TopBarComponent } from '../../components/top-bar/top-bar.component';
+import { ThemesComponent } from './sections/themes/themes.component';
+import { ExperimentsComponent } from "./sections/experiments/experiments.component";
 
 @Component({
     selector: 'home-page',
     imports: [
-        RouterOutlet,
-        VsSearchComponent,
-        MarkdownEditorComponent,
-        MarkdownRendererComponent,
-        CarouselComponent,
-        CarouselItemComponent,
-        SkeletonLoaderComponent,
-        ThemesComponent,
-        ProjectsComponent,
-        DrawerComponent,
-        VsMenuComponent,
-        TopBarComponent
-    ],
-    templateUrl: './home-page.component.html',
-    styleUrl: './home-page.component.css'
+    MarkdownEditorComponent,
+    MarkdownRendererComponent,
+    ThemesComponent,
+    ExperimentsComponent
+],
+    templateUrl: './home-page.component.html'
 })
 export class HomePageComponent {
+  @ViewChild(MarkdownEditorComponent) set content(content: MarkdownEditorComponent) {
+    this.mdEditor = content;
+    setTimeout(() => {
+      this.replaceInitialText();
+    }, 0);
+  }
+
+  mdEditor!: MarkdownEditorComponent;
   markdown?: MdNode;
 
   constructor() {}
+
+  replaceInitialText() {
+    this.mdEditor.inputText(
+`# Efe Enes Çamcı
+### Solutions Architect
+
+I develop websites, desktop programs, mobile apps; increase organizational security, automate business-critical workflows, manage cloud infrastructure; experiment with ideas, take on new challenges, reinvent the wheel, and have fun.
+
+**[GitHub](https://github.com/efeenesc)** -
+**[LinkedIn](https://linkedin.com/in/efeenescamci)** -
+**[E-mail](mailto:hello@efeenescamci.com)**`)
+  }
 
   markdownChanged(newMd: MdNode) {
     this.markdown = newMd;

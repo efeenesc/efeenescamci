@@ -51,12 +51,6 @@ export class CarouselComponent implements AfterViewInit {
     window.addEventListener('resize', () => this.onWindowSizeChange());
   }
 
-  ngOnViewInit() {
-    // this.children.changes.subscribe((children: QueryList<any>) => {
-    //   this.childrenChanged(children);
-    // });
-  }
-
   onWindowSizeChange() {
     this.carouselRect = this.carousel.getBoundingClientRect();
     this.carouselBounds = [this.contentDiv.clientWidth * 0.8, 0];
@@ -70,15 +64,8 @@ export class CarouselComponent implements AfterViewInit {
     this.woSvc.mousePositionObservable.subscribe((event) => this.drag(event));
     this.woSvc.mouseUpObservable.subscribe(() => this.stopDragging());
 
-    // this.childrenChanged(this.children);
     this.onWindowSizeChange();
   }
-
-  // childrenChanged(children: QueryList<any>) {
-  //   children.forEach(() => {
-  //     return;
-  //   });
-  // }
 
   getDragPosition(e: MouseEvent | TouchEvent): number {
     if (e instanceof TouchEvent) {
@@ -159,16 +146,5 @@ export class CarouselComponent implements AfterViewInit {
         });
       }
     });
-    // this.carouselAnimeInstance = anime({
-    //   targets: this.elTranslatePos,
-    //   current: this.translatePos,
-    //   update: () => {
-    //     const newStyle = 'translateX(' + this.elTranslatePos.current + 'px)';
-    //     this.carousel.style.transform = newStyle;
-    //     this.carousel.style.webkitTransform = newStyle;
-    //   },
-    //   duration: duration,
-    //   easing: 'easeOutExpo',
-    // });
   }
 }

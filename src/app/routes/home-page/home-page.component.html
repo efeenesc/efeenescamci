@@ -1,16 +1,16 @@
 <div
-  class="flex flex-col h-max [&>section]:rounded-[1rem] lg:[&>section]:rounded-[2rem] gap-24 relative"
+  class="flex flex-col lg:w-4/5 mx-auto h-max [&_section]:bg-theme-900 [&>section]:rounded-[1rem] lg:[&>section]:rounded-[2rem] gap-24 relative"
 >
   <section class="p-2 lg:p-10 h-full flex-shrink-0 flex transition-colors">
     <div
       class="w-full grid h-[80vh] lg:grid-rows-1 lg:grid-cols-[49%_2%_49%] lg:grid-flow-row grid-rows-[49%_2%_49%] grid-flow-row"
     >
       <div
-        class="flex-1 justify-center overflow-auto flex p-1 lg:m-1 lg:p-5 flex-col transition-colors text-nowrap text-foreground outline-dashed outline-border1 rounded-xl lg:rounded-2xl"
+        class="flex-1 justify-center overflow-auto flex p-1 lg:m-1 lg:p-5 flex-col transition-colors text-nowrap text-foreground"
       >
         @if (this.markdown) {
         <markdown-renderer
-          class="inline-block"
+          class="inline-block text-wrap"
           [parsedContent]="this.markdown.content"
         >
           <div class="inline-block w-2 h-4 bg-contrast" id="caret"></div>
@@ -21,7 +21,7 @@
       <div id="blank"></div>
 
       <div
-        class="h-auto flex flex-col shadow-xl bg-theme-600 group border-border1 border rounded-2xl scale-[99%] focus-within:scale-100 focus-within:rounded-3xl focus-within:shadow-2xl transition-all overflow-hidden"
+        class="h-auto flex flex-col shadow-xl bg-theme-600 group border-border1 border rounded-2xl focus-within:rounded-3xl focus-within:shadow-2xl transition-all overflow-hidden"
       >
         <div
           class="title w-full h-[6%] flex items-center opacity-50 group-has-[:focus]:opacity-100 justify-center"
@@ -37,19 +37,16 @@
     </div>
   </section>
 
-  <section class="min-h-screen flex w-full justify-center overflow-x-hidden">
+  <section class="py-2 flex w-full justify-center overflow-x-hidden">
     <themes-section></themes-section>
   </section>
 
-  <!-- <router-outlet /> -->
-
-  <!-- <section
-            class="min-h-screen flex w-full justify-center overflow-x-hidden"
-          >
-            <projects-section></projects-section>
-          </section> -->
+  <section class="min-h-[90vh] flex w-full justify-center overflow-x-hidden">
+    <experiments-section></experiments-section>
+  </section>
 
   <section
     class="footer w-full justify-self-center p-5 flex items-center justify-center"
-  ></section>
+  >
+  </section>
 </div>

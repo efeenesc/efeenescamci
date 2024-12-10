@@ -53,7 +53,7 @@ export class VsCardComponent {
   loadingContainerDiv!: HTMLDivElement;
 
   @Input() cardInfo!: VSExtension;
-  @Input() cardType: 'small' | 'large' = 'small'
+  @Input() cardType: 'small' | 'large' = 'large'
   @Input('cardStyle') set _style(content: VsCardStyle) {
     this.bg900 = content.bg900;
     this.bg300 = content.bg300;
@@ -74,10 +74,24 @@ export class VsCardComponent {
   constructor (private vs : VsThemeService) {}
 
   themeSelected() {
+    if (this.cardInfo.displayName === 'Beige' && this.cardInfo.publisher.displayName === 'efeenesc') {
+      this.vs.setDefaultColorScheme();
+      this.vs.setThemeInternal({
+        themeId: "00000000-0000-0000-0000-00000000",
+        themeName: this.cardInfo.displayName,
+        themeAuthor: this.cardInfo.publisher.displayName,
+        themeIcon: this.cardInfo.extensionIcon as string
+      });
+      return;
+    }
     this.itemSelected(this.cardInfo);
   }
 
   itemSelected(ext: VSExtension) {
+    this.calculatedGradient = '';
+    this.currentProgress = 0;
+    this.downloadProgress = 0;
+    this.downloadProgressObj = { current: 0 };
     this.startLoadingAnimation();
     this.vs.changeTheme(ext, (loaded, total) => {
       const progress = parseInt((loaded / total) * 100 + ''); // Working with float in JS is never good. Convert to string then int

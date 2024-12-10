@@ -1,5 +1,6 @@
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-require-imports */
 /** @type {import('tailwindcss').Config} */
-// eslint-disable-next-line no-undef
 module.exports = {
   content: ["./src/**/*.{html,ts}",],
   theme: {
@@ -40,6 +41,8 @@ module.exports = {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwindcss-counter')()
+  ],
 }
 

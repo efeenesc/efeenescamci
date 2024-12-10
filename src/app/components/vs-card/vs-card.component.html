@@ -1,30 +1,30 @@
 <div
   (click)="themeSelected()"
-  class="flex flex-col w-full h-full items-center justify-center rounded-lg
-  transition-all relative cursor-pointer overflow-hidden {{ this.cardType == 'large' ? 'text-md md:text-lg' : 'text-lg md:text-xl' }}"
+  class="flex flex-col w-full h-full items-center justify-center rounded-lg aspect-square
+  transition-all relative cursor-pointer overflow-hidden {{ this.cardType == 'large' ? 'text-lg md:text-xl': 'text-md md:text-lg' }}"
 >
-  <div #themeinfo class="transition-colors w-full h-full flex flex-col items-center z-20 p-1 rounded-lg justify-center overflow-hidden" [class]="[this.bg300]">
+  <div #themeinfo class="transition-colors w-full h-full grid grid-rows-[50%_50%] grid-cols-1 items-center z-20 p-1 rounded-xl justify-center overflow-hidden" [class]="[this.bg300]">
     <div class="p-2 h-full flex items-center justify-center overflow-hidden">
       <!-- BEGIN ICON -->
       @defer (when this.cardInfo.extensionIcon !== undefined) {
         <!-- If extensionIcon is not yet loaded: -->
         @if (!this.cardInfo.extensionIcon) {
           <!-- If extensionIcon is false (therefore the icon doesn't exist): -->
-          <div class="w-fit h-full flex-grow aspect-square rounded-lg bg-white font-extrabold text-2xl text-black flex justify-center items-center" >
+          <div class="w-fit h-full aspect-square rounded-lg bg-white font-extrabold text-2xl text-black flex justify-center items-center" >
             -
           </div>
-        } 
+        }
         
         @else {
           <!-- If extensionIcon is not false (and is therefore a string per the type definition): -->
           <img id="theme_icon"
             draggable="false"
-            class="overflow-hidden block touch-none select-none object-contain w-fit flex-grow rounded-lg aspect-square h-full"
+            class="overflow-hidden block touch-none select-none object-contain flex-grow rounded-lg aspect-square h-full"
             [src]="this.cardInfo.extensionIcon"/>
         } 
         
       } @placeholder {
-        <div class="object-contain w-fit h-full flex-grow rounded-lg overflow-hidden" >
+        <div class="object-contain h-full flex-grow rounded-lg overflow-hidden" >
           <skeleton-loader class="h-full w-full aspect-square block" [class]="[this.bg900]" />
         </div>
       }
@@ -42,29 +42,18 @@
         }}</span>
         <a
           target="_blank"
-          href="https://marketplace.visualstudio.com/publishers/{{
-            this.cardInfo.publisher.publisherName
-          }}"
+          href="{{ this.cardInfo.publisher.publisherName === 'efeenesc' ? 'https://github.com/efeenesc' : 'https://marketplace.visualstudio.com/publishers/' + this.cardInfo.publisher.publisherName }}"
           [class]="this.fgAccent"
           class="relative flex w-fit items-center flex-nowrap gap-2 border-b-[1px] border-accent1 transition-colors hover:border-contrast 
                   hover:text-contrast [&_svg]:transition-colors [&_svg]:fill-accent1 [&_svg]:hover:fill-contrast"
           ><span>{{ this.cardInfo.publisher.displayName }}</span><icon-arrow-up-right-from-square class="w-[1rem] aspect-square" />
         </a>
-        @if (this.cardType === 'large') {
-          <!-- Display description if large card -->
-          <span class="text-ellipsis text-contrast transition-color overflow-hidden">{{ this.cardInfo.shortDescription }}</span>
-        }
 
     } @placeholder {
       <!-- Skeleton loader start -->
       <skeleton-loader class="text-foreground transition-color rounded-lg overflow-hidden w-full h-8" />
       <skeleton-loader class="text-accent1 transition-color rounded-lg overflow-hidden w-full h-8 mt-2" />
-      @if (this.cardType === 'large') {
-        <skeleton-loader
-          class="text-ellipsis text-contrast transition-color min-h-8 rounded-lg overflow-hidden h-full flex-grow w-full"
-        />
       <!-- Skeleton loader end -->
-      }
     }
     <!-- END TEXT CONTENT -->
     </div>

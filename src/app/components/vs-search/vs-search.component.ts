@@ -1,15 +1,11 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { LocalStorageService } from '../../services/local-storage.service';
-import { LoadingBarComponent } from '../loading-bar/loading-bar.component';
-import { VsCardComponent } from '../vs-card/vs-card.component';
-import { MagnifyingGlassComponent } from "../../icons/magnifying-glass/magnifying-glass.component";
-import { SkeletonLoaderComponent } from "../skeleton-loader/skeleton-loader.component";
 import gsap from 'gsap';
 
 @Component({
-    selector: 'vs-search',
-    imports: [LoadingBarComponent, VsCardComponent, MagnifyingGlassComponent, SkeletonLoaderComponent],
-    templateUrl: './vs-search.component.html'
+  selector: 'vs-search',
+  imports: [],
+  templateUrl: './vs-search.component.html',
 })
 export class VsSearchComponent {
   @ViewChild('themebtn') themeBtn!: HTMLElement;
@@ -26,12 +22,9 @@ export class VsSearchComponent {
   themeAuthor?: string | null;
   themeIcon?: string | null;
 
-  constructor(
-    private _lss: LocalStorageService
-  ) {}
+  constructor(private _lss: LocalStorageService) {}
 
   ngOnInit() {
-    
     this.restoreThemeInformation();
     this._lss.valueChanges.subscribe((obj) => {
       switch (obj.key) {
@@ -44,16 +37,20 @@ export class VsSearchComponent {
           break;
 
         case 'theme_icon':
-          this.themeIcon = 'data:image/png;base64,' + obj.value;
+          if (obj.value.startsWith('data:image')) {
+            this.themeIcon = obj.value;
+          } else {
+            this.themeIcon = 'data:image/png;base64,' + obj.value;
+          }
           break;
       }
     });
   }
 
   restoreThemeInformation() {
-    this.themeAuthor = this._lss.get("theme_author");
-    this.themeName = this._lss.get("theme_name");
-    this.themeIcon = 'data:image/png;base64,' + this._lss.get("theme_icon");
+    this.themeAuthor = this._lss.get('theme_author');
+    this.themeName = this._lss.get('theme_name');
+    this.themeIcon = 'data:image/png;base64,' + this._lss.get('theme_icon');
   }
 
   playScrollAnimation(progress: number) {
@@ -64,21 +61,21 @@ export class VsSearchComponent {
       paddingTop: pad,
       paddingBottom: pad,
       duration: 0.01,
-      ease: 'none'
+      ease: 'none',
     });
-    
+
     gsap.to('#theme-author', {
       opacity: progress,
       duration: 0.01,
-      ease: 'none'
+      ease: 'none',
     });
-    
+
     const top = (1 - progress) * 1.2;
-    
+
     gsap.to('#theme-name', {
       top: top + 'vh',
       duration: 0.01,
-      ease: 'none'
+      ease: 'none',
     });
   }
 }

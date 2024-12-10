@@ -1,9 +1,8 @@
 /// <reference lib="webworker" />
 
-import { lex, parse } from "../classes/markdownparser";
+import { ConvertToHtmlTree } from "../classes/markdown/Markdown";
 
 addEventListener('message', ({ data }) => {
-  const lexed = lex(data);
-  const mdTree = parse(lexed);
+  const mdTree = ConvertToHtmlTree(data);
   postMessage(mdTree);
 });

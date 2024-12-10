@@ -1,7 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { VsSearchComponent } from '../vs-search/vs-search.component';
 import { WindowObserverService, WindowSize } from '../../services/window-observer.service';
-import { MagnifyingGlassComponent } from "../../icons/magnifying-glass/magnifying-glass.component";
 import { SiteLogoComponent } from "../../icons/site-logo/site-logo.component";
 import { HamburgerMenuComponent } from "../../icons/menu/hamburger-menu.component";
 import { RouterLink } from '@angular/router';
@@ -9,7 +8,7 @@ import gsap from 'gsap';
 
 @Component({
     selector: 'top-bar',
-    imports: [VsSearchComponent, MagnifyingGlassComponent, SiteLogoComponent, HamburgerMenuComponent, RouterLink],
+    imports: [VsSearchComponent, SiteLogoComponent, HamburgerMenuComponent, RouterLink],
     templateUrl: './top-bar.component.html'
 })
 export class TopBarComponent {
@@ -37,6 +36,8 @@ export class TopBarComponent {
   ngOnInit() {
     this.woSvc.scrollObservable.subscribe((newYval) => this.trackScroll(newYval));
     this.woSvc.sizeObservable.subscribe((newWndSize) => this.setTopBarMode(newWndSize));
+
+    this.setTopBarMode(this.woSvc.getWindowSize());
   }
 
   emitThemeBarClickedEvent() {
@@ -75,7 +76,7 @@ export class TopBarComponent {
 
     this.topBarTween = gsap.to('#topbar', {
       height: newHeight,
-      ease: 'spring(1, 0.8, 10, 50)' // Using GSAP's spring easing with similar parameters
+      ease: 'elastic.out(1.2, 1)'
     });
 
     const basePadY = 0.25;
@@ -89,7 +90,7 @@ export class TopBarComponent {
     this.hamburgerTween = gsap.to('#hamburger-menu', {
       paddingTop: finalPadY,
       paddingBottom: finalPadY,
-      duration: 0.05,
+      duration: 0.2,
       ease: 'none'
     });
   }

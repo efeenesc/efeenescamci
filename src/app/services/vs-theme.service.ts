@@ -3,7 +3,7 @@ import * as vst from '../types/vs-types';
 import stripJsonComments from 'strip-json-comments';
 import type JSZip from 'jszip'
 import { ScopeFinder } from '../classes/scopefinder';
-import { ColorScheme, ColorTheme } from '../classes/colorscheme';
+import { ColorScheme, ThemeType } from '../classes/colorscheme';
 import { LocalStorageService } from './local-storage.service';
 import { ThemeMetadata, ThemePackage } from '../types/vs/manifest';
 
@@ -172,7 +172,7 @@ export class VsThemeService {
    * @param info - The theme information object.
    * @param themes - Optional array of color schemes associated with the theme.
    */
-  private setThemeInternal(info: ThemeInfo, themes?: ColorScheme[]) {
+  public setThemeInternal(info: ThemeInfo, themes?: ColorScheme[]) {
     this._lss.set('theme_name', info.themeName);
     this._lss.set('theme_author', info.themeAuthor);
     this._lss.set('theme_id', info.themeId);
@@ -204,8 +204,8 @@ export class VsThemeService {
         ].async('string');
 
         const colorScheme = themeFile.substring(0, 5).includes('<?xml')
-          ? await this.readPlistFile(themeFile, colorTheme as ColorTheme)!
-          : this.readJSONFile(themeFile, colorTheme as ColorTheme)!;
+          ? await this.readPlistFile(themeFile, colorTheme as ThemeType)!
+          : this.readJSONFile(themeFile, colorTheme as ThemeType)!;
 
         colorScheme.name = theme.label;
         return colorScheme;
@@ -291,7 +291,7 @@ export class VsThemeService {
    * @param colorTheme - The type of color theme ('dark' or 'light').
    * @returns A ColorScheme object with extracted color details.
    */
-  private async readPlistFile(filestr: string, colorTheme: ColorTheme): Promise<ColorScheme> {
+  private async readPlistFile(filestr: string, colorTheme: ThemeType): Promise<ColorScheme> {
     if (typeof this.dPlistParse === 'undefined') {
       this.dPlistParse = await import('@plist/parse') as any; // I'm not going to spend 5 years trying to get TypeScript to comply. 'any' to the rescue
     }
@@ -327,7 +327,7 @@ export class VsThemeService {
    * @param colorTheme - The type of color theme ('dark' or 'light').
    * @returns A ColorScheme object with extracted color details.
    */
-  private readJSONFile(filestr: string, colorTheme: ColorTheme): ColorScheme {
+  private readJSONFile(filestr: string, colorTheme: ThemeType): ColorScheme {
     const theme_json = JSON.parse(
       stripJsonComments(filestr, { trailingCommas: true })
     );

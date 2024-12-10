@@ -3,14 +3,13 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { VsThemeService } from '../../services/vs-theme.service';
 import * as vst from '../../types/vs-types';
-import { LoadingBarComponent } from '../loading-bar/loading-bar.component';
 import { VsCardComponent } from '../vs-card/vs-card.component';
 import { MagnifyingGlassComponent } from "../../icons/magnifying-glass/magnifying-glass.component";
 import { SkeletonLoaderComponent } from "../skeleton-loader/skeleton-loader.component";
 
 @Component({
     selector: 'vs-menu',
-    imports: [FormsModule, ReactiveFormsModule, LoadingBarComponent, VsCardComponent, MagnifyingGlassComponent, SkeletonLoaderComponent],
+    imports: [FormsModule, ReactiveFormsModule, VsCardComponent, MagnifyingGlassComponent, SkeletonLoaderComponent],
     templateUrl: './vs-menu.component.html',
     styles: `
   ::-webkit-scrollbar {

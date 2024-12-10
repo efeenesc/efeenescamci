@@ -22,10 +22,10 @@
     >
       <div
         id="contentbody"
-        class="grid justify-between grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 auto-rows-[30vh] lg:auto-rows-[30vh] lg:pt-4 flex-grow gap-5"
+        class="grid justify-between grid-cols-1 lg:grid-cols-2 xl:grid-cols-5 lg:pt-4 flex-grow gap-5"
       >
         @if (searching || searchResults === undefined) {
-          @for (i of [1,1,1,1,1,1,1,1,1]; track i) {
+          @for (i of [1,1,1,1,1,1,1,1,1,1,1]; track i) {
             <div
               class="w-full h-full bg-system-700 rounded-lg shadow-md-alt overflow-hidden"
             >
