@@ -17,6 +17,7 @@ export class VsSearchComponent {
   animationSeekAt: number = 0;
 
   @Input() internalStyle?: string;
+  @Input() displayKeys: boolean = true;
 
   themeName?: string | null;
   themeAuthor?: string | null;

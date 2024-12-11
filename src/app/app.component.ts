@@ -110,6 +110,8 @@ export class AppComponent {
       return this.vsSvc.setDefaultColorScheme();
     }
 
+    this.vsSvc.activeThemeVariantName.next(cs!.name);
+
     // Change the color variables to the restored color scheme
     this.vsSvc.changeColorVariables(cs);
   }

@@ -70,6 +70,7 @@ export class ThemesComponent {
     bg900Class: 'bg-theme-900',
     fgTextClass: 'text-foreground',
     fgTextAccent: 'text-accent1',
+    fgSvg: '[&_svg]:fill-accent1'
   });
   currentThemeId?: string;
 

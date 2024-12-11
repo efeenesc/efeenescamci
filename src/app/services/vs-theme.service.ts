@@ -6,6 +6,7 @@ import { ScopeFinder } from '../classes/scopefinder';
 import { ColorScheme, ThemeType } from '../classes/colorscheme';
 import { LocalStorageService } from './local-storage.service';
 import { ThemeMetadata, ThemePackage } from '../types/vs/manifest';
+import { BehaviorSubject } from 'rxjs';
 
 export type iconDownloadConfig = 'none' | 'small' | 'large';
 
@@ -22,8 +23,19 @@ export interface ThemeInfo {
 export class VsThemeService {
   private dJSZip?: JSZip; // Dynamically imported JSZip
   private dPlistParse?: (input: string | ArrayBuffer) => any; // Dynamically imported 'parse' method of the '@plist/parse' library
+  activeThemeVariantName: BehaviorSubject<string> = new BehaviorSubject('');
 
-  constructor(private _lss: LocalStorageService) {}
+  constructor(private _lss: LocalStorageService) {
+    const currentVariant = this._lss.get('theme_variant');
+
+    if (currentVariant)
+      this.activeThemeVariantName.next(currentVariant);
+
+    this._lss.valueChanges.subscribe((nv) => {
+      if (nv.key === 'theme_variant')
+        this.activeThemeVariantName.next(nv.value);
+    })
+  }
 
   /**
    * Fetches and filters Visual Studio themes based on the provided filter criteria.
@@ -162,8 +174,7 @@ export class VsThemeService {
 
     const themes = await this.readThemes(pkg_themes, zip);
     this.changeColorVariables(themes[0]);
-
-    this.setThemeInternal(themeInfo, themes);
+    this.setThemeInternal(themeInfo, themes[0].name, themes);
   }
 
   /**
@@ -172,15 +183,23 @@ export class VsThemeService {
    * @param info - The theme information object.
    * @param themes - Optional array of color schemes associated with the theme.
    */
-  public setThemeInternal(info: ThemeInfo, themes?: ColorScheme[]) {
+  public setThemeInternal(info: ThemeInfo, newVariantName: string, themes?: ColorScheme[]) {
     this._lss.set('theme_name', info.themeName);
     this._lss.set('theme_author', info.themeAuthor);
     this._lss.set('theme_id', info.themeId);
     this._lss.set('theme_icon', info.themeIcon);
+    this._lss.set('theme_variant', newVariantName);
 
     if (themes) {
       this._lss.set('themes', JSON.stringify(themes));
     }
+  }
+
+  /**
+   * Applies the given variant of the current theme.
+   */
+  public setThemeVariant(newVariant: ColorScheme) {
+    this.changeColorVariables(newVariant);
   }
 
   /**
@@ -285,6 +304,19 @@ export class VsThemeService {
   }
 
   /**
+   * Gets locally stored theme variants of the currently applied theme.
+   * These variants are saved to local storage under the 'themes' key.
+   * Themes' variants are saved right after a theme is downloaded and applied.
+   */
+  getLocalThemeVariants(): ColorScheme[] | undefined {
+    const local = this._lss.get("themes");
+    if (!local) return;
+
+    const themes: ColorScheme[] = JSON.parse(local);
+    return themes;
+  }
+
+  /**
    * Reads and parses a Plist file, extracting color scheme details from it.
    * 
    * @param filestr - The content of the Plist file as a string.
@@ -385,6 +417,7 @@ export class VsThemeService {
     );
     document.documentElement.setAttribute('data-theme', cs.theme);
 
+    this.activeThemeVariantName.next(cs.name);
     this.saveToLocalStorage(cs);
   }
 
@@ -410,7 +443,7 @@ export class VsThemeService {
       themeAuthor: 'efeenesc',
       themeIcon: '',
       themeName: 'Beige',
-    });
+    }, "Beige Light");
   }
 
   /**
@@ -420,6 +453,7 @@ export class VsThemeService {
    */
   private saveToLocalStorage(cs: ColorScheme): void {
     const jsonVal = JSON.stringify(cs);
+    this.activeThemeVariantName.next(cs.name);
     this._lss.set('theme_val', jsonVal);
   }
 

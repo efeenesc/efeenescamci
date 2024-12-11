@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable @typescript-eslint/no-require-imports */
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{html,ts}",],
@@ -11,7 +10,7 @@ module.exports = {
         "theme-300": "var(--theme-300)",
         "foreground": "var(--foreground)",
         "accent1": "var(--accent1)",
-        "accent2": "var(--accent2",
+        "accent2": "var(--accent2)",
         "border1": "var(--border1)",
         "contrast": "var(--contrast)",
         "inverse": "var(--inverse)",

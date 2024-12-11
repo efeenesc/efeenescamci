@@ -11,7 +11,7 @@ import { ExperimentsComponent } from "./sections/experiments/experiments.compone
     MarkdownEditorComponent,
     MarkdownRendererComponent,
     ThemesComponent,
-    ExperimentsComponent
+    ExperimentsComponent,
 ],
     templateUrl: './home-page.component.html'
 })
@@ -24,12 +24,7 @@ export class HomePageComponent {
   }
 
   mdEditor!: MarkdownEditorComponent;
-  markdown?: MdNode;
-
-  constructor() {}
-
-  replaceInitialText() {
-    this.mdEditor.inputText(
+  homeText = 
 `![Efe Enes Çamcı](https://avatars.githubusercontent.com/u/79850104?v=4)
 
 
@@ -41,10 +36,32 @@ I develop websites, desktop programs, mobile apps; increase organizational secur
 
 **[GitHub](https://github.com/efeenesc)** -
 **[LinkedIn](https://linkedin.com/in/efeenescamci)** -
-**[E-mail](mailto:hello@efeenescamci.com)**`)
+**[E-mail](mailto:hello@efeenescamci.com)**`
+
+  markdown?: MdNode;
+
+  constructor() {}
+
+  async replaceInitialText() {
+    for (const i of [...Array(this.homeText.length).keys()]) {
+      this.mdEditor.inputText(this.homeText.substring(0, i), i % 30 == 0);
+      // if (i > 30 && i % 30 == 0) return;
+      await this.delay(10);
+    }
+
+    this.mdEditor.inputText(this.homeText);
   }
 
   markdownChanged(newMd: MdNode) {
     this.markdown = newMd;
+    console.log(this.markdown);
+  }
+
+  delay(ms: number) {
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        resolve()
+      }, ms)
+    })
   }
 }

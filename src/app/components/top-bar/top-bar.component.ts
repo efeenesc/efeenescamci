@@ -2,13 +2,11 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@
 import { VsSearchComponent } from '../vs-search/vs-search.component';
 import { WindowObserverService, WindowSize } from '../../services/window-observer.service';
 import { SiteLogoComponent } from "../../icons/site-logo/site-logo.component";
-import { HamburgerMenuComponent } from "../../icons/menu/hamburger-menu.component";
-import { RouterLink } from '@angular/router';
 import gsap from 'gsap';
 
 @Component({
     selector: 'top-bar',
-    imports: [VsSearchComponent, SiteLogoComponent, HamburgerMenuComponent, RouterLink],
+    imports: [VsSearchComponent, SiteLogoComponent],
     templateUrl: './top-bar.component.html'
 })
 export class TopBarComponent {
@@ -38,6 +36,8 @@ export class TopBarComponent {
     this.woSvc.sizeObservable.subscribe((newWndSize) => this.setTopBarMode(newWndSize));
 
     this.setTopBarMode(this.woSvc.getWindowSize());
+
+    // this.emitThemeBarClickedEvent()
   }
 
   emitThemeBarClickedEvent() {

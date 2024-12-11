@@ -10,10 +10,13 @@
     <div class="flex w-full h-[98vh] flex-col overflow-hidden">
       <div
         id="grabberDiv"
-        class="flex justify-end cursor-grab active:cursor-grabbing h-[6vh]"
+        class="flex justify-end cursor-grab active:cursor-grabbing h-[5vh] mb-2"
         (mousedown)="this.startDragging($event)"
       >
-          <div id="grabberImg" class="w-1/5 h-2 bg-system-300 rounded-full mt-2 absolute left-1/2 -translate-x-1/2"></div>
+        <div
+          id="grabberImg"
+          class="w-1/4 lg:w-1/5 h-2 bg-system-300 rounded-full mt-2 absolute left-1/2 -translate-x-1/2"
+        ></div>
         <div
           class="rounded-full aspect-square h-12 lg:h-14 bg-system-600 cursor-pointer justify-end"
           (click)="this.clickedOutside()"

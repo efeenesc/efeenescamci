@@ -6,6 +6,7 @@ import * as vst from '../../types/vs-types';
 import { VsCardComponent } from '../vs-card/vs-card.component';
 import { MagnifyingGlassComponent } from "../../icons/magnifying-glass/magnifying-glass.component";
 import { SkeletonLoaderComponent } from "../skeleton-loader/skeleton-loader.component";
+import { ColorScheme } from '../../classes/colorscheme';
 
 @Component({
     selector: 'vs-menu',
@@ -37,9 +38,13 @@ export class VsMenuComponent {
   searchControl!: FormControl;
   searchDebounce: number = 500;
   searchFilter: vst.VSFilterBody = new vst.VSFilterBody();
+  featuredThemes!: vst.VSResultBody | null;
   searchResults!: vst.VSResultBody | null;
   searching: boolean = false;
   downloadPercent: number = 0;
+  variants: ColorScheme[] = [];
+  currentVariantName: string = '';
+  viewingVariants: boolean = false;
 
   constructor(
     private vsSvc: VsThemeService
@@ -51,15 +56,40 @@ export class VsMenuComponent {
       .pipe(debounceTime(this.searchDebounce), distinctUntilChanged())
       .subscribe((query: string) => {
         this.searching = true;
+
+        if (query === '') {
+          this.searchResults = this.featuredThemes;
+          return;
+        }
+        
         this.searchVSMarketplace(query)
         .then(() => this.searching = false);
       });
     this.getFeaturedThemes();
+    
+    this.vsSvc.activeThemeVariantName.subscribe((newVariant) => { this.currentVariantName = newVariant; console.log(newVariant); });
+  }
+
+  showVariantPanel() {
+    this.variants = this.vsSvc.getLocalThemeVariants() || [];
+    this.viewingVariants = true;
+  }
+
+  hideVariantPanel() {
+    if (this.viewingVariants)
+      this.viewingVariants = false;
+  }
+
+  changeVariant(variantName: string) {
+    const variant = this.variants.find((v) => v.name === variantName);
+    if (!variant) return;
+    this.vsSvc.setThemeVariant(variant);
   }
 
   async getFeaturedThemes() {
     const requestedFilter = new vst.VSFilterBody;
     const results = await this.vsSvc.getFilteredResults(requestedFilter, 'small');
+    this.featuredThemes = results;
     this.searchResults = results;
   }
 

@@ -82,7 +82,7 @@ export class MarkdownEditorComponent {
     });
   }
 
-  inputText(newText: string) {
+  inputText(newText: string, changeMd: boolean = true) {
     const splitText = newText.split('\n');
     const html = splitText
       .map((line) =>
@@ -90,10 +90,12 @@ export class MarkdownEditorComponent {
       )
       .join('');
     this.textarea.innerHTML = html;
-    this.textChanged.next(null);
 
-    const sel = window.getSelection();
-    this.getCursorLine(sel!);
+    if (changeMd) {
+      this.textChanged.next(null);
+      const sel = window.getSelection();
+      this.getCursorLine(sel!);
+    }
   }
 
   checkDOM() {

@@ -9,7 +9,8 @@ export type VsCardStyleProps = {
   bg900Class?: string,
   bg300Class?: string,
   fgTextClass?: string,
-  fgTextAccent?: string
+  fgTextAccent?: string,
+  fgSvg?: string
 }
 
 export class VsCardStyle {
@@ -17,6 +18,7 @@ export class VsCardStyle {
   bg300: string = "bg-system-700";
   fgText: string = "text-contrast";
   fgAccent: string = "text-contrast text-bold";
+  fgSvg: string = "[&_svg]:fill-contrast"
   constructor (
     props?: VsCardStyleProps
   ) {
@@ -33,6 +35,9 @@ export class VsCardStyle {
 
     if (props.fgTextAccent)
       this.fgAccent = props.fgTextAccent;
+
+    if (props.fgSvg)
+      this.fgSvg = props.fgSvg;
   }
 }
 
@@ -64,7 +69,7 @@ export class VsCardComponent {
   bg900: string = "bg-system-900";
   bg300: string = "bg-system-700";
   fgText: string = "text-contrast";
-  fgAccent: string = "text-contrast text-bold";
+  fgAccent: string = "text-neutral-400 text-bold border-neutral-400 [&_svg]:fill-neutral-400";
 
   calculatedGradient: string = '';
   currentProgress: number = 0;
@@ -81,7 +86,7 @@ export class VsCardComponent {
         themeName: this.cardInfo.displayName,
         themeAuthor: this.cardInfo.publisher.displayName,
         themeIcon: this.cardInfo.extensionIcon as string
-      });
+      }, 'Beige Light');
       return;
     }
     this.itemSelected(this.cardInfo);
