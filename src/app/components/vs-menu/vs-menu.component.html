@@ -5,30 +5,45 @@
   >
     <div class="flex flex-row flex-wrap justify-between items-center gap-2">
       <div
-        class="flex w-full lg:w-1/2 h-12 transition-all bg-system-700 focus-within:bg-system-600 rounded-lg p-2 gap-2"
+        class="flex w-full border-[1px] border-border1 lg:w-1/2 h-12 transition-all bg-system-700 focus-within:bg-system-600 rounded-lg p-2 gap-2"
       >
         <magnifying-glass
           class="h-full aspect-square p-2 outline-none [&_svg]:fill-system-200"
         />
         <input
           (click)="this.hideVariantPanel()"
-          class="w-full bg-transparent group focus:outline-none placeholder:text-system-200 font-bold text-contrast"
+          class="w-full bg-transparent group focus:outline-none placeholder:text-system-200 text-sm lg:text-base font-bold text-contrast"
           [formControl]="searchControl"
           placeholder="Search themes in Visual Studio marketplace"
         />
       </div>
-      or...
       <button
-        (click)="this.showVariantPanel()"
-        class="flex-grow h-12 transition-color bg-theme-300 rounded-lg p-2 text-foreground transition-all hover:bg-theme-600 active:bg-theme-600 active:scale-[98%] font-bold"
+        (click)="
+          this.viewingVariants
+            ? this.hideVariantPanel()
+            : this.showVariantPanel()
+        "
+        class="flex gap-2 items-center justify-center flex-grow h-12 transition-color border-[1px] border-border1 rounded-lg p-2 text-sm lg:text-base font-bold transition-all hover:bg-opacity-80 active:bg-opacity-80 active:scale-[98%]"
+        [class]="
+          this.viewingVariants
+            ? 'bg-system-700 text-contrast'
+            : 'bg-theme-300 text-foreground'
+        "
       >
-        Change variant of current theme
+        @if (!this.viewingVariants) {
+          Change variant of current theme
+          <div class="rounded-lg p-1 bg-theme-600 text-accent1">
+            {{ this.variants.length }} total
+          </div>
+        } @else {
+          Go back to marketplace
+        }
       </button>
     </div>
 
     <div
       id="content"
-      class="transition-color flex-grow flex h-full relative justify-center overflow-y-scroll lg:pr-3 mb-3"
+      class="transition-color pb-4 flex-grow flex h-full relative justify-center overflow-y-scroll lg:pr-3 mb-3"
     >
       @if (this.viewingVariants) {
       <div
@@ -36,40 +51,45 @@
       >
         @for (ext of variants; track ext.name) {
         <button
-          class="flex flex-col w-full bg-system-600 hover:bg-system-300 active:bg-system-200 cursor-pointer px-4 py-2 text-start"
+          class="flex flex-col w-full bg-system-600 hover:bg-system-700 transition-colors active:bg-system-200 cursor-pointer px-4 py-2 text-start"
           (click)="this.changeVariant(ext.name)"
         >
           <div class="flex gap-2">
-            <span>{{ ext.name }}</span>
+            <span class="font-semibold">{{ ext.name }}</span>
             @if (ext.name === this.currentVariantName) {
               <span class="bg-accent1 text-theme-900 rounded-lg px-4">CURRENT</span>
             }
           </div>
 
-          <span>{{ ext.theme === 'dark' ? "Dark" : "Light" }}</span>
+          <span class="text-base">{{ ext.theme === "dark" ? "Dark" : "Light" }}</span>
         </button>
         }
       </div>
       } @else {
       <div
         id="contentbody"
-        class="grid grid-flow-row-dense h-fit justify-between rounded-lg grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 lg:pt-4 flex-grow gap-2"
+        class="grid grid-flow-row-dense h-fit justify-between rounded-lg grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 lg:pt-4 flex-grow gap-2"
       >
-        @if (searching || searchResults === undefined) { @for (i of
-        [1,2,3,4,5,6,7,8,9]; track i) {
-        <div
-          class="w-full h-full bg-system-700 rounded-lg shadow-md-alt overflow-hidden"
-        >
-          <skeleton-loader class="w-full h-full"></skeleton-loader>
-        </div>
-        } } @else { @for (ext of searchResults!.results[0].extensions; track
-        ext.extensionId) {
-        <vs-card
-          class="w-full lg:w-full h-fit rounded-lg shadow-md-alt"
-          [cardInfo]="ext"
-          [cardType]="'large'"
-        ></vs-card>
-        } }
+        @if (searching || searchResults === undefined) { 
+          @for (i of
+          [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]; track i) {
+          <div
+            class="w-full h-full bg-system-700 rounded-lg border-[1px] border-border1 overflow-hidden"
+          >
+            <skeleton-loader
+              class="w-full h-full aspect-square"
+            ></skeleton-loader>
+          </div>
+          } 
+        } @else { 
+          @for (ext of searchResults!.results[0].extensions; track ext.extensionId) {
+          <vs-card
+            class="w-full lg:w-full h-fit aspect-square rounded-lg border-[1px] border-border1"
+            [cardInfo]="ext"
+            [cardType]="'large'"
+          ></vs-card>
+          } 
+        }
       </div>
       }
     </div>

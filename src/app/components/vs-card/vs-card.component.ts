@@ -1,8 +1,9 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import { VSExtension } from '../../types/vs-types';
 import { SkeletonLoaderComponent } from "../skeleton-loader/skeleton-loader.component";
 import { ArrowUpRightFromSquareComponent } from '../../icons/arrow-up-right-from-square/arrow-up-right-from-square.component';
 import { VsThemeService } from '../../services/vs-theme.service';
+import beigeIcon from '../../icons/beige-theme-icon/beigeiconb64';
 import gsap from 'gsap';
 
 export type VsCardStyleProps = {
@@ -46,7 +47,7 @@ export class VsCardStyle {
     imports: [SkeletonLoaderComponent, ArrowUpRightFromSquareComponent],
     templateUrl: './vs-card.component.html'
 })
-export class VsCardComponent {
+export class VsCardComponent implements OnDestroy {
   @ViewChild('themeinfo') set _dm(content: ElementRef) {
     this.themeInfoDiv = content.nativeElement;
   }
@@ -66,6 +67,8 @@ export class VsCardComponent {
     this.fgAccent = content.fgAccent;
   }
 
+  abortController: AbortController | null = null;
+
   bg900: string = "bg-system-900";
   bg300: string = "bg-system-700";
   fgText: string = "text-contrast";
@@ -80,19 +83,15 @@ export class VsCardComponent {
 
   themeSelected() {
     if (this.cardInfo.displayName === 'Beige' && this.cardInfo.publisher.displayName === 'efeenesc') {
-      this.vs.setDefaultColorScheme();
-      this.vs.setThemeInternal({
-        themeId: "00000000-0000-0000-0000-00000000",
-        themeName: this.cardInfo.displayName,
-        themeAuthor: this.cardInfo.publisher.displayName,
-        themeIcon: this.cardInfo.extensionIcon as string
-      }, 'Beige Light');
-      return;
+      this.vs.setDefaultColorScheme('default', beigeIcon);
+    } else {
+      this.itemSelected(this.cardInfo);
     }
-    this.itemSelected(this.cardInfo);
   }
 
   itemSelected(ext: VSExtension) {
+    this.abortController = new AbortController();
+
     this.calculatedGradient = '';
     this.currentProgress = 0;
     this.downloadProgress = 0;
@@ -107,6 +106,14 @@ export class VsCardComponent {
       this.downloadProgress = progress;
       this.setCalculatedGradient(this.downloadProgress);
     });
+  }
+
+  cancelThemeChange() {
+    if (this.abortController) {
+      this.abortController.abort();
+      this.abortController = null;
+      this.stopLoadingAnimation();
+    }
   }
 
   startLoadingAnimation() {
@@ -155,5 +162,10 @@ export class VsCardComponent {
         }
       }
     });
-  }  
+  }
+
+  ngOnDestroy() {
+    // console.log("Card destroyed?");
+    this.cancelThemeChange();
+  }
 }

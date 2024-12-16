@@ -1,13 +1,14 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
 import { LocalStorageService } from '../../services/local-storage.service';
 import gsap from 'gsap';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'vs-search',
   imports: [],
   templateUrl: './vs-search.component.html',
 })
-export class VsSearchComponent {
+export class VsSearchComponent implements OnDestroy {
   @ViewChild('themebtn') themeBtn!: HTMLElement;
 
   @Input('animationSeekAt') set _seek(s: number) {
@@ -23,11 +24,13 @@ export class VsSearchComponent {
   themeAuthor?: string | null;
   themeIcon?: string | null;
 
+  valueChangesSubscription!: Subscription;
+
   constructor(private _lss: LocalStorageService) {}
 
   ngOnInit() {
     this.restoreThemeInformation();
-    this._lss.valueChanges.subscribe((obj) => {
+    this.valueChangesSubscription = this._lss.valueChanges.subscribe((obj) => {
       switch (obj.key) {
         case 'theme_author':
           this.themeAuthor = obj.value;
@@ -51,7 +54,14 @@ export class VsSearchComponent {
   restoreThemeInformation() {
     this.themeAuthor = this._lss.get('theme_author');
     this.themeName = this._lss.get('theme_name');
-    this.themeIcon = 'data:image/png;base64,' + this._lss.get('theme_icon');
+    const themeIcon = this._lss.get('theme_icon');
+    if (!themeIcon) return;
+
+    if (themeIcon.startsWith('data:image')) {
+      this.themeIcon = themeIcon;
+    } else {
+      this.themeIcon = 'data:image/png;base64,' + themeIcon;
+    }
   }
 
   playScrollAnimation(progress: number) {
@@ -78,5 +88,9 @@ export class VsSearchComponent {
       duration: 0.01,
       ease: 'none',
     });
+  }
+
+  ngOnDestroy(): void {
+    this.valueChangesSubscription.unsubscribe();
   }
 }

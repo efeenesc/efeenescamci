@@ -1,9 +1,9 @@
 <div
   (click)="themeSelected()"
   class="flex flex-col w-full h-full items-center justify-center rounded-lg aspect-square
-  transition-all relative cursor-pointer overflow-hidden {{ this.cardType == 'large' ? 'text-md md:text-xl': 'text-md md:text-lg' }}"
+  transition-all relative cursor-pointer overflow-hidden {{ this.cardType == 'large' ? 'text-sm md:text-xl': 'text-base md:text-lg' }}"
 >
-  <div #themeinfo class="transition-colors w-full h-full grid grid-rows-[50%_50%] grid-cols-1 items-center z-20 p-1 rounded-xl justify-center overflow-hidden" [class]="[this.bg300]">
+  <div #themeinfo class="transition-colors w-full h-full grid grid-rows-[60%_40%] grid-cols-1 items-center z-20 p-1 rounded-lg justify-center overflow-hidden" [class]="[this.bg300]">
     <div class="p-2 h-full flex items-center justify-center overflow-hidden">
       <!-- BEGIN ICON -->
       @defer (when this.cardInfo.extensionIcon !== undefined) {
@@ -19,7 +19,7 @@
           <!-- If extensionIcon is not false (and is therefore a string per the type definition): -->
           <img id="theme_icon"
             draggable="false"
-            class="overflow-hidden block touch-none select-none object-contain flex-grow rounded-lg aspect-square h-full"
+            class="overflow-hidden block touch-none select-none object-contain rounded-lg aspect-square h-full"
             [src]="this.cardInfo.extensionIcon"/>
         } 
         
@@ -37,7 +37,7 @@
     <div class="flex flex-col h-full w-full items-center justify-center overflow-hidden">
       @defer (when this.cardInfo.displayName !== undefined) {
 
-        <span class="transition-color" [class]="this.fgText">{{
+        <span class="transition-color text-ellipsis text-nowrap" [class]="this.fgText">{{
           this.cardInfo.displayName
         }}</span>
         <a
@@ -45,7 +45,7 @@
           href="{{ this.cardInfo.publisher.publisherName === 'efeenesc' ? 'https://github.com/efeenesc' : 'https://marketplace.visualstudio.com/publishers/' + this.cardInfo.publisher.publisherName }}"
           [class]="this.fgAccent"
           class="relative flex w-fit items-center flex-nowrap gap-2 border-b-[1px] border-accent1 transition-colors hover:border-contrast 
-                  hover:text-contrast [&_svg]:transition-colors [&_svg]:fill-accent1 [&_svg]:hover:fill-contrast"
+                  hover:text-contrast [&_svg]:transition-colors [&_svg]:fill-accent1 [&_svg]:hover:fill-contrast text-clip text-nowrap"
           ><span>{{ this.cardInfo.publisher.displayName }}</span><icon-arrow-up-right-from-square class="w-[1rem] aspect-square" />
         </a>
 
@@ -58,7 +58,7 @@
     <!-- END TEXT CONTENT -->
     </div>
   </div>
-  <div #loadingcontainer class="bg-system-300 opacity-0 absolute left-0 top-0 z-10 h-full w-full overflow-hidden">
+  <div #loadingcontainer class="bg-system-300 rounded-lg opacity-0 absolute left-0 top-0 z-10 h-full w-full overflow-hidden">
     <div
       id="loading-div"
       class="h-full w-full"
