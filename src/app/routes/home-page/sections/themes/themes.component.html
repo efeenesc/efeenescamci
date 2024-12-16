@@ -1,13 +1,30 @@
 <div
-  defer (deferLoad)="this.beginLoading()"
-  class="w-full py-2 min-h-full flex flex-grow flex-col items-center justify-center gap-10 relative"
+  defer
+  (deferLoad)="this.beginLoading()"
+  class="w-full py-2 min-h-full flex flex-grow flex-col items-center justify-center relative"
 >
+  <div class="flex w-full gap-2 my-2 py-2 lg:my-6 lg:py-6 relative [&_h1]:z-10 select-none pointer-events-none">
+    <div class="-ml-24 lg:-ml-12 flex gap-2 relative z-10 text-2xl lg:text-5xl">
+      <h1 class="text-theme-900 font-extrabold">THEMES</h1>
+      <h1 class="text-theme-900 font-extrabold">THEMES</h1>
+      <h1 class="text-accent1 font-extrabold">THEMES</h1>
+      <h1 class="text-theme-900 font-extrabold">THEMES</h1>
+      <h1 class="text-theme-900 font-extrabold">THEMES</h1>
+      <h1 class="text-theme-900 font-extrabold">THEMES</h1>
+      <h1 class="text-theme-900 font-extrabold">THEMES</h1>
+      <h1 class="text-theme-900 font-extrabold">THEMES</h1>
+    </div>
+    <div class="bg-contrast opacity-50 absolute top-0 left-0 w-full h-full"></div>
+  </div>
+
   <div class="p-3 w-full lg:w-3/4 flex flex-col gap-5 text-lg lg:text-2xl">
     <h4>
-      I couldn't decide on a theme or a color scheme. Here's all themes in <b class="text-accent1">Visual Studio marketplace</b>!
+      I couldn't decide on a theme or a color scheme. Here's all themes in
+      <b class="text-accent1">Visual Studio marketplace</b>!
     </h4>
     <h4>
-      Click the theme button on the top right corner to search for your favorite Visual Studio Code theme, or pick from one of my favorites:
+      Click the theme button on the top right corner to search for your favorite
+      Visual Studio Code theme, or pick from one of my favorites:
     </h4>
   </div>
   <carousel class="select-none self-start">
