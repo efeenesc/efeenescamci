@@ -1,12 +1,9 @@
 import {
   AfterViewInit,
   Component,
-  ContentChildren,
   ElementRef,
-  QueryList,
   ViewChild,
 } from '@angular/core';
-import { CarouselItemComponent } from '../carousel-item/carousel-item.component';
 import { WindowObserverService } from '../../services/window-observer.service';
 import gsap from 'gsap';
 
@@ -31,9 +28,6 @@ export class CarouselComponent implements AfterViewInit {
   }
   contentDiv!: HTMLDivElement;
 
-  @ContentChildren(CarouselItemComponent)
-  children!: QueryList<any>;
-
   isDragging: boolean = false;
   dragStartTime: number = 0;
   dragStartPos: number = 0;
@@ -44,25 +38,31 @@ export class CarouselComponent implements AfterViewInit {
   private currentMousePos: MousePosition | null = { x: 0, time: 0 };
   private prevMousePos: MousePosition | null = { x: 0, time: 0 };
   private carouselTween?: gsap.core.Tween;
+  private supressClick: boolean = false;
 
   constructor(private woSvc: WindowObserverService) {}
 
   ngOnInit() {
     window.addEventListener('resize', () => this.onWindowSizeChange());
+    this.woSvc.mouseUpObservable.subscribe(() => this.stopDragging());
+    this.woSvc.mousePositionObservable.subscribe((event) => this.drag(event));
   }
 
   onWindowSizeChange() {
     this.carouselRect = this.carousel.getBoundingClientRect();
-    this.carouselBounds = [this.contentDiv.clientWidth * 0.8, 0];
+    this.carouselBounds = [this.contentDiv.clientWidth * 0.9, 0];
   }
 
   ngAfterViewInit(): void {
+    // this.carousel.addEventListener(
+    //   'touchstart',
+    //   (event: MouseEvent | TouchEvent) => this.startDragging(event)
+    // );
     this.carousel.addEventListener(
-      'touchstart',
-      (event: MouseEvent | TouchEvent) => this.startDragging(event)
-    );
-    this.woSvc.mousePositionObservable.subscribe((event) => this.drag(event));
-    this.woSvc.mouseUpObservable.subscribe(() => this.stopDragging());
+      'click',
+      (event: MouseEvent | TouchEvent) => this.onClick(event),
+      true
+    )
 
     this.onWindowSizeChange();
   }
@@ -97,6 +97,7 @@ export class CarouselComponent implements AfterViewInit {
 
   drag(e: MouseEvent | TouchEvent): void {
     if (!this.isDragging) return;
+    this.supressClick = true;
 
     const offsetX = this.getDragPosition(e);
     const dragDistance = offsetX - this.dragStartPos;
@@ -111,6 +112,7 @@ export class CarouselComponent implements AfterViewInit {
   stopDragging(): void {
     if (!this.isDragging) return;
     this.isDragging = false;
+    setTimeout(() => this.supressClick = false, 0);
 
     if (this.prevMousePos === null || this.currentMousePos === null) return;
 
@@ -128,6 +130,13 @@ export class CarouselComponent implements AfterViewInit {
     );
 
     this.updateCarouselPosition(750);
+  }
+
+  onClick(e: MouseEvent | TouchEvent): void {
+    if (this.supressClick) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
+    }
   }
 
   private updateCarouselPosition(duration: number): void {

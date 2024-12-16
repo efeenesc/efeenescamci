@@ -3,19 +3,18 @@ import { VSExtension, VSFilterBody } from '../../../../types/vs-types';
 import { VsThemeService } from '../../../../services/vs-theme.service';
 import { CarouselComponent } from '../../../../components/carousel/carousel.component';
 import { LocalStorageService } from '../../../../services/local-storage.service';
-import { CarouselItemComponent } from '../../../../components/carousel-item/carousel-item.component';
 import {
   VsCardComponent,
   VsCardStyle,
 } from '../../../../components/vs-card/vs-card.component';
 import { DeferLoadDirective } from '../../../../classes/deferload';
+import beigeIcon from '../../../../icons/beige-theme-icon/beigeiconb64';
 
 @Component({
   selector: 'themes-section',
   standalone: true,
   imports: [
     CarouselComponent,
-    CarouselItemComponent,
     VsCardComponent,
     DeferLoadDirective,
   ],
@@ -50,7 +49,7 @@ export class ThemesComponent {
     extensionId: '00000000-0000-0000-0000-000000000000',
     extensionName: 'Beige',
     displayName: 'Beige',
-    extensionIcon: '',
+    extensionIcon: beigeIcon,
     flags: '0',
     lastUpdated: '',
     publishedDate: '',

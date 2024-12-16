@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as vst from '../types/vs-types';
 import stripJsonComments from 'strip-json-comments';
-import type JSZip from 'jszip'
+import type JSZip from 'jszip';
 import { ScopeFinder } from '../classes/scopefinder';
 import { ColorScheme, ThemeType } from '../classes/colorscheme';
 import { LocalStorageService } from './local-storage.service';
@@ -28,19 +28,18 @@ export class VsThemeService {
   constructor(private _lss: LocalStorageService) {
     const currentVariant = this._lss.get('theme_variant');
 
-    if (currentVariant)
-      this.activeThemeVariantName.next(currentVariant);
+    if (currentVariant) this.activeThemeVariantName.next(currentVariant);
 
     this._lss.valueChanges.subscribe((nv) => {
       if (nv.key === 'theme_variant')
         this.activeThemeVariantName.next(nv.value);
-    })
+    });
   }
 
   /**
    * Fetches and filters Visual Studio themes based on the provided filter criteria.
    * Optionally downloads theme icons based on the provided icon size configuration.
-   * 
+   *
    * @param requestedFilter - The filter criteria for searching themes.
    * @param downloadIcons - Configuration for icon download size ('small' or 'large').
    * @returns A promise resolving to the filtered results or null.
@@ -85,24 +84,35 @@ export class VsThemeService {
 
   /**
    * Downloads a package file as a ZIP archive from the specified URL.
-   * Supports tracking progress via a callback function.
-   * 
+   * Supports tracking progress via a callback function and cancellation.
+   *
    * @param requestedPackage - The URL of the package to be downloaded.
    * @param progressCallback - Optional callback function to track download progress.
+   * @param signal - An optional AbortSignal to cancel the request.
    * @returns A promise resolving to the loaded JSZip object.
    */
   getPackageFile = async (
     requestedPackage: string,
-    progressCallback?: (loaded: number, total: number) => void
-  ) : Promise<JSZip> => {
+    progressCallback?: (loaded: number, total: number) => void,
+    signal?: AbortSignal
+  ): Promise<JSZip> => {
     if (typeof this.dJSZip === 'undefined') {
       this.dJSZip = (await import('jszip')).default;
     }
-    
+
     return new Promise((resolve, reject) => {
       const client = new XMLHttpRequest();
       client.open('GET', requestedPackage, true);
       client.responseType = 'arraybuffer';
+
+      // Abort logic
+      if (signal) {
+        signal.addEventListener('abort', () => {
+          console.log('Aborting!!!');
+          client.abort();
+          reject(new Error('Download aborted'));
+        });
+      }
 
       client.onprogress = (prog) => {
         if (prog.lengthComputable && progressCallback) {
@@ -134,9 +144,10 @@ export class VsThemeService {
   /**
    * Changes the current theme by extracting theme details from the provided VS Code extension package.
    * Applies the theme and updates the application accordingly.
-   * 
+   *
    * @param ext - The Visual Studio extension containing the theme.
    * @param progress - Optional callback function to track theme application progress.
+   * @param signal - Optional AbortSignal to cancel the theme application.
    */
   async changeTheme(
     ext: vst.VSExtension,
@@ -179,11 +190,15 @@ export class VsThemeService {
 
   /**
    * Saves the theme information and theme color schemes to local storage.
-   * 
+   *
    * @param info - The theme information object.
    * @param themes - Optional array of color schemes associated with the theme.
    */
-  public setThemeInternal(info: ThemeInfo, newVariantName: string, themes?: ColorScheme[]) {
+  public setThemeInternal(
+    info: ThemeInfo,
+    newVariantName: string,
+    themes?: ColorScheme[]
+  ) {
     this._lss.set('theme_name', info.themeName);
     this._lss.set('theme_author', info.themeAuthor);
     this._lss.set('theme_id', info.themeId);
@@ -205,7 +220,7 @@ export class VsThemeService {
   /**
    * Reads and parses themes from the provided list and ZIP archive.
    * Supports both JSON and XML (Plist) theme formats.
-   * 
+   *
    * @param themesList - List of theme metadata to be read.
    * @param zip - The ZIP archive containing theme files.
    * @returns A promise resolving to an array of parsed color schemes.
@@ -237,7 +252,7 @@ export class VsThemeService {
   /**
    * Changes the current theme using a JSON string by parsing it into a ColorScheme object.
    * Applies the parsed color scheme to the application.
-   * 
+   *
    * @param themeJson - The JSON string representing the theme's color scheme.
    */
   async changeThemeJson(themeJson: string) {
@@ -253,7 +268,7 @@ export class VsThemeService {
 
   /**
    * Converts a Blob object to a Base64-encoded string asynchronously.
-   * 
+   *
    * @param blob - The Blob object to be converted.
    * @returns A promise resolving to a Base64 string, null, or an ArrayBuffer.
    */
@@ -267,7 +282,7 @@ export class VsThemeService {
 
   /**
    * Fetches an extension's icon based on the preferred icon size and converts it to a Base64 string.
-   * 
+   *
    * @param ext - The Visual Studio extension containing the icon.
    * @param iconSizePreference - Preferred icon size ('small' or 'large').
    * @returns A promise resolving to a Base64 string, undefined, or false if the icon is not found.
@@ -309,7 +324,7 @@ export class VsThemeService {
    * Themes' variants are saved right after a theme is downloaded and applied.
    */
   getLocalThemeVariants(): ColorScheme[] | undefined {
-    const local = this._lss.get("themes");
+    const local = this._lss.get('themes');
     if (!local) return;
 
     const themes: ColorScheme[] = JSON.parse(local);
@@ -318,14 +333,17 @@ export class VsThemeService {
 
   /**
    * Reads and parses a Plist file, extracting color scheme details from it.
-   * 
+   *
    * @param filestr - The content of the Plist file as a string.
    * @param colorTheme - The type of color theme ('dark' or 'light').
    * @returns A ColorScheme object with extracted color details.
    */
-  private async readPlistFile(filestr: string, colorTheme: ThemeType): Promise<ColorScheme> {
+  private async readPlistFile(
+    filestr: string,
+    colorTheme: ThemeType
+  ): Promise<ColorScheme> {
     if (typeof this.dPlistParse === 'undefined') {
-      this.dPlistParse = await import('@plist/parse') as any; // I'm not going to spend 5 years trying to get TypeScript to comply. 'any' to the rescue
+      this.dPlistParse = (await import('@plist/parse')) as any; // I'm not going to spend 5 years trying to get TypeScript to comply. 'any' to the rescue
     }
 
     const pfile = this.dPlistParse!(filestr);
@@ -354,7 +372,7 @@ export class VsThemeService {
 
   /**
    * Reads and parses a JSON file, extracting color scheme details from it.
-   * 
+   *
    * @param filestr - The content of the JSON file as a string.
    * @param colorTheme - The type of color theme ('dark' or 'light').
    * @returns A ColorScheme object with extracted color details.
@@ -390,7 +408,7 @@ export class VsThemeService {
 
   /**
    * Applies the provided ColorScheme to the application by setting relevant CSS variables.
-   * 
+   *
    * @param cs - The ColorScheme object containing theme color details.
    */
   changeColorVariables(cs: ColorScheme) {
@@ -424,31 +442,83 @@ export class VsThemeService {
   /**
    * Sets the default color scheme for the application, applying a predefined light theme.
    */
-  setDefaultColorScheme(): void {
-    const cs = new ColorScheme('light');
+  setDefaultColorScheme(
+    theme: 'light' | 'dark' | 'default',
+    extIcon?: string
+  ): void {
+    if (theme === 'default') {
+      theme =
+        window?.matchMedia?.('(prefers-color-scheme:dark)')?.matches ?? false
+          ? 'dark'
+          : 'light';
+    }
+    
+    const colorSchemes: ColorScheme[] = [
+      {
+        name: 'Beige Light',
+        theme900: '#ded8c4',
+        theme600: '#D3CEB6',
+        theme300: '#c7c4a8',
+        text: '#3d3929',
+        accent1: '#ad8b63',
+        accent2: '#4b4848',
+        border1: '#747474',
+        contrast: '#000000',
+        highlight: '#f3c092',
+        theme: 'light',
+        inverse: '#ffffff',
+        system: '#1c1c1e',
+      },
+      {
+        name: 'Beige Dark',
+        theme900: '#2d2c29',
+        theme600: '#403F3A',
+        theme300: '#53514b',
+        text: '#e5e5e2',
+        accent1: '#d97757',
+        accent2: '#594a9b',
+        border1: '#414141',
+        contrast: '#ffffff',
+        highlight: '#a68364',
+        theme: 'dark',
+        inverse: '#000000',
+        system: '#0d0d0d',
+      },
+      {
+        name: 'Beige Inverted',
+        theme900: '#20263a',
+        theme600: '#373a56',
+        theme300: '#373a56',
+        text: '#c1c5d5',
+        accent1: '#52739a',
+        accent2: '#b3b6b6',
+        border1: '#8a8a8a',
+        contrast: '#ffffff',
+        highlight: '#0d3e6c',
+        theme: 'dark',
+        inverse: '#000000',
+        system: '#0d0d0d',
+      },
+    ];
 
-    cs.theme900 = '#ded8c4';
-    cs.theme600 = '#c7c4a8';
-    cs.theme300 = '#c7c4a8';
-    cs.text = '#3d3929';
-    cs.accent1 = '#ad8b63';
-    cs.accent2 = '#4b4848';
-    cs.border1 = '#747474';
-    cs.contrast = '#000000';
-    cs.highlight = '#f3c092';
+    const newTheme = colorSchemes.find((cs) => cs.theme === theme)!;
 
-    this.changeColorVariables(cs);
-    this.setThemeInternal({
-      themeId: '',
-      themeAuthor: 'efeenesc',
-      themeIcon: '',
-      themeName: 'Beige',
-    }, "Beige Light");
+    this.changeColorVariables(newTheme);
+    this.setThemeInternal(
+      {
+        themeId: '',
+        themeAuthor: 'efeenesc',
+        themeIcon: extIcon!,
+        themeName: 'Beige',
+      },
+      newTheme.name,
+      colorSchemes
+    );
   }
 
   /**
    * Saves the provided color scheme to local storage as a JSON string.
-   * 
+   *
    * @param cs - The ColorScheme object to be saved.
    */
   private saveToLocalStorage(cs: ColorScheme): void {
@@ -459,7 +529,7 @@ export class VsThemeService {
 
   /**
    * Retrieves a saved color scheme from local storage, if available.
-   * 
+   *
    * @returns A ColorScheme object representing the saved theme, or undefined if not found.
    */
   getFromLocalStorage(): ColorScheme | undefined {

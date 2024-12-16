@@ -1,5 +1,5 @@
 .selected {
-  background-color: var(--highlight);
+  background-color: var(--highlight) !important;
 }
 
 .selected::before {
@@ -11,7 +11,7 @@
 }
 
 #markdownArea * {
-  background-color: none;
+  background-color: transparent;
   font-size: medium;
   font-style: normal;
 }

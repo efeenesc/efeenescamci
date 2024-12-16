@@ -7,6 +7,7 @@ import { DrawerComponent } from './components/drawer/drawer.component';
 import { VsMenuComponent } from './components/vs-menu/vs-menu.component';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { WindowObserverService } from './services/window-observer.service';
+import beigeIcon from './icons/beige-theme-icon/beigeiconb64';
 import { gsap } from "gsap";
 
 @Component({
@@ -46,8 +47,8 @@ export class AppComponent {
   ngOnInit() {
     // Reset to default theme if the current theme is default theme
     // This is to make sure any changes to the default theme are reflected on-device
-    const resetToDefaultTheme = this.checkIfDefaultThemeEnabled();
-    this.restoreLastTheme(resetToDefaultTheme)
+    // const resetToDefaultTheme = this.checkIfDefaultThemeEnabled();
+    this.restoreLastTheme();
 
     this.checkTouchDevice();
   }
@@ -107,7 +108,7 @@ export class AppComponent {
     // Check if the color scheme is invalid or if we need to reset to default
     if (!cs || resetToDefault || Object.keys(cs).includes('darkest')) {
       // Set the default color scheme if the conditions are met
-      return this.vsSvc.setDefaultColorScheme();
+      return this.vsSvc.setDefaultColorScheme('default', beigeIcon);
     }
 
     this.vsSvc.activeThemeVariantName.next(cs!.name);
@@ -183,9 +184,5 @@ export class AppComponent {
   setMainHeight() {
     const pageHeight = document.getElementById('main')!.clientHeight;
     document.body.style.height = pageHeight + 'px';
-  }
-
-  markdownChanged(newMd: MdNode) {
-    this.markdown = newMd;
   }
 }

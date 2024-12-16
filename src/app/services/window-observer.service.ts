@@ -72,15 +72,19 @@ export class WindowObserverService implements OnDestroy {
   }
 
   /**
-   * Determines if the current device is a touch-enabled device.
-   * 
-   * @returns `true` if the device supports touch events; otherwise, `false`.
+   * Determines if the current device is a mobile device.
+   *
+   * @returns `true` if the device is mobile; otherwise, `false`.
    */
   isTouchDevice() {
-    return (
-      'ontouchstart' in window ||
-      navigator.maxTouchPoints > 0 ||
-      (navigator as any).msMaxTouchPoints > 0
-    );
+    const ua = navigator.userAgent;
+
+    if (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
+        ua
+      )
+    )
+      return true;
+    else return false;
   }
 }

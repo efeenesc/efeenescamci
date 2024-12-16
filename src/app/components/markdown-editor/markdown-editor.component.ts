@@ -45,6 +45,8 @@ export class MarkdownEditorComponent {
   htmlElements: string = '';
   mdTree?: MdNode;
 
+  animationPlaying: boolean = false;
+
   constructor() {
     if (typeof Worker !== 'undefined') {
       // Create a new
@@ -80,6 +82,18 @@ export class MarkdownEditorComponent {
 
       this.getCursorLine(sel!);
     });
+  }
+
+  async animateTextIn(newText: string) {
+    this.animationPlaying = true;
+    for (const i of [...Array(newText.length).keys()]) {
+      this.inputText(newText.substring(0, i), i % 30 == 0);
+      // if (i > 30 && i % 30 == 0) return;
+      await this.delay(10);
+    }
+
+    this.inputText(newText);
+    this.animationPlaying = false;
   }
 
   inputText(newText: string, changeMd: boolean = true) {
@@ -135,8 +149,18 @@ export class MarkdownEditorComponent {
   }
 
   clickEvent() {
+    if (this.animationPlaying) return;
+
     setTimeout(() => this.assignCurrentLine(), 0);
     this.checkDOM();
+  }
+
+  onFocus(event: FocusEvent) {
+    if (!this.animationPlaying) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    (event.target as any).blur();
   }
 
   /* 
@@ -237,5 +261,13 @@ export class MarkdownEditorComponent {
     if (this.showRenderer) this.mdTree = mdTree;
 
     this.result.emit(mdTree);
+  }
+
+  private delay(ms: number) {
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        resolve()
+      }, ms)
+    })
   }
 }

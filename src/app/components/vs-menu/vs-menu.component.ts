@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { VsThemeService } from '../../services/vs-theme.service';
@@ -7,6 +7,7 @@ import { VsCardComponent } from '../vs-card/vs-card.component';
 import { MagnifyingGlassComponent } from "../../icons/magnifying-glass/magnifying-glass.component";
 import { SkeletonLoaderComponent } from "../skeleton-loader/skeleton-loader.component";
 import { ColorScheme } from '../../classes/colorscheme';
+import { LocalStorageService } from '../../services/local-storage.service';
 
 @Component({
     selector: 'vs-menu',
@@ -32,8 +33,11 @@ import { ColorScheme } from '../../classes/colorscheme';
     display:none;
   }`
 })
-export class VsMenuComponent {
+export class VsMenuComponent implements OnDestroy {
   @ViewChild('themebtn') themeBtn!: HTMLElement;
+
+  @ViewChildren(VsCardComponent) cards!: QueryList<VsCardComponent>;
+
   results?: vst.VSExtension;
   searchControl!: FormControl;
   searchDebounce: number = 500;
@@ -47,10 +51,20 @@ export class VsMenuComponent {
   viewingVariants: boolean = false;
 
   constructor(
+    private lss: LocalStorageService,
     private vsSvc: VsThemeService
   ) {}
 
+  ngOnDestroy(): void {
+    console.log("Destroyed");
+    this.cards.forEach((item) => {
+      item.cancelThemeChange();
+    })
+  }
+
   ngOnInit() {
+    this.variants = this.vsSvc.getLocalThemeVariants() || [];
+
     this.searchControl = new FormControl('');
     this.searchControl.valueChanges
       .pipe(debounceTime(this.searchDebounce), distinctUntilChanged())
@@ -66,12 +80,17 @@ export class VsMenuComponent {
         .then(() => this.searching = false);
       });
     this.getFeaturedThemes();
-    
+      
+    this.lss.valueChanges.subscribe((newVal) => {
+      if (newVal.key === "theme_name") {
+        setTimeout(() => this.variants = this.vsSvc.getLocalThemeVariants() || [], 0);
+      }
+        
+    })
     this.vsSvc.activeThemeVariantName.subscribe((newVariant) => { this.currentVariantName = newVariant; console.log(newVariant); });
   }
 
   showVariantPanel() {
-    this.variants = this.vsSvc.getLocalThemeVariants() || [];
     this.viewingVariants = true;
   }
 

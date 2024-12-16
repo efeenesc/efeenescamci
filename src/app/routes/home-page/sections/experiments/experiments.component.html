@@ -1,64 +1,63 @@
-<div class="grid grid-flow-row h-fit lg:grid-cols-2 gap-5 w-full p-6">
+<div class="flex flex-col w-full">
   <div
-    class="flex flex-col gap-4 h-fit outline outline-1 rounded-2xl outline-border1 bg-theme-300"
+    class="flex w-full gap-2 my-2 py-2 lg:my-6 lg:py-6 relative [&_h1]:z-10 select-none pointer-events-none"
   >
-    <div class="flex gap-4 px-4 pt-4">
-      <div class="overflow-hidden w-32 aspect-square rounded-lg">
-        <img
-          class="object-contain scale-125"
-          src="https://github.com/efeenesc/recap/raw/master/assets/appicon.png"
-        />
-      </div>
-      <div class="flex flex-col">
-        <h2 class="text-foreground text-xl font-bold">Recap</h2>
-        <p class="text-contrast">
-          Get a Recap of your daily activity. Built using Go and Wails.
-        </p>
-      </div>
+    <div class="-ml-12 flex gap-2 relative z-10 text-2xl lg:text-5xl">
+      <h1 class="text-theme-900 font-extrabold">EXPERIMENTS</h1>
+      <h1 class="text-accent1 font-extrabold">EXPERIMENTS</h1>
+      <h1 class="text-theme-900 font-extrabold">EXPERIMENTS</h1>
+      <h1 class="text-theme-900 font-extrabold">EXPERIMENTS</h1>
+      <h1 class="text-theme-900 font-extrabold">EXPERIMENTS</h1>
+      <h1 class="text-theme-900 font-extrabold">EXPERIMENTS</h1>
     </div>
-    <div class="flex self-end gap-2 bg-theme-600 w-full p-4 rounded-2xl">
-      <button
-        class="rounded-full text-theme-900 bg-accent1 hover:brightness-110 hover:scale-[98%] active:scale-[90%] transition-all outline outline-1 outline-border1 py-2 px-4 text-lg"
-      >
-        Source code
-      </button>
-      <button
-        class="rounded-full text-theme-900 bg-foreground hover:brightness-110 hover:scale-[98%] active:scale-[90%] transition-all outline outline-1 outline-border1 py-2 px-4 text-lg"
-      >
-        Read more
-      </button>
-    </div>
+    <div
+      class="bg-contrast opacity-50 absolute top-0 left-0 w-full h-full"
+    ></div>
   </div>
 
   <div
-    class="flex flex-col gap-4 h-fit outline outline-1 rounded-2xl outline-border1 bg-theme-300"
+    class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 self-center justify-center items-center gap-5 w-fit p-4 sm:p-6 lg:p-10"
   >
-    <div class="flex gap-4 px-4 pt-4">
-      <div class="overflow-hidden w-32 aspect-square rounded-lg brightness-90">
-        <img
-          class="object-contain scale-125"
-          src="https://github.com/efeenesc/c-twig-server/blob/main/assets/icon.png?raw=true"
-        />
+    @for (exp of expCards; track exp.name) {
+
+    <div
+      class="flex flex-col relative w-full max-w-xs sm:max-w-sm rounded-2xl shadow-lg bg-theme-300 outline outline-1 outline-border1 overflow-hidden"
+    >
+      <!-- Icon Section with Gradient -->
+      <div
+        class="peer relative bg-theme-200 mb-[8vh] bg-gradient-to-r items-center justify-center from-[#f2f4f4] to-[#e0e0df] overflow-hidden justify-self-center"
+      >
+        <img loading="lazy" [src]="exp.icon_url" [alt]="exp.name + 'icon'" />
       </div>
-      <div class="flex flex-col">
-        <h2 class="text-foreground text-xl font-bold">c-twig-server</h2>
-        <p class="text-contrast">
-          A server as durable as a twig found in the wild. Educational purposes
-          only.
+
+      <!-- Content Section -->
+      <div
+        class="flex flex-col peer-has-[:hover]:-bottom-[4vh] transition-all delay-100 duration-500 p-2 pt-3 lg:p-6 absolute bottom-0 bg-theme-600 z-10 rounded-t-xl w-full"
+      >
+        <!-- Gradient Overlay -->
+        <h2 class="text-foreground text-xl lg:text-2xl font-semibold">{{ exp.name }}</h2>
+        <p class="text-contrast leading-relaxed">
+          {{ exp.desc }}
         </p>
+        <div class="flex gap-4 mt-4">
+          <!-- Source Code Button -->
+          <a
+            href="#"
+            class="px-4 py-2 text-center text-base font-bold text-theme-900 bg-accent1 rounded-lg hover:brightness-110 transition-all"
+          >
+            Source Code
+          </a>
+          <!-- Blog Post Button -->
+          <a
+            href="#"
+            class="px-4 py-2 text-center text-base font-bold text-theme-900 bg-accent1 rounded-lg hover:brightness-110 transition-all"
+          >
+            Read More
+          </a>
+        </div>
       </div>
     </div>
-    <div class="flex self-end gap-2 bg-theme-600 w-full p-4 rounded-2xl">
-      <button
-        class="rounded-full text-theme-900 bg-accent1 hover:brightness-110 hover:scale-[98%] active:scale-[90%] transition-all outline outline-1 outline-border1 py-2 px-4 text-lg"
-      >
-        Source code
-      </button>
-      <button
-        class="rounded-full text-theme-900 bg-foreground hover:brightness-110 hover:scale-[98%] active:scale-[90%] transition-all outline outline-1 outline-border1 py-2 px-4 text-lg"
-      >
-        Read more
-      </button>
-    </div>
+
+    }
   </div>
 </div>

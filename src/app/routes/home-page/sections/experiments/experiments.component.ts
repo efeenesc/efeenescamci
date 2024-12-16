@@ -25,6 +25,29 @@ export class ExperimentsComponent {
 
   mdEditor!: MarkdownEditorComponent;
   markdown?: MdNode;
+  expCards = [
+    {
+      icon_url: "https://github.com/efeenesc/recap/raw/master/assets/appicon.png",
+      name: "Recap",
+      desc: "Get a Recap of your daily activity. Built using Go and Wails.",
+      source_url: "",
+      read_more: ""
+    },
+    {
+      icon_url: "https://github.com/efeenesc/c-twig-server/raw/main/assets/icon.png",
+      name: "c-twig-server",
+      desc: "C server as durable as a twig found in the wild. Educational purposes only.",
+      source_url: "",
+      read_more: ""
+    },
+    {
+      icon_url: "assets/efeenescamci-logo.png",
+      name: "efeenescamci",
+      desc: "This website. Built with Angular.",
+      source_url: "",
+      read_more: ""
+    }
+  ]
 
   constructor() {}
 
