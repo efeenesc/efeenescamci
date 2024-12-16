@@ -12,11 +12,11 @@
   </div>
   <carousel class="select-none self-start">
     @for (ext of placeholders; track ext) {
-    <carousel-item>
-      <vs-card class="h-full w-full" [cardInfo]="ext" 
-        [cardStyle]="this.vsCardTheme"
-      ></vs-card>
-    </carousel-item>
+    <vs-card
+      class="h-full w-full shadow-lg border border-border1 rounded-lg"
+      [cardInfo]="ext"
+      [cardStyle]="this.vsCardTheme"
+    ></vs-card>
     }
   </carousel>
 </div>
