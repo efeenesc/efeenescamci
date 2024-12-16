@@ -1,5 +1,8 @@
 <div
-  class="flex h-full w-full overflow-hidden transition-colors flex-col xl:flex-row"
+  class="flex h-full w-full overflow-hidden transition-all flex-col xl:flex-row"
+  [class]="this.animationPlaying
+  ? 'pointer-events-none select-none opacity-50'
+  : 'opacity-100 scale-100'"
 >
   @if (this.showRenderer) {
   <div
@@ -26,6 +29,7 @@
     <div
       [contentEditable]="true"
       #markdownArea
+      (focus)="this.onFocus($event)"
       (paste)="this.onPaste($event)"
       (keydown)="this.keyDownEvent($event)"
       (click)="this.clickEvent()"

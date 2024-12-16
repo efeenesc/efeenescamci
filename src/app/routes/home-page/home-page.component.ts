@@ -43,25 +43,11 @@ I develop websites, desktop programs, mobile apps; increase organizational secur
   constructor() {}
 
   async replaceInitialText() {
-    for (const i of [...Array(this.homeText.length).keys()]) {
-      this.mdEditor.inputText(this.homeText.substring(0, i), i % 30 == 0);
-      // if (i > 30 && i % 30 == 0) return;
-      await this.delay(10);
-    }
-
-    this.mdEditor.inputText(this.homeText);
+    await this.mdEditor.animateTextIn(this.homeText);
   }
 
   markdownChanged(newMd: MdNode) {
     this.markdown = newMd;
-    console.log(this.markdown);
-  }
-
-  delay(ms: number) {
-    return new Promise<void>((resolve) => {
-      setTimeout(() => {
-        resolve()
-      }, ms)
-    })
+    // console.log(this.markdown);
   }
 }
