@@ -1,4 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 export interface WindowSize {
@@ -14,16 +15,18 @@ export class WindowObserverService implements OnDestroy {
   sizeObservable!: Subject<WindowSize>;
   mouseUpObservable!: Subject<void>;
   mousePositionObservable!: Subject<MouseEvent | TouchEvent>;
+  firstOpenedPage: boolean = true;
 
   /**
    * Tracks window events and forwards them to subscribers.
    * `mouseUpObservable`, `mousePositionObservable`, `scrollObservable`, and `sizeObservable` are provided by this service.
    */
-  constructor() {
+  constructor(private router: Router) {
     this.scrollObservable = new Subject();
     this.sizeObservable = new Subject();
     this.mouseUpObservable = new Subject();
     this.mousePositionObservable = new Subject();
+    this.router.events.subscribe(() => this.firstOpenedPage = this.router.lastSuccessfulNavigation === null); // If lastSuccessfulNavigation is null, then it's the first opened page
 
     window.addEventListener('mousemove', (event: MouseEvent | TouchEvent) => this.mousePositionObservable.next(event));
     window.addEventListener('touchmove', (event: MouseEvent | TouchEvent) => this.mousePositionObservable.next(event));
@@ -86,5 +89,9 @@ export class WindowObserverService implements OnDestroy {
     )
       return true;
     else return false;
+  }
+
+  checkIfFirstOpenedPage() {
+    return this.firstOpenedPage;
   }
 }

@@ -6,16 +6,20 @@
 
 <div
   id="massive-container"
-  class="h-screen max-h-screen w-screen py-1 lg:p-2 lg:pr-5 font-inter overflow-hidden bg-system bg-noise bg-blend-soft-light fixed"
+  class="min-h-screen font-inter bg-system bg-noise bg-blend-soft-light"
+  correct-overflow
+  [pad-by]="10"
 >
-  <top-bar [themeBarStyle]="this.themeBarStyle" (themeButtonClicked)="this.themeButtonClicked()"></top-bar>
+  <div class="h-[10vh] w-full"></div>
+  <top-bar
+  [themeBarStyle]="this.themeBarStyle" (themeButtonClicked)="this.themeButtonClicked()"></top-bar>
   <div
     id="contentarea"
     #contentarea
-    class="w-full h-min relative bottom-0 overflow-hidden rounded-[1rem] lg:rounded-[2rem]"
+    class="w-full h-min bottom-0 rounded-[1rem] lg:rounded-[2rem]"
   >
     <main
-      class="w-full transition-colors text-contrast overflow-hidden top-0 left-0 will-change-transform rounded-[1rem] lg:rounded-[2rem]"
+      class="w-full h-full transition-colors text-contrast rounded-[1rem] lg:rounded-[2rem]"
       id="main"
       #main
     >

@@ -1,17 +1,25 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
-import { XMarkComponent } from "../../icons/xmark/xmark.component";
+import { XMarkComponent } from '../../icons/xmark/xmark.component';
 import { WindowObserverService } from '../../services/window-observer.service';
 import gsap from 'gsap';
+import { OverflowDirective } from '../../directives/overflow.directive';
 
 interface VerticalMousePosition {
   y: number;
   time: number;
 }
 @Component({
-    selector: 'drawer-component',
-    imports: [XMarkComponent],
-    templateUrl: './drawer.component.html'
+  selector: 'drawer-component',
+  imports: [XMarkComponent],
+  templateUrl: './drawer.component.html',
 })
 export class DrawerComponent {
   @ViewChild('drawerMain') set _dm(content: ElementRef) {
@@ -44,6 +52,10 @@ export class DrawerComponent {
   constructor(private woSvc: WindowObserverService) {}
 
   ngOnInit() {
+    if (!this.woSvc.isTouchDevice()) {
+      OverflowDirective.preOverflowHidden();
+    }
+
     document.body.style.overflow = 'hidden';
 
     if (this.closeEvent) {
@@ -55,8 +67,12 @@ export class DrawerComponent {
     this.slideUp();
 
     window.addEventListener('touchstart', (event) => this.startDragging(event));
-    this.mousePositionSub = this.woSvc.mousePositionObservable.subscribe((event) => this.drag(event));
-    this.mouseUpSub = this.woSvc.mouseUpObservable.subscribe(() => this.stopDragging());
+    this.mousePositionSub = this.woSvc.mousePositionObservable.subscribe(
+      (event) => this.drag(event)
+    );
+    this.mouseUpSub = this.woSvc.mouseUpObservable.subscribe(() =>
+      this.stopDragging()
+    );
   }
 
   ngOnDestroy() {
@@ -80,7 +96,7 @@ export class DrawerComponent {
 
     this.translatePos = 2; // Target 2vh
     this.elTranslatePos = { current: 100 }; // Start at 100vh (bottom of page)
-    this.updateDrawerPosition(600, false, "expo.out");
+    this.updateDrawerPosition(600, false, 'expo.out');
   }
 
   closeOverlay() {
@@ -88,12 +104,19 @@ export class DrawerComponent {
     const overlay = document.getElementById('mainOverlay')!;
     dkbg.style.removeProperty('opacity');
     overlay.style.removeProperty('pointer-events');
-    document.body.style.removeProperty('overflow');
+
+    if (document.body.style.overflow === 'hidden') {
+      document.body.style.removeProperty('overflow');
+
+      if (!this.woSvc.isTouchDevice()) {
+        OverflowDirective.postOverflowHidden();
+      }
+    }
   }
 
   slideDown() {
     this.translatePos = 100;
-    this.updateDrawerPosition(300, true, "power2.in");
+    this.updateDrawerPosition(300, true, 'power2.in');
   }
 
   clickedOutside() {
@@ -118,7 +141,10 @@ export class DrawerComponent {
   }
 
   startDragging(e: MouseEvent | TouchEvent): void {
-    if ((e.target as HTMLDivElement).id !== "grabberDiv" && (e.target as HTMLDivElement).id !== "grabberImg") {
+    if (
+      (e.target as HTMLDivElement).id !== 'grabberDiv' &&
+      (e.target as HTMLDivElement).id !== 'grabberImg'
+    ) {
       return;
     }
 
@@ -138,7 +164,10 @@ export class DrawerComponent {
     const dragDistance = offsetY - this.dragStartPos;
 
     this.translatePos += dragDistance * 0.1;
-    this.translatePos = Math.min(Math.max(this.translatePos, this.carouselBounds[1]), 100); // Clamp position
+    this.translatePos = Math.min(
+      Math.max(this.translatePos, this.carouselBounds[1]),
+      100
+    ); // Clamp position
     this.dragStartPos = offsetY;
 
     const closeAfter = this.translatePos > this.carouselBounds[0];
@@ -164,19 +193,28 @@ export class DrawerComponent {
     this.translatePos += vel;
     const closeAfter = this.translatePos > this.carouselBounds[0];
 
-    this.translatePos = closeAfter ? 100 : Math.max(this.translatePos, this.carouselBounds[1]);
+    this.translatePos = closeAfter
+      ? 100
+      : Math.max(this.translatePos, this.carouselBounds[1]);
 
     this.resetMouseVariables();
-    this.updateDrawerPosition(400, closeAfter, "expo.out");
+    this.updateDrawerPosition(400, closeAfter, 'expo.out');
   }
 
-  private updateDrawerPosition(duration: number, closeAfter: boolean = false, easing: string = "sine.inOut"): void {
+  private updateDrawerPosition(
+    duration: number,
+    closeAfter: boolean = false,
+    easing: string = 'sine.inOut'
+  ): void {
     if (closeAfter) this.closeOverlay();
 
     if (this.drawerTween) this.drawerTween.kill();
 
     this.drawerTween = gsap.to(this.elTranslatePos, {
-      current: Math.min(Math.max(this.translatePos, this.carouselBounds[1]), 100), // Clamp position
+      current: Math.min(
+        Math.max(this.translatePos, this.carouselBounds[1]),
+        100
+      ), // Clamp position
       duration: duration / 1000, // GSAP uses seconds for duration
       ease: easing,
       onUpdate: () => {
@@ -187,7 +225,7 @@ export class DrawerComponent {
           this.closed.emit();
           this.resetMouseVariables();
         }
-      }
+      },
     });
   }
 }

@@ -1,15 +1,31 @@
 import { Routes } from '@angular/router';
-import { HomePageComponent } from './routes/home-page/home-page.component';
-import { BlogPageComponent } from './routes/blog-page/blog-page.component';
+import { BlogPostResolver } from './services/backend-resolver.service';
 
 export const routes: Routes = [
   {
     path: '',
-    component: HomePageComponent,
-    pathMatch: 'full'
+    loadComponent: () => import('./routes/home-page/home-page.component').then(m => m.HomePageComponent),
+    pathMatch: 'full',
+    data: { animation: 'home' }
   },
   {
     path: 'blog',
-    component: BlogPageComponent,
+    loadComponent: () => import('./routes/blog-page/blog-page.component').then(m => m.BlogPageComponent),
+  },
+  {
+    path: 'blog/:route',
+    loadComponent: () => import('./routes/view-blog-page/view-blog-page.component').then(m => m.ViewBlogPageComponent),
+    resolve: {
+      blogPost: BlogPostResolver
+    },
+    data: { animation: 'blog' }
+  },
+  {
+    path: "**",
+    redirectTo: "404"
+  },
+  {
+    path: '404',
+    loadComponent: () => import('./routes/error-page/error-page.component').then(m => m.ErrorPageComponent),
   }
 ];

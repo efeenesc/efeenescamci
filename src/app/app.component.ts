@@ -7,8 +7,9 @@ import { DrawerComponent } from './components/drawer/drawer.component';
 import { VsMenuComponent } from './components/vs-menu/vs-menu.component';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { WindowObserverService } from './services/window-observer.service';
+import { OverflowDirective } from './directives/overflow.directive';
 import beigeIcon from './icons/beige-theme-icon/beigeiconb64';
-import { gsap } from "gsap";
+import { gsap } from 'gsap';
 
 @Component({
   selector: 'app-root',
@@ -17,9 +18,10 @@ import { gsap } from "gsap";
     DrawerComponent,
     VsMenuComponent,
     TopBarComponent,
-  ],
+    OverflowDirective,
+],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  styleUrl: './app.component.css'
 })
 export class AppComponent {
   @ViewChild('main') set _m(content: ElementRef) {
@@ -39,28 +41,62 @@ export class AppComponent {
   elTranslatePos: { current: number } = { current: 0 };
   themeBarStyle: string = '';
   drawerOpened: boolean = false;
-  mainResizeObserver: ResizeObserver = new ResizeObserver((entries) => this.onMainResized(entries));
+  // mainResizeObserver: ResizeObserver = new ResizeObserver((entries) => this.onMainResized(entries));
   private pageScrollTween?: gsap.core.Tween;
 
-  constructor(private lss: LocalStorageService, private vsSvc: VsThemeService, private woSvc: WindowObserverService) {}
+  constructor(
+    private lss: LocalStorageService,
+    private vsSvc: VsThemeService,
+    private woSvc: WindowObserverService,
+  ) {
+    this.restoreLastTheme();
+  }
+
+  prepareRoute(outlet: RouterOutlet) {
+    return (
+      outlet &&
+      outlet.activatedRouteData &&
+      outlet.activatedRouteData['animation']
+    );
+  }
 
   ngOnInit() {
     // Reset to default theme if the current theme is default theme
     // This is to make sure any changes to the default theme are reflected on-device
     // const resetToDefaultTheme = this.checkIfDefaultThemeEnabled();
-    this.restoreLastTheme();
-
-    this.checkTouchDevice();
+    console.log(
+      `█████████████████████████████████████
+████████████             ████████████
+████████    █████████████    ████████
+██████   ████           ████   ██████
+█████  ███                 ███  █████
+███   ██        █████        ██   ███
+██   ██      ████████████     ██   ██
+██  ██     ███████████████     ██  ██
+█  ██     █████████████████     ██  █
+█  ██                           ██  █
+█  ██                           ██  █
+█  ██     ████████████████████████  █
+██  ██     ███████████████    ███  ██
+██   ██      ███████████      ██   ██
+███   ██         ███         ██   ███
+█████  ████               ████  █████
+██████   █████         █████   ██████
+████████    █████████████    ████████
+████████████              ███████████
+█████████████████████████████████████
+`
+    );
   }
 
   ngAfterContentInit() {
-    this.mainResizeObserver.observe(document.getElementById('main')!)
+    // this.mainResizeObserver.observe(document.getElementById('main')!)
 
-    this.setMainHeight();
+    // this.setMainHeight();
 
-    this.woSvc.sizeObservable.subscribe(() => {
-      this.setMainHeight();
-    })
+    // this.woSvc.sizeObservable.subscribe(() => {
+    //   this.setMainHeight();
+    // })
 
     this.lss.valueChanges.subscribe((newVal) => {
       if (newVal.key === 'theme_val') {
@@ -83,7 +119,7 @@ export class AppComponent {
 
   /**
    * Checks if the default theme is enabled by comparing the theme name and author with the default values.
-   * 
+   *
    * @returns {boolean} True if the default theme is enabled, false otherwise.
    */
   checkIfDefaultThemeEnabled(): boolean {
@@ -98,7 +134,7 @@ export class AppComponent {
   /**
    * Restores the last theme from local storage.
    * If the theme is invalid or resetToDefault is true, it sets the default color scheme.
-   * 
+   *
    * @param resetToDefault Whether to reset to the default theme. Defaults to false.
    */
   restoreLastTheme(resetToDefault: boolean = false) {
@@ -146,7 +182,7 @@ export class AppComponent {
 
   /**
    * Animates the page scroll by updating the transform property of the main element.
-   * 
+   *
    * @param scrollY The current scroll Y position.
    */
   animatePageScroll(scrollY: number) {
@@ -154,7 +190,7 @@ export class AppComponent {
     if (this.pageScrollTween) {
       this.pageScrollTween.kill();
     }
-  
+
     // Create a new tween to animate the page scroll.
     this.pageScrollTween = gsap.to(this.elTranslatePos, {
       // Set the current position to the negative of the scroll Y position.
@@ -162,7 +198,7 @@ export class AppComponent {
       // Set the animation duration to 0.2 seconds.
       duration: 0.2,
       // Use the power4.out easing function for a smooth animation.
-      ease: "power4.out",
+      ease: 'power4.out',
       // Update the transform property of the main element on each frame.
       onUpdate: () => {
         // Calculate the new transform position.
@@ -170,9 +206,9 @@ export class AppComponent {
         // Set the transform property of the main element.
         gsap.set(this.main, {
           transform: newPos,
-          webkitTransform: newPos
+          webkitTransform: newPos,
         });
-      }
+      },
     });
   }
 

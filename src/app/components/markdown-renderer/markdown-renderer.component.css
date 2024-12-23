@@ -1,5 +1,34 @@
 * {
+  color: var(--contrast);
   text-wrap: pretty;
+}
+
+h1 {
+  @apply text-4xl mb-2 sm:text-5xl lg:text-6xl font-extrabold;
+}
+
+h2 {
+  @apply text-2xl mb-2 md:text-4xl lg:text-5xl;
+}
+
+h3 {
+  @apply text-xl mb-2 md:text-3xl lg:text-4xl text-accent1;
+}
+
+h4 {
+  @apply text-lg md:text-2xl lg:text-3xl;
+}
+
+h5 {
+  @apply text-xl lg:text-2xl;
+}
+
+h6 {
+  @apply text-lg lg:text-xl;
+}
+
+img {
+  @apply w-full rounded-xl max-w-[300px] lg:max-w-[50%];
 }
 
 strong {
@@ -33,16 +62,15 @@ a {
   padding: 0px;
 }
 
+a:visited {
+  color: inherit;
+}
+
 br {
   content: "";
   display: block;
   height: 10px;
   width: 100px;
-}
-
-img {
-  max-width: 50%;
-  border-radius: 10%;
 }
 
 blockquote {

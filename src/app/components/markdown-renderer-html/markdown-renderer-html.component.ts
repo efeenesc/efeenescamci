@@ -1,10 +1,11 @@
-import { Component, Input, SecurityContext } from '@angular/core';
+import { Component, Input, SecurityContext, ViewEncapsulation } from '@angular/core';
 import { MdNode } from '../../classes/markdown';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'markdown-renderer-html',
   imports: [],
+  encapsulation: ViewEncapsulation.ShadowDom,
   template: `
   <div [innerHTML]="this.parsedNode"></div>
   `,
@@ -14,13 +15,13 @@ import { DomSanitizer } from '@angular/platform-browser';
 /** 
  * Displays Markdown in HTML by converting the Markdown into an HTML string.
  * Puts the string through sanitization before displaying it. No performance
- * difference between this and markdown-renderer.
+ * difference between this and markdown-renderer, but it is significantly easier
+ * to work with, and the DOM isn't destroyed by the Angular switch-case and Angular compiler.
  */
 export class MarkdownRendererHtmlComponent {
   private sanitizer: DomSanitizer;
   parsedNode: string | undefined | null;
   @Input() set parsedContent(content: MdNode[] | string) {
-    console.log(content);
     let parsed: string;
 
     if (content === '' || content.length === 0) {
@@ -33,8 +34,6 @@ export class MarkdownRendererHtmlComponent {
     } else {
       parsed = content.map((node) => this.renderNode(node)).join('');
     }
-
-    console.log("Parsed:", parsed);
 
     this.parsedNode = this.sanitizer.sanitize(SecurityContext.HTML, parsed);
   }

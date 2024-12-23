@@ -24,10 +24,15 @@
       class="flex flex-col relative w-full max-w-xs sm:max-w-sm rounded-2xl shadow-lg bg-theme-300 outline outline-1 outline-border1 overflow-hidden"
     >
       <!-- Icon Section with Gradient -->
+      @if (!exp.loaded) {
+        <div class="object-contain h-full flex-grow rounded-lg overflow-hidden" >
+          <skeleton-loader class="h-full w-full aspect-square block bg-theme-900" />
+        </div>
+      }
       <div
         class="peer relative bg-theme-200 mb-[8vh] bg-gradient-to-r items-center justify-center from-[#f2f4f4] to-[#e0e0df] overflow-hidden justify-self-center"
       >
-        <img loading="lazy" [src]="exp.icon_url" [alt]="exp.name + 'icon'" />
+        <img loading="lazy" (load)="this.setLoaded(exp.id)" [src]="exp.icon_url" [alt]="exp.name + 'icon'" onerror="this.style.display='none'" />
       </div>
 
       <!-- Content Section -->
@@ -35,29 +40,37 @@
         class="flex flex-col peer-has-[:hover]:-bottom-[4vh] transition-all delay-100 duration-500 p-2 pt-3 lg:p-6 absolute bottom-0 bg-theme-600 z-10 rounded-t-xl w-full"
       >
         <!-- Gradient Overlay -->
-        <h2 class="text-foreground text-xl lg:text-2xl font-semibold">{{ exp.name }}</h2>
+        <h2 class="text-foreground text-xl lg:text-2xl font-semibold">
+          {{ exp.name }}
+        </h2>
         <p class="text-contrast leading-relaxed">
           {{ exp.desc }}
         </p>
         <div class="flex gap-4 mt-4">
           <!-- Source Code Button -->
+          @if (exp.source_url) {
           <a
-            href="#"
+            [href]="exp.source_url"
+            target="_blank"
             class="px-4 py-2 text-center text-base font-bold text-theme-900 bg-accent1 rounded-lg hover:brightness-110 transition-all"
           >
             Source Code
           </a>
+          }
+
           <!-- Blog Post Button -->
+          @if (exp.read_more) {
           <a
-            href="#"
+            [href]="exp.read_more"
+            target="_blank"
             class="px-4 py-2 text-center text-base font-bold text-theme-900 bg-accent1 rounded-lg hover:brightness-110 transition-all"
           >
             Read More
           </a>
+          }
         </div>
       </div>
     </div>
-
     }
   </div>
 </div>

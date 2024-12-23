@@ -2,11 +2,12 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@
 import { VsSearchComponent } from '../vs-search/vs-search.component';
 import { WindowObserverService, WindowSize } from '../../services/window-observer.service';
 import { SiteLogoComponent } from "../../icons/site-logo/site-logo.component";
+import { OverflowDirective } from '../../directives/overflow.directive';
 import gsap from 'gsap';
 
 @Component({
     selector: 'top-bar',
-    imports: [VsSearchComponent, SiteLogoComponent],
+    imports: [VsSearchComponent, SiteLogoComponent, OverflowDirective],
     templateUrl: './top-bar.component.html'
 })
 export class TopBarComponent {
@@ -20,7 +21,7 @@ export class TopBarComponent {
 
   @Output()
   themeButtonClicked: EventEmitter<boolean> = new EventEmitter();
-
+  
   topbarScrollProgress!: number;
   topbarExtended: boolean = true;
   mobileMode: boolean = false;

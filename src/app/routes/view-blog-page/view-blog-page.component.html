@@ -1,0 +1,51 @@
+<div
+  class="transition-card relative top-0 flex flex-col lg:w-4/5 mx-auto min-h-screen h-max bg-theme-900 rounded-[1rem] lg:rounded-[2rem] overflow-hidden"
+>
+  <div class="flex flex-col gap-2 p-4 lg:p-6 w-full bg-theme-300 rounded-t-[1rem] lg:rounded-t-[2rem]">
+    <div class="text-foreground text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold">{{ blogPost?.title }}</div>
+    <div class="flex flex-wrap gap-x-4 gap-y-0">
+      <div class="text-foreground text-lg">
+        <span>Created </span
+        ><span class="font-bold text-accent1">{{ blogPost?.created_at }}</span>
+      </div>
+      <div class="text-foreground text-lg">
+        <span>Edited </span
+        ><span class="font-bold text-accent1">{{ blogPost?.last_updated }}</span>
+      </div>
+    </div>
+  </div>
+  @if (this.isLoading) {
+  <skeleton-loader
+    class="h-full w-full flex-1 min-h-screen bg-theme-900 [&_div]:h-screen"
+  />
+  } @else {
+  <div
+    class="w-full h-full grid p-2 lg:p-0 lg:grid-rows-1 lg:grid-cols-[49%_2%_49%] lg:grid-flow-row"
+  >
+    <div
+      class="flex-1 overflow-auto flex p-1 lg:m-1 lg:px-5 lg:pb-5 flex-col transition-colors text-nowrap text-foreground"
+    >
+      @if (this.markdownNode) {
+      <markdown-renderer-html
+        class="inline-block text-wrap"
+        [parsedContent]="this.markdownNode.content"
+      >
+      </markdown-renderer-html>
+      }
+    </div>
+
+    <div id="blank hidden lg:block"></div>
+
+    <div
+      class="hidden lg:flex h-auto flex-col bg-theme-600 group border-l-[1px] border-border1 transition-all overflow-hidden"
+    >
+      <markdown-editor
+        class="overflow-hidden block h-full"
+        (result)="markdownChanged($event)"
+        [showRenderer]="false"
+      ></markdown-editor>
+    </div>
+  </div>
+  }
+</div>
+<footer></footer>
