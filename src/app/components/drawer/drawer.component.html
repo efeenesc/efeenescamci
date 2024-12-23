@@ -1,6 +1,6 @@
 <div
   id="mainOverlay"
-  class="flex justify-center items-center w-screen h-screen fixed pointer-events-none z-10"
+  class="flex justify-center items-center w-screen h-screen fixed pointer-events-none z-30"
 >
   <div
     id="drawerMain"
@@ -18,7 +18,7 @@
           class="w-1/4 lg:w-1/5 h-2 bg-system-300 rounded-full mt-2 absolute left-1/2 -translate-x-1/2"
         ></div>
         <div
-          class="rounded-full aspect-square h-12 lg:h-14 bg-system-600 cursor-pointer justify-end"
+          class="rounded-full aspect-square h-10 md:h-12 lg:h-14 bg-system-600 cursor-pointer justify-end"
           (click)="this.clickedOutside()"
         >
           <xmark

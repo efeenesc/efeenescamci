@@ -1,20 +1,20 @@
 <div
-  class="flex flex-col lg:w-4/5 mx-auto h-max [&_section]:bg-theme-900 [&>section]:rounded-[1rem] lg:[&>section]:rounded-[2rem] gap-24 relative"
+  id="home-page-component"
+  class="flex flex-col lg:w-4/5 mx-auto h-max [&_section]:bg-theme-900 [&>section]:rounded-[1rem] lg:[&>section]:rounded-[2rem] gap-12"
 >
-  <section class="p-2 lg:p-10 h-full flex-shrink-0 flex transition-colors">
+  <section class="p-2 min-h-[80vh] lg:p-10 h-full flex-shrink-0 flex transition-colors">
     <div
-      class="w-full grid min-h-[80vh] lg:grid-rows-1 lg:grid-cols-[49%_2%_49%] lg:grid-flow-row"
+      class="w-full grid lg:grid-rows-1 lg:grid-cols-[49%_2%_49%] lg:grid-flow-row"
     >
       <div
-        class="flex-1 justify-center overflow-auto flex p-1 lg:m-1 lg:p-5 flex-col transition-colors text-nowrap text-foreground"
+        class="flex-1 overflow-auto flex p-1 lg:m-1 lg:p-5 flex-col transition-colors text-nowrap"
       >
         @if (this.markdown) {
-        <markdown-renderer
+        <markdown-renderer-html
           class="inline-block text-wrap"
           [parsedContent]="this.markdown.content"
         >
-          <!-- <div class="inline-block w-2 h-4 bg-contrast" id="caret"></div> -->
-        </markdown-renderer>
+        </markdown-renderer-html>
         }
       </div>
 
@@ -41,12 +41,15 @@
     <themes-section></themes-section>
   </section>
 
-  <section class="min-h-[90vh] w-full flex justify-center overflow-x-hidden">
+  <section class="w-full flex justify-center overflow-x-hidden">
     <experiments-section></experiments-section>
   </section>
 
-  <section
-    class="footer w-full justify-self-center p-5 flex items-center justify-center"
-  >
+  <section class="w-full flex justify-center overflow-x-hidden">
+    <blog-section></blog-section>
   </section>
+
+  <div class="transition-card fixed bottom-0 left-0 w-full lg:w-4/5 lg:left-1/2 lg:-translate-x-1/2"></div>
 </div>
+
+<footer></footer>

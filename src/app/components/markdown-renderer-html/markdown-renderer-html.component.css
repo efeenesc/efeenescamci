@@ -1,0 +1,99 @@
+* {
+  @apply text-contrast;
+  text-wrap: pretty;
+  text-justify: inter-word;
+}
+
+h1 {
+  @apply text-4xl mb-2 sm:text-5xl lg:text-6xl font-extrabold !text-foreground;
+  margin-top: 0;
+}
+
+h2 {
+  @apply text-2xl mb-2 md:text-4xl lg:text-5xl;
+  margin-top: 0;
+}
+
+h3 {
+  @apply text-xl mb-2 md:text-3xl lg:text-4xl !text-accent1;
+  margin-top: 0;
+}
+
+h4 {
+  @apply text-lg md:text-2xl lg:text-3xl;
+}
+
+h5 {
+  @apply text-xl lg:text-2xl;
+}
+
+h6 {
+  @apply text-lg lg:text-xl;
+}
+
+img {
+  @apply w-full rounded-xl max-w-[300px] lg:max-w-[50%];
+}
+
+strong {
+  font-weight: 800;
+  display: inline-block;
+}
+
+ul {
+  display: block;
+  list-style-type: disc;
+}
+
+code {
+  margin-left: 6px;
+  margin-right: 0px;
+}
+
+a {
+  cursor: pointer;
+  margin: 0px;
+  padding: 0px;
+  color: var(--contrast);
+  word-wrap: break-word !important;
+  text-decoration: underline;
+  text-decoration-color: inherit;
+}
+
+a:visited {
+  color: inherit;
+}
+
+br {
+  content: "";
+  display: block;
+  height: 10px;
+  width: 100px;
+}
+
+blockquote {
+  @apply rounded-lg p-3 bg-theme-300;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 40px;
+  margin-inline-end: 40px;
+  unicode-bidi: isolate;
+  text-wrap: wrap;
+}
+
+ol {
+  display: block;
+  list-style-type: decimal;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 40px;
+  unicode-bidi: isolate;
+}
+
+@media (prefers-color-scheme: light) {
+  a {
+    text-decoration-color: inherit;
+  }
+}

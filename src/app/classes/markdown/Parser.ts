@@ -22,18 +22,18 @@ export function parse(l: string[][]): MdNode {
 		}
 
 		// Process the tokens in the current line
-		const result = processTokens(line);
+		const { nodes: result } = processTokens(line);
 
-		switch (result.nodes[0].type) {
+		switch (result[0].type) {
 			case "li": // List item
 			case "ul": // Unordered list
 				// Delegate handling of list items to a dedicated function
-				handleListItems(rootContent, result);
+				handleListItems(rootContent, { nodes: result });
 				break;
 
 			default:
 				// For other types, simply append the processed nodes to root content
-				rootContent.push(...result.nodes);
+				rootContent.push(...result);
 				break;
 		}
 	}
@@ -140,26 +140,27 @@ function processTokens(
 
 		// Determine the node type of the current token
 		const nodeType = getNodeType(token, index);
+
 		if (nodeType) {
 			// Flush any accumulated text before processing the new node type
 			flushTextBuffer();
 			const closingToken = getClosingToken(token);
 
-      // If the token isn't closed and is a list indicator, treat it as a list
-      if (index === 0 && ["-", "*", "+"].includes(token)) {
-        const { nodes: childNodes, index: newIndex } = processTokens(
-          tokens,
-          index + 1,
-          closingToken
-        );
+			// If the token isn't closed and is a list indicator, treat it as a list
+			if (index === 0 && ["-", "*", "+"].includes(token)) {
+				const { nodes: childNodes, index: newIndex } = processTokens(
+					tokens,
+					index + 1,
+					closingToken
+				);
 
-        nodes.push(new MdNode("ul", childNodes));
-        index = newIndex;
-        continue;
-      }
+				nodes.push(new MdNode("ul", childNodes));
+				index = newIndex;
+				continue;
+			}
 
-      let tokenClosed = true;
-      if (closingToken) {
+			let tokenClosed = true;
+			if (closingToken) {
 				// Check if the closing token exists further in the line
 				tokenClosed = lookAheadFind(closingToken, tokens, index + 1) !== -1;
 			}
@@ -172,26 +173,26 @@ function processTokens(
 					closingToken
 				);
 
-        const prevNode = nodes[nodes.length - 1];
+				const prevNode = nodes[nodes.length - 1];
 
 				switch (nodeType) {
 					case "ad": // Anchor (link)
-            if (prevNode && prevNode.type === 'text' && prevNode.content === "!") {
-              nodes.pop();
-              nodes.push(new MdNode("img", childNodes));
-            } else {
-              nodes.push(new MdNode("a", childNodes));
-            }
-						
+						if (prevNode && prevNode.type === "text" && (prevNode.content as string).endsWith("!")) {
+							prevNode.content = (prevNode.content as string).slice(0, -1);
+							nodes.push(new MdNode("img", childNodes));
+						} else {
+							nodes.push(new MdNode("a", childNodes));
+						}
+
 						break;
 
 					case "al": // Link content
 						if (prevNode && prevNode.type === "a") {
 							prevNode.url = childNodes[0].content as string;
 						} else if (prevNode && prevNode.type === "img") {
-              prevNode.url = childNodes[0].content as string;
-            } else {
-							nodes.push(new MdNode("text", childNodes[0].content as string));
+							prevNode.url = childNodes[0].content as string;
+						} else {
+							nodes.push(new MdNode("text", "(" + childNodes[0].content + ")"));
 						}
 						break;
 
@@ -223,7 +224,7 @@ function processTokens(
 function getNodeType(token: string, index: number): MdNodeType | undefined {
 	const result = typeMap[token];
 
-  if ((result === 'ul' || result === 'bq') && index !== 0) return;
+	if ((result === "ul" || result === "bq" || result === "h1" || result === "h2" || result === "h3") && index !== 0) return;
 
 	if (result) return result;
 
