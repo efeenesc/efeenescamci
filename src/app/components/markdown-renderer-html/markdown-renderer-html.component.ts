@@ -1,13 +1,13 @@
-import { Component, Input, SecurityContext, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Input, SecurityContext, ViewEncapsulation } from '@angular/core';
 import { MdNode } from '../../classes/markdown';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'markdown-renderer-html',
   imports: [],
-  encapsulation: ViewEncapsulation.ShadowDom,
+  encapsulation: ViewEncapsulation.None,
   template: `
-  <div [innerHTML]="this.parsedNode"></div>
+  <div class="md-renderer" [innerHTML]="this.parsedNode"></div>
   `,
   styleUrl: './markdown-renderer-html.component.css'
 })
@@ -38,7 +38,7 @@ export class MarkdownRendererHtmlComponent {
     this.parsedNode = this.sanitizer.sanitize(SecurityContext.HTML, parsed);
   }
 
-  constructor(sanitizer: DomSanitizer) {
+  constructor(sanitizer: DomSanitizer, private el: ElementRef) {
     this.sanitizer = sanitizer;
   }
 
@@ -90,7 +90,7 @@ export class MarkdownRendererHtmlComponent {
       case 'img':
         return `<img src="${node.url}" alt="${content}">`
       case 'a':
-        return `<a href="${node.url}" target="_blank">${content}</a>`;
+        return `<a href="${node.url || ''}" target="_blank">${content}</a>`;
       default:
         console.warn(`Unsupported node type: ${node.type}`);
         return '';

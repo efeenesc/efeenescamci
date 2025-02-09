@@ -1,51 +1,64 @@
-<div
-  class="transition-card relative top-0 flex flex-col lg:w-4/5 mx-auto min-h-screen h-max bg-theme-900 rounded-[1rem] lg:rounded-[2rem] overflow-hidden"
->
-  <div class="flex flex-col gap-2 p-4 lg:p-6 w-full bg-theme-300 rounded-t-[1rem] lg:rounded-t-[2rem]">
-    <div class="text-foreground text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold">{{ blogPost?.title }}</div>
-    <div class="flex flex-wrap gap-x-4 gap-y-0">
-      <div class="text-foreground text-lg">
-        <span>Created </span
-        ><span class="font-bold text-accent1">{{ blogPost?.created_at }}</span>
-      </div>
-      <div class="text-foreground text-lg">
-        <span>Edited </span
-        ><span class="font-bold text-accent1">{{ blogPost?.last_updated }}</span>
-      </div>
-    </div>
-  </div>
-  @if (this.isLoading) {
-  <skeleton-loader
-    class="h-full w-full flex-1 min-h-screen bg-theme-900 [&_div]:h-screen"
-  />
-  } @else {
+<div class="flex flex-row justify-center gap-2 min-h-screen">
   <div
-    class="w-full h-full grid p-2 lg:p-0 lg:grid-rows-1 lg:grid-cols-[49%_2%_49%] lg:grid-flow-row"
+    class="view-blog-page relative top-0 flex flex-col lg:w-4/5 xl:w-3/5 h-full bg-theme-900 rounded-[1rem] lg:rounded-[2rem]"
   >
     <div
-      class="flex-1 overflow-auto flex p-1 lg:m-1 lg:px-5 lg:pb-5 flex-col transition-colors text-nowrap text-foreground"
+      class="flex flex-col gap-2 p-4 lg:p-6 w-full bg-theme-300 rounded-t-[1rem] lg:rounded-t-[2rem]"
     >
-      @if (this.markdownNode) {
-      <markdown-renderer-html
-        class="inline-block text-wrap"
-        [parsedContent]="this.markdownNode.content"
+      <div
+        class="text-foreground text-2xl md:text-xl lg:text-2xl xl:text-4xl font-bold"
       >
-      </markdown-renderer-html>
-      }
+        {{ blogPost?.title }}
+      </div>
+      <div class="flex flex-wrap gap-x-4 gap-y-0">
+        <div class="text-foreground text-lg">
+          <span>Created </span
+          ><span class="font-bold text-accent1">{{
+            blogPost?.created_at
+          }}</span>
+        </div>
+        <div class="text-foreground text-lg">
+          <span>Edited </span
+          ><span class="font-bold text-accent1">{{
+            blogPost?.last_updated
+          }}</span>
+        </div>
+      </div>
     </div>
-
-    <div id="blank hidden lg:block"></div>
+    @if (this.isLoading) {
+    <skeleton-loader
+      class="h-full w-full flex-1 min-h-screen bg-theme-900 [&_div]:h-screen"
+    />
+    } @else {
+    <div class="w-full h-full relative">
+      <div
+        class="flex-1 overflow-auto flex flex-col transition-colors text-nowrap text-foreground"
+      >
+        <markdown-editor
+          class="md-editor hidden overflow-hidden h-full w-full absolute top-0 left-0 right-0 bottom-0 z-10 opacity-0"
+          (result)="markdownChanged($event)"
+          [showRenderer]="false"
+        ></markdown-editor>
+        @if (this.markdownNode) {
+        <markdown-renderer-html
+          class="inline-block text-wrap p-3 lg:px-7 pt-4 lg:m-1 lg:pb-5"
+          [parsedContent]="this.markdownNode.content"
+        >
+        </markdown-renderer-html>
+        }
+      </div>
+    </div>
+    }
+    <div class="absolute bottom-0 self-end place-self-end mb-4 mr-32">
+      You can edit this post and submit your corrections ➡️
+    </div>
 
     <div
-      class="hidden lg:flex h-auto flex-col bg-theme-600 group border-l-[1px] border-border1 transition-all overflow-hidden"
+      class="aspect-square w-24 overflow-hidden m-4 p-4 z-20 rounded-2xl bg-accent1 transition-all hover:brightness-105 hover:scale-[98%] active:scale-[90%] cursor-pointer sticky bottom-2 self-end shadow-xl-alt [&_*]:stroke-theme-300"
+      (click)="this.editButtonClicked()"
     >
-      <markdown-editor
-        class="overflow-hidden block h-full"
-        (result)="markdownChanged($event)"
-        [showRenderer]="false"
-      ></markdown-editor>
+      <edit-icon></edit-icon>
     </div>
   </div>
-  }
 </div>
 <footer></footer>

@@ -14,7 +14,7 @@
           (click)="this.hideVariantPanel()"
           class="w-full bg-transparent group focus:outline-none placeholder:text-system-200 text-sm lg:text-base font-bold text-contrast"
           [formControl]="searchControl"
-          placeholder="Search themes in Visual Studio marketplace"
+          placeholder="Search themes in VS marketplace"
         />
       </div>
       <button
@@ -30,14 +30,11 @@
             : 'bg-theme-300 text-foreground'
         "
       >
-        @if (!this.viewingVariants) {
-          Change variant of current theme
-          <div class="rounded-lg p-1 bg-theme-600 text-accent1">
-            {{ this.variants.length }} total
-          </div>
-        } @else {
-          Go back to marketplace
-        }
+        @if (!this.viewingVariants) { Change variant of current theme
+        <div class="rounded-lg p-1 bg-theme-600 text-accent1">
+          {{ this.variants.length }} total
+        </div>
+        } @else { Go back to marketplace }
       </button>
     </div>
 
@@ -51,17 +48,28 @@
       >
         @for (ext of variants; track ext.name) {
         <button
-          class="flex flex-col w-full bg-system-600 hover:bg-system-700 transition-colors active:bg-system-200 cursor-pointer px-4 py-2 text-start"
+          class="flex flex-col w-full transition-colors cursor-pointer px-4 py-2 text-start"
+          [class]="
+            ext.name === this.currentVariantName
+              ? 'bg-accent1 hover:brightness-105 active:brightness-110 text-theme-900'
+              : 'bg-system-600 hover:bg-system-700 active:bg-system-200'
+          "
           (click)="this.changeVariant(ext.name)"
         >
-          <div class="flex gap-2">
-            <span class="font-semibold">{{ ext.name }}</span>
-            @if (ext.name === this.currentVariantName) {
-              <span class="bg-accent1 text-theme-900 rounded-lg px-4">CURRENT</span>
-            }
-          </div>
+          <span class="font-semibold">{{ ext.name }}</span>
 
-          <span class="text-base">{{ ext.theme === "dark" ? "Dark" : "Light" }}</span>
+          <span
+            class="rounded-lg px-4"
+            [class]="
+              ext.name === this.currentVariantName
+                ? 'bg-theme-900 text-contrast'
+                : 'bg-accent1 text-theme-900'
+            "
+            >{{ ext.theme === "dark" ? "Dark" : "Light" }}</span
+          >
+          <!-- @if (ext.name === this.currentVariantName) {
+            <span class="bg-accent1 text-theme-900 rounded-lg px-4">Selected</span>
+          } -->
         </button>
         }
       </div>
@@ -70,26 +78,23 @@
         id="contentbody"
         class="grid grid-flow-row-dense h-fit justify-between rounded-lg grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 lg:pt-4 flex-grow gap-2"
       >
-        @if (searching || searchResults === undefined) { 
-          @for (i of
-          [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]; track i) {
-          <div
-            class="w-full h-full bg-system-700 rounded-lg border-[1px] border-border1 overflow-hidden"
-          >
-            <skeleton-loader
-              class="w-full h-full aspect-square"
-            ></skeleton-loader>
-          </div>
-          } 
-        } @else { 
-          @for (ext of searchResults!.results[0].extensions; track ext.extensionId) {
-          <vs-card
-            class="w-full lg:w-full h-fit aspect-square rounded-lg border-[1px] border-border1"
-            [cardInfo]="ext"
-            [cardType]="'large'"
-          ></vs-card>
-          } 
-        }
+        @if (searching || searchResults === undefined) { @for (i of
+        [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]; track i) {
+        <div
+          class="w-full h-full bg-system-700 rounded-lg border-[1px] border-border1 overflow-hidden"
+        >
+          <skeleton-loader
+            class="w-full h-full aspect-square"
+          ></skeleton-loader>
+        </div>
+        } } @else { @for (ext of searchResults!.results[0].extensions; track
+        ext.extensionId) {
+        <vs-card
+          class="w-full lg:w-full h-fit aspect-square rounded-lg border-[1px] border-border1"
+          [cardInfo]="ext"
+          [cardType]="'large'"
+        ></vs-card>
+        } }
       </div>
       }
     </div>

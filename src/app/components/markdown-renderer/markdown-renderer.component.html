@@ -91,7 +91,7 @@
           <markdown-renderer [parsedContent]="node.content"></markdown-renderer>
         </a>
       } @case ('img') {
-        <img [src]="node.url" [alt]="getTextInsideContent(node.content)">
+        <img [src]="node.url || ''" [alt]="getTextInsideContent(node.content)" onerror="this.style.display='none'">
       }
     } 
   } 

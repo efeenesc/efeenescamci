@@ -7,6 +7,7 @@ import { BlogSectionComponent } from './sections/blog/blog.component';
 import { MarkdownRendererHtmlComponent } from '../../components/markdown-renderer-html/markdown-renderer-html.component';
 import { WindowObserverService } from '../../services/window-observer.service';
 import { FooterComponent } from '../../components/footer/footer.component';
+import { ParsedWelcomeMessage } from './parsed-welcome-message';
 
 @Component({
   selector: 'home-page',
@@ -54,7 +55,8 @@ I develop websites, desktop programs, mobile apps; increase organizational secur
 
   async fillWelcomeText() {
     if (window.innerWidth < 1280 || !this.isInitialLoad) {
-      this.mdEditor.inputText(this.homeText);
+      this.markdown = ParsedWelcomeMessage;
+      this.mdEditor.inputText(this.homeText, false);
     } else {
       await this.mdEditor.animateTextIn(this.homeText);
     }
@@ -62,5 +64,6 @@ I develop websites, desktop programs, mobile apps; increase organizational secur
 
   markdownChanged(newMd: MdNode) {
     this.markdown = newMd;
+    console.log(newMd);
   }
 }

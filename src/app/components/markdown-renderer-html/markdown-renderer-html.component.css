@@ -1,56 +1,61 @@
-* {
-  @apply text-contrast;
+.md-renderer {
+  @apply text-contrast text-base lg:text-lg;
   text-wrap: pretty;
   text-justify: inter-word;
 }
 
-h1 {
-  @apply text-4xl mb-2 sm:text-5xl lg:text-6xl font-extrabold !text-foreground;
-  margin-top: 0;
+.md-renderer * {
+  @apply text-contrast text-base lg:text-lg;
+  text-wrap: pretty;
+  text-justify: inter-word;
 }
 
-h2 {
-  @apply text-2xl mb-2 md:text-4xl lg:text-5xl;
-  margin-top: 0;
+.md-renderer h1 {
+  @apply text-4xl my-8 sm:text-5xl lg:text-6xl font-extrabold !text-foreground;
 }
 
-h3 {
-  @apply text-xl mb-2 md:text-3xl lg:text-4xl !text-accent1;
-  margin-top: 0;
+.md-renderer h2 {
+  @apply text-2xl my-8 md:text-4xl lg:text-5xl;
 }
 
-h4 {
+.md-renderer h3 {
+  @apply text-xl mt-6 mb-4 md:text-3xl lg:text-4xl !text-accent1;
+}
+
+.md-renderer h4 {
   @apply text-lg md:text-2xl lg:text-3xl;
 }
 
-h5 {
+.md-renderer h5 {
   @apply text-xl lg:text-2xl;
 }
 
-h6 {
+.md-renderer h6 {
   @apply text-lg lg:text-xl;
 }
 
-img {
+.md-renderer img {
   @apply w-full rounded-xl max-w-[300px] lg:max-w-[50%];
 }
 
-strong {
+.md-renderer strong {
   font-weight: 800;
   display: inline-block;
 }
 
-ul {
+.md-renderer ul {
   display: block;
   list-style-type: disc;
+  margin-left: 2em;
+  margin-right: 2em;
 }
 
-code {
+.md-renderer code {
   margin-left: 6px;
   margin-right: 0px;
 }
 
-a {
+.md-renderer a {
   cursor: pointer;
   margin: 0px;
   padding: 0px;
@@ -60,18 +65,18 @@ a {
   text-decoration-color: inherit;
 }
 
-a:visited {
+.md-renderer a:visited {
   color: inherit;
 }
 
-br {
+.md-renderer br {
   content: "";
   display: block;
   height: 10px;
   width: 100px;
 }
 
-blockquote {
+.md-renderer blockquote {
   @apply rounded-lg p-3 bg-theme-300;
   margin-block-start: 1em;
   margin-block-end: 1em;
@@ -81,7 +86,7 @@ blockquote {
   text-wrap: wrap;
 }
 
-ol {
+.md-renderer ol {
   display: block;
   list-style-type: decimal;
   margin-block-start: 1em;
@@ -93,7 +98,7 @@ ol {
 }
 
 @media (prefers-color-scheme: light) {
-  a {
+  .md-renderer a {
     text-decoration-color: inherit;
   }
 }

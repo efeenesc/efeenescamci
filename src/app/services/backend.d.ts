@@ -1,3 +1,8 @@
+interface BlogQueryResult {
+	total: number
+	briefs: BlogRoute[]
+}
+
 type FullBlog = BlogFile & BlogProps
 
 interface BlogRoute extends BlogProps {

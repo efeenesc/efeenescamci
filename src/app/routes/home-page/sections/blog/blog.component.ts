@@ -21,8 +21,8 @@ export class BlogSectionComponent {
 
   ngOnInit() {
     this.backend.getNewBlogPostBriefs().subscribe({
-      next: (data: BlogRoute[]) => {
-        this.blogs = data;
+      next: (data: BlogQueryResult) => {
+        this.blogs = data.briefs;
       },
       error: (error: any) => {
         this.errorMessage = 'Error fetching new blog post briefs';

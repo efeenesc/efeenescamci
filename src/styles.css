@@ -46,8 +46,12 @@
   view-transition-name: topbar;
 }
 
-.transition-card {
-  view-transition-name: transition-card;
+.blog-page {
+  view-transition-name: blog-page;
+}
+
+.view-blog-page {
+  view-transition-name: view-blog-page;
 }
 
 ::view-transition-old(topbar) {

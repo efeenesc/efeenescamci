@@ -37,8 +37,6 @@ export class TopBarComponent {
     this.woSvc.sizeObservable.subscribe((newWndSize) => this.setTopBarMode(newWndSize));
 
     this.setTopBarMode(this.woSvc.getWindowSize());
-
-    // this.emitThemeBarClickedEvent()
   }
 
   emitThemeBarClickedEvent() {
@@ -66,8 +64,8 @@ export class TopBarComponent {
   }
 
   playNewTopBarAnimation(progress: number) {
-    const baseHeight = 5; // Height in vh (viewport height)
-    const extraHeight = progress * 5;
+    const baseHeight = 6; // Height in vh (viewport height)
+    const extraHeight = progress * 4;
 
     const finalHeight = baseHeight + extraHeight;
     const newHeight = finalHeight + 'vh';

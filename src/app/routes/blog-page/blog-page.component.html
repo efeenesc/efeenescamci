@@ -1,13 +1,51 @@
 <div
-  class="flex flex-col h-max [&>section]:rounded-[1rem] lg:[&>section]:rounded-[2rem] gap-24 relative"
+  class="blog-page flex flex-col lg:w-4/5 xl:w-3/5 mx-auto min-h-screen h-max [&_section]:bg-theme-900 [&>section]:rounded-[1rem] lg:[&>section]:rounded-[2rem] gap-12"
 >
-  <section class="p-2 lg:p-10 h-full flex-col flex-shrink-0 flex transition-colors">
-    <div class="text-accent1 text-5xl mb-12">
-      BLOG
+  <section
+    class="p-2 min-h-[80vh] lg:p-10 h-full flex-shrink-0 flex flex-col gap-y-4 transition-colors"
+  >
+    <p>My unorganized thoughts about life, and programming (mostly programming).</p>
+    @if (this.pages) {
+    <div class="flex self-end justify-end text-xl gap-x-2">
+      Pages
+      <div class="flex gap-x-4 overflow-x-auto">
+        @for (page of this.pages; track page.pageNumber) {
+        <div
+          class="aspect-square text-xl px-2 rounded-md cursor-pointer transition-all hover:brightness-105"
+          [class]="page.current ? 'bg-accent1' : 'bg-theme-300'"
+          (click)="this.pageNumberClicked(page)"
+        >
+          {{ page.pageNumber + 1 }}
+        </div>
+        }
+      </div>
     </div>
-    <div>
-      <!-- <p class="text-foreground text-2xl mb-6">My unorganized thoughts and opinions on programming.</p>
-      <p class="text-foreground text-2xl">I may often be incorrect 🤷 Feel free to correct me using markdown editor and commit your changes, all on the browser!</p> -->
+
+    @if (this.blogs) { @for (b of this.blogs; track b.id) {
+    <div
+      class="flex flex-col gap-2 p-2 lg:p-6 w-full bg-theme-300 rounded-[1rem] shadow-lg cursor-pointer outline outline-1 outline-border1"
+      (click)="this.blogCardClicked($event, b)"
+    >
+      <div class="text-foreground text-lg lg:text-2xl font-bold">
+        {{ b.title }}
+      </div>
+      <div class="flex flex-wrap gap-4">
+        <div class="text-contrast text-base lg:text-lg">
+          <span>Created </span
+          ><span class="font-bold text-accent1">{{ b.created_at }}</span>
+        </div>
+        <div class="text-contrast text-base lg:text-lg">
+          <span>Edited </span
+          ><span class="font-bold text-accent1">{{ b.last_updated }}</span>
+        </div>
+      </div>
     </div>
+    } } }
   </section>
+
+  <div
+    class="view-blog-page fixed bottom-0 left-0 w-full lg:w-4/5 xl:w-3/5 lg:left-1/2 lg:-translate-x-1/2"
+  ></div>
 </div>
+
+<footer></footer>

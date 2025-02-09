@@ -6,14 +6,24 @@ import { catchError, map, Observable, throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class BackendService {
-  private api = 'https://api.efeenescamci.com';
-  // private api = 'http://localhost:3000';
+  // private api = 'https://api.efeenescamci.com';
+  private api = 'http://localhost:3000';
 
   constructor(private http: HttpClient) { }
 
-  getNewBlogPostBriefs(): Observable<BlogRoute[]> {
-    return this.http.get<BlogRoute[]>(this.api + '/blog/latest', { responseType: 'json' }).pipe(
-      map(response => response as BlogRoute[]),
+  getLimitedNumberOfPosts(limit: number, skip: number): Observable<BlogQueryResult> {
+    return this.http.get<BlogQueryResult>(this.api + `/blog?limit=${limit}&skip=${skip}`, {responseType: 'json'}).pipe(
+      map(response => response as BlogQueryResult),
+      catchError(error => {
+        console.error('Error fetching blog post briefs:', error);
+        return throwError(() => error);
+      })
+    )
+  }
+
+  getNewBlogPostBriefs(): Observable<BlogQueryResult> {
+    return this.http.get<BlogQueryResult>(this.api + '/blog/latest', { responseType: 'json' }).pipe(
+      map(response => response as BlogQueryResult),
       catchError(error => {
         console.error('Error fetching new blog post briefs:', error);
         return throwError(() => error);
