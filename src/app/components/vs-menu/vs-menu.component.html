@@ -44,22 +44,23 @@
     >
       @if (this.viewingVariants) {
       <div
-        class="flex flex-col w-full h-fit gap-2 rounded-2xl lg:mt-4 overflow-hidden"
+        class="flex flex-col w-full h-fit rounded-2xl lg:mt-4 overflow-hidden"
       >
         @for (ext of variants; track ext.name) {
         <button
-          class="flex flex-col w-full transition-colors cursor-pointer px-4 py-2 text-start"
+          class="flex w-full relative overflow-hidden transition-colors cursor-pointer px-4 py-2 outline outline-border1 outline-1 text-start flex-wrap gap-2"
           [class]="
             ext.name === this.currentVariantName
               ? 'bg-accent1 hover:brightness-105 active:brightness-110 text-theme-900'
-              : 'bg-system-600 hover:bg-system-700 active:bg-system-200'
+              : 'bg-system-700 hover:bg-system-900'
           "
           (click)="this.changeVariant(ext.name)"
         >
+        <div class="flex flex-col w-full h-full">
           <span class="font-semibold">{{ ext.name }}</span>
 
           <span
-            class="rounded-lg px-4"
+            class="rounded-lg px-4 w-fit"
             [class]="
               ext.name === this.currentVariantName
                 ? 'bg-theme-900 text-contrast'
@@ -67,6 +68,18 @@
             "
             >{{ ext.theme === "dark" ? "Dark" : "Light" }}</span
           >
+        </div>
+          
+
+          <div class="absolute -top-4 right-0 flex w-1/2 h-24">
+            <div class="w-full h-full block -mr-7" style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)" [style.background]="ext.accent1"></div>
+            <div class="w-full h-full block -mr-7" style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)" [style.background]="ext.accent2"></div>
+            <div class="w-full h-full block -mr-7" style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)" [style.background]="ext.theme300"></div>
+            <div class="w-full h-full block -mr-7" style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)" [style.background]="ext.theme600"></div>
+            <div class="w-full h-full block -mr-7" style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)" [style.background]="ext.theme900"></div>
+            <div class="w-full h-full block -mr-7" style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)" [style.background]="ext.system"></div>
+            <div class="w-full h-full block -mr-7" style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)" [style.background]="ext.text"></div>
+          </div>
           <!-- @if (ext.name === this.currentVariantName) {
             <span class="bg-accent1 text-theme-900 rounded-lg px-4">Selected</span>
           } -->

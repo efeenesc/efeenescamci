@@ -6,7 +6,6 @@ import { MarkdownRendererHtmlComponent } from '../../components/markdown-rendere
 import { SkeletonLoaderComponent } from '../../components/skeleton-loader/skeleton-loader.component';
 import { Meta } from '@angular/platform-browser';
 import { FooterComponent } from "../../components/footer/footer.component";
-import { EditIconComponent } from "../../icons/edit/edit-icon.component";
 import gsap from "gsap";
 
 @Component({
@@ -16,7 +15,6 @@ import gsap from "gsap";
     MarkdownRendererHtmlComponent,
     SkeletonLoaderComponent,
     FooterComponent,
-    EditIconComponent
 ],
   templateUrl: './view-blog-page.component.html',
 })

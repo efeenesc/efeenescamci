@@ -28,7 +28,6 @@ export class TopBarComponent {
   minScrollY: number = 0;
   maxScrollY: number = 200;
   private topBarTween!: gsap.core.Tween;
-  private hamburgerTween!: gsap.core.Tween;
 
   constructor(private woSvc: WindowObserverService) { }
 
@@ -64,8 +63,8 @@ export class TopBarComponent {
   }
 
   playNewTopBarAnimation(progress: number) {
-    const baseHeight = 6; // Height in vh (viewport height)
-    const extraHeight = progress * 4;
+    const baseHeight = 5; // Height in vh (viewport height)
+    const extraHeight = progress * 5;
 
     const finalHeight = baseHeight + extraHeight;
     const newHeight = finalHeight + 'vh';
@@ -73,24 +72,9 @@ export class TopBarComponent {
     if (this.topBarTween)
       this.topBarTween.kill();
 
-    this.topBarTween = gsap.to('#topbar', {
+    this.topBarTween = gsap.to(['#topbar', '#website-logo-svg'], {
       height: newHeight,
       ease: 'elastic.out(1.2, 1)'
-    });
-
-    const basePadY = 0.25;
-    const extraPadY = progress * 0.50;
-
-    const finalPadY = basePadY + extraPadY + 'rem';
-
-    if (this.hamburgerTween)
-      this.hamburgerTween.kill();
-
-    this.hamburgerTween = gsap.to('#hamburger-menu', {
-      paddingTop: finalPadY,
-      paddingBottom: finalPadY,
-      duration: 0.2,
-      ease: 'none'
     });
   }
 }

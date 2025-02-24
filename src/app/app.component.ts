@@ -8,6 +8,7 @@ import { VsMenuComponent } from './components/vs-menu/vs-menu.component';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { WindowObserverService } from './services/window-observer.service';
 import { OverflowDirective } from './directives/overflow.directive';
+import { FooterComponent } from './components/footer/footer.component';
 import beigeIcon from './icons/beige-theme-icon/beigeiconb64';
 import { gsap } from 'gsap';
 
@@ -19,6 +20,7 @@ import { gsap } from 'gsap';
     VsMenuComponent,
     TopBarComponent,
     OverflowDirective,
+    FooterComponent
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
@@ -61,9 +63,6 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    // Reset to default theme if the current theme is default theme
-    // This is to make sure any changes to the default theme are reflected on-device
-    // const resetToDefaultTheme = this.checkIfDefaultThemeEnabled();
     console.log(
       `█████████████████████████████████████
 ████████████             ████████████
@@ -90,14 +89,6 @@ export class AppComponent {
   }
 
   ngAfterContentInit() {
-    // this.mainResizeObserver.observe(document.getElementById('main')!)
-
-    // this.setMainHeight();
-
-    // this.woSvc.sizeObservable.subscribe(() => {
-    //   this.setMainHeight();
-    // })
-
     this.lss.valueChanges.subscribe((newVal) => {
       if (newVal.key === 'theme_val') {
         const themeObj = JSON.parse(newVal.value);

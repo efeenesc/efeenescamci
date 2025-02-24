@@ -118,10 +118,10 @@ export class DrawerComponent {
   }
 
   getDragPosition(e: MouseEvent | TouchEvent): number {
-    if (e instanceof TouchEvent) {
+    if (window.TouchEvent && e instanceof TouchEvent) {
       return e.changedTouches[0].clientY;
     } else {
-      return e.clientY;
+      return (e as MouseEvent).clientY;
     }
   }
 
@@ -143,9 +143,10 @@ export class DrawerComponent {
 
     if (this.isDragging) return;
 
+    const currentTime = performance.now();
     this.resetMouseVariables();
     this.dragStartPos = this.getDragPosition(e);
-    this.setPrevMousePosition(this.dragStartPos, e.timeStamp);
+    this.setPrevMousePosition(this.dragStartPos, currentTime);
 
     this.isDragging = true;
   }

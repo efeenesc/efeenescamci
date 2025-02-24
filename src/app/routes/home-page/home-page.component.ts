@@ -51,19 +51,21 @@ I develop websites, desktop programs, mobile apps; increase organizational secur
 
   constructor(private wndSvc: WindowObserverService) {
     this.isInitialLoad = this.wndSvc.firstOpenedPage;
+    this.markdown = ParsedWelcomeMessage
+    // if (this.isInitialLoad && this.mdEditor)
+    //   this.fillWelcomeText();
   }
 
   async fillWelcomeText() {
-    if (window.innerWidth < 1280 || !this.isInitialLoad) {
+    // if (window.innerWidth < 1280 || !this.isInitialLoad) {
       this.markdown = ParsedWelcomeMessage;
       this.mdEditor.inputText(this.homeText, false);
-    } else {
-      await this.mdEditor.animateTextIn(this.homeText);
-    }
+    // } else {
+    //   await this.mdEditor.animateTextIn(this.homeText);
+    // }
   }
 
   markdownChanged(newMd: MdNode) {
     this.markdown = newMd;
-    console.log(newMd);
   }
 }

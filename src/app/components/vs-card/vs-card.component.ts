@@ -156,7 +156,7 @@ export class VsCardComponent implements OnDestroy {
         
         if (this.currentProgress === 100) {
           setTimeout(() => {
-            console.log(this.currentProgress);
+            // console.log(this.currentProgress);
             this.stopLoadingAnimation();
           }, 25);
         }

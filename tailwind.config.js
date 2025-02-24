@@ -2,6 +2,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{html,ts}",],
+  darkMode: ['selector', '[data-theme="dark"]'],
   theme: {
     extend: {
       colors: {
@@ -24,10 +25,10 @@ module.exports = {
       },
       fontFamily: {
         "fantasque": "Fantasque Sans Mono, monospace",
-        "inter": "Inter, monospace",
+        "inter": "Inter Tight, monospace",
       },
       backgroundImage: {
-        "noise": "url('assets/noise.png')"
+        "noise": "url('assets/noise2.png')"
       },
       boxShadow: {
         "sm-alt": "0 0 2px 0 rgb(0 0 0 / 0.05)",

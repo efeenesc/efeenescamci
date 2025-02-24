@@ -56,7 +56,6 @@ export class VsMenuComponent implements OnDestroy {
   ) {}
 
   ngOnDestroy(): void {
-    console.log("Destroyed");
     this.cards.forEach((item) => {
       item.cancelThemeChange();
     })

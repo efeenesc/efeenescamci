@@ -1,44 +1,38 @@
 <div class="flex flex-col w-full">
-  <div
-    class="flex w-full gap-2 my-2 py-2 lg:my-6 lg:py-6 relative [&_h1]:z-10 select-none pointer-events-none"
-  >
-    <div class="-ml-12 flex gap-2 relative z-10 text-2xl lg:text-5xl">
-      <h1 class="text-theme-900 font-extrabold">BLOG</h1>
-      <h1 class="text-accent1 font-extrabold">BLOG</h1>
-      <h1 class="text-theme-900 font-extrabold">BLOG</h1>
-      <h1 class="text-theme-900 font-extrabold">BLOG</h1>
-      <h1 class="text-theme-900 font-extrabold">BLOG</h1>
-      <h1 class="text-theme-900 font-extrabold">BLOG</h1>
-      <h1 class="text-theme-900 font-extrabold">BLOG</h1>
-      <h1 class="text-theme-900 font-extrabold">BLOG</h1>
-      <h1 class="text-theme-900 font-extrabold">BLOG</h1>
-      <h1 class="text-theme-900 font-extrabold">BLOG</h1>
-      <h1 class="text-theme-900 font-extrabold">BLOG</h1>
-      <h1 class="text-theme-900 font-extrabold">BLOG</h1>
-    </div>
-    <div
-      class="bg-contrast opacity-50 absolute top-0 left-0 w-full h-full"
-    ></div>
-  </div>
+  <h1 class="text-2xl md:text-3xl lg:text-4xl mb-4 text-accent1 font-extrabold self-start">Shorts</h1>
 
   <div
-    class="grid grid-cols-1 lg:grid-cols-2 self-center justify-center items-center gap-5 w-full p-4 sm:p-6 lg:p-10"
+    class="flex flex-col rounded-xl self-center justify-center items-center w-full"
   >
-    @if (this.blogs) { @for (b of this.blogs; track b.id) {
+    @if (this.blogs.length > 1) { @for (b of this.blogs; track b.id) {
     <div
-      class="flex flex-col gap-2 p-2 lg:p-6 w-full bg-theme-300 rounded-[1rem] shadow-lg cursor-pointer outline outline-1 outline-border1"
+      class="flex flex-col duration-300 transition-all py-2 w-full cursor-pointer border-b-[1px] border-border1 last-of-type:border-none"
       (click)="this.blogCardClicked($event, b)"
     >
-      <div class="text-foreground text-lg lg:text-2xl font-bold">{{ b.title }}</div>
+      
+      <div class="text-foreground text-lg lg:text-2xl font-bold">
+        {{ b.title }}
+      </div>
+      <span class="text-base">{{ b.created_at }}</span>
       <div class="flex flex-wrap gap-4">
         <div class="text-contrast text-base lg:text-lg">
-          <span>Created </span
-          ><span class="font-bold text-accent1">{{ b.created_at }}</span>
+          <!-- <span>Created </span> -->
+          
         </div>
-        <div class="text-contrast text-base lg:text-lg">
-          <span>Edited </span
-          ><span class="font-bold text-accent1">{{ b.last_updated }}</span>
-        </div>
+        <!-- <div class="text-contrast text-base lg:text-lg">
+          <span>Edited {{ b.last_updated }}</span>
+        </div> -->
+      </div>
+    </div>
+    } } @else { @for (num of [0,1,2]; track num) {
+    <div
+      class="flex flex-col duration-300 transition-all gap-2 py-2 w-full cursor-pointer border-b-[1px] border-border1 last-of-type:border-none"
+    >
+      <div class="flex w-full h-7 lg:h-8">
+        <skeleton-loader class="w-full block bg-theme-900" />
+      </div>
+      <div class="flex w-full h-6 lg:h-7">
+        <skeleton-loader class="w-full block bg-theme-900" />
       </div>
     </div>
     } }

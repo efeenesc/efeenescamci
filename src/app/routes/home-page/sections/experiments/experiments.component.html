@@ -1,65 +1,50 @@
 <div class="flex flex-col w-full">
-  <div
-    class="flex w-full gap-2 my-2 py-2 lg:my-6 lg:py-6 relative [&_h1]:z-10 select-none pointer-events-none"
-  >
-    <div class="-ml-12 flex gap-2 relative z-10 text-2xl lg:text-5xl">
-      <h1 class="text-theme-900 font-extrabold">EXPERIMENTS</h1>
-      <h1 class="text-accent1 font-extrabold">EXPERIMENTS</h1>
-      <h1 class="text-theme-900 font-extrabold">EXPERIMENTS</h1>
-      <h1 class="text-theme-900 font-extrabold">EXPERIMENTS</h1>
-      <h1 class="text-theme-900 font-extrabold">EXPERIMENTS</h1>
-      <h1 class="text-theme-900 font-extrabold">EXPERIMENTS</h1>
-    </div>
-    <div
-      class="bg-contrast opacity-50 absolute top-0 left-0 w-full h-full"
-    ></div>
-  </div>
+  <h1 class="text-2xl md:text-3xl lg:text-4xl mb-4 text-accent1 font-extrabold self-start antialiased">Experiments</h1>
 
   <div
-    class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 self-center justify-center items-center gap-5 w-fit p-4 sm:p-6 lg:p-10"
+    class="flex flex-col self-center justify-center items-center w-full"
   >
     @for (exp of expCards; track exp.name) {
-
-    <div
-      class="flex flex-col relative w-full max-w-xs sm:max-w-sm rounded-2xl shadow-lg bg-theme-300 outline outline-1 outline-border1 overflow-hidden"
+    <a
+      [href]="exp.source_url"
+      target="_blank"
+      class="flex relative flex-col lg:flex-row w-full duration-300 transition-all border-b-[1px] py-2 border-border1 last-of-type:border-none gap-3"
     >
       <!-- Icon Section with Gradient -->
-      @if (!exp.loaded) {
-        <div class="object-contain h-full flex-grow rounded-lg overflow-hidden" >
-          <skeleton-loader class="h-full w-full aspect-square block bg-theme-900" />
-        </div>
-      }
+      
       <div
-        class="peer relative bg-theme-200 mb-[8vh] bg-gradient-to-r items-center justify-center from-[#f2f4f4] to-[#e0e0df] overflow-hidden justify-self-center"
+        class="h-full w-min aspect-square min-h-[100px] rounded-xl block relative bg-theme-200 bg-gradient-to-r items-center justify-center from-[#f2f4f4] to-[#e0e0df] overflow-hidden justify-self-center"
       >
+      @if (!exp.loaded) {
+        <skeleton-loader class="aspect-square block" />
+      }
         <img loading="lazy" (load)="this.setLoaded(exp.id)" [src]="exp.icon_url" [alt]="exp.name + 'icon'" onerror="this.style.display='none'" />
       </div>
 
-      <!-- Content Section -->
-      <div
-        class="flex flex-col peer-has-[:hover]:-bottom-[4vh] transition-all delay-100 duration-500 p-2 pt-3 lg:p-6 absolute bottom-0 bg-theme-600 z-10 rounded-t-xl w-full"
-      >
-        <!-- Gradient Overlay -->
+      <div class="flex flex-col">
         <h2 class="text-foreground text-xl lg:text-2xl font-semibold">
           {{ exp.name }}
         </h2>
         <p class="text-contrast leading-relaxed">
           {{ exp.desc }}
         </p>
-        <div class="flex gap-4 mt-4">
+      </div>
+      <!-- Content Section -->
+        <!-- Gradient Overlay -->
+        
           <!-- Source Code Button -->
-          @if (exp.source_url) {
+          <!-- @if (exp.source_url) {
           <a
             [href]="exp.source_url"
             target="_blank"
-            class="px-4 py-2 text-center text-base font-bold text-theme-900 bg-accent1 rounded-lg hover:brightness-110 transition-all"
+            class="h-fit px-4 py-2 text-center text-base font-bold text-theme-900 bg-accent1 rounded-lg hover:brightness-110 transition-all"
           >
             Source Code
           </a>
-          }
+          } -->
 
           <!-- Blog Post Button -->
-          @if (exp.read_more) {
+          <!-- @if (exp.read_more) {
           <a
             [href]="exp.read_more"
             target="_blank"
@@ -67,10 +52,8 @@
           >
             Read More
           </a>
-          }
-        </div>
-      </div>
-    </div>
+          } -->
+        </a>
     }
   </div>
 </div>

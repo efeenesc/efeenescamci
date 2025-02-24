@@ -9,20 +9,21 @@ enum OverflowState {
 })
 export class OverflowDirective {
   @Input('pad-by') padBy: number = 10;
-  private static elements: Set<{ el: HTMLElement, val: number }> = new Set();
+  @Input('use-transform') useTransform: boolean = false;
+  private static elements: Set<{ el: HTMLElement, val: number, useTransform: boolean }> = new Set();
   static state: OverflowState = OverflowState.NOT_CORRECTED;
 
   constructor(private el: ElementRef) {}
 
   ngOnInit(): void {
-    OverflowDirective.elements.add({el: this.el.nativeElement, val: this.padBy});
+    OverflowDirective.elements.add({el: this.el.nativeElement, val: this.padBy, useTransform: this.useTransform });
   }
 
   ngOnDestroy(): void {
-    OverflowDirective.elements.delete({el: this.el.nativeElement, val: this.padBy});
+    OverflowDirective.elements.delete({el: this.el.nativeElement, val: this.padBy, useTransform: this.useTransform});
   }
 
-  static getAllElements(): { el: HTMLElement, val: number }[] {
+  static getAllElements(): { el: HTMLElement, val: number, useTransform: boolean }[] {
     return Array.from(OverflowDirective.elements);
   }
 
@@ -36,9 +37,22 @@ export class OverflowDirective {
    * Call `postOverflowHidden` after setting overflow to its initial, non-hidden value. 
    */
   static preOverflowHidden() {
-    OverflowDirective.getAllElements().forEach(({ el, val }) => {
-      el.dataset['originalPaddingRight'] = el.style.paddingRight;
-      el.style.paddingRight = el.style.paddingRight + val + 'px';
+    if (window.innerWidth - document.body.clientWidth === 0) return;
+    OverflowDirective.getAllElements().forEach(({ el, val, useTransform }) => {
+      let origPad;
+      let newPad;
+
+      if (useTransform) {
+        origPad = el.style.transform;
+        newPad = `translateX(${val}px)`;
+        el.style.transform = newPad;
+      } else {
+        origPad = el.style.paddingRight;
+        newPad = el.style.paddingRight + val + 'px';
+        el.style.paddingRight = newPad;
+      }
+      
+      el.dataset['originalPad'] = origPad;
     })
   }
 
@@ -50,8 +64,14 @@ export class OverflowDirective {
    * Call `preOverflowHidden` before setting overflow to 'hidden'.
    */
   static postOverflowHidden() {
-    OverflowDirective.getAllElements().forEach(({ el }) => {
-      el.style.paddingRight = el.dataset['originalPaddingRight']!;
+    if (window.innerWidth - document.body.clientWidth === 0) return;
+
+    OverflowDirective.getAllElements().forEach(({ el, useTransform }) => {
+      if (useTransform) {
+        el.style.transform = el.dataset['originalPad']!;
+      } else {
+        el.style.paddingRight = el.dataset['originalPad']!;
+      }
     })
   }
 }

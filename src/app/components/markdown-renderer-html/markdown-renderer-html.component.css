@@ -1,13 +1,8 @@
 .md-renderer {
   @apply text-contrast text-base lg:text-lg;
   text-wrap: pretty;
-  text-justify: inter-word;
-}
-
-.md-renderer * {
-  @apply text-contrast text-base lg:text-lg;
-  text-wrap: pretty;
-  text-justify: inter-word;
+  line-height: 1.5;
+  font-weight: 450;
 }
 
 .md-renderer h1 {

@@ -184,7 +184,6 @@ export class MarkdownEditorComponent {
     }
 
     if (document.queryCommandSupported('insertText')) {
-      console.log('Command supported');
       document.execCommand('insertText', false, text);
     } else if (document.getSelection) {
       // Insert text at the current position of caret

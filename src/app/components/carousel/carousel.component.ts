@@ -68,10 +68,10 @@ export class CarouselComponent implements AfterViewInit {
   }
 
   getDragPosition(e: MouseEvent | TouchEvent): number {
-    if (e instanceof TouchEvent) {
-      return e.changedTouches[0].clientX - this.carouselRect.left;
+    if (window.TouchEvent && e instanceof TouchEvent) {
+        return e.changedTouches[0].clientX - this.carouselRect.left;
     } else {
-      return e.clientX - this.carouselRect.left;
+        return (e as MouseEvent).clientX - this.carouselRect.left;
     }
   }
 
@@ -90,23 +90,25 @@ export class CarouselComponent implements AfterViewInit {
     if (this.isDragging) return;
     this.isDragging = true;
     this.clearMousePosition();
-
+  
+    const currentTime = performance.now();
     this.dragStartPos = this.getDragPosition(e);
-    this.setPrevMousePosition(this.dragStartPos, e.timeStamp);
+    this.setPrevMousePosition(this.dragStartPos, currentTime);
   }
-
+  
   drag(e: MouseEvent | TouchEvent): void {
     if (!this.isDragging) return;
     this.supressClick = true;
-
+  
     const offsetX = this.getDragPosition(e);
+    const currentTime = performance.now();
     const dragDistance = offsetX - this.dragStartPos;
-
+  
     this.translatePos += dragDistance;
     this.dragStartPos = offsetX;
-
+  
     this.updateCarouselPosition(150);
-    this.setPrevMousePosition(offsetX, e.timeStamp);
+    this.setPrevMousePosition(offsetX, currentTime);
   }
 
   stopDragging(): void {

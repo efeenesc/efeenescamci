@@ -1,15 +1,17 @@
 import { Component } from '@angular/core';
 import { BackendService } from '../../../../services/backend.service';
 import { Router } from '@angular/router';
+import { SkeletonLoaderComponent } from "../../../../components/skeleton-loader/skeleton-loader.component";
 
 @Component({
   selector: 'blog-section',
-  imports: [],
+  imports: [SkeletonLoaderComponent],
   templateUrl: './blog.component.html',
   styles: `
   :host {
     display: flex;
     width: 100%;
+    flex-basis: 100%;
   }
   `,
 })

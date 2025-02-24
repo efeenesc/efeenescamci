@@ -1,11 +1,12 @@
+<div class="h-[10vh] w-full"></div>
 <div
   id="topbar"
   #topbar
   correct-overflow
-  [pad-by]="9"
-  class="w-full h-[10vh] backdrop-blur-sm overflow-hidden flex text-inverse gap-2 sm:gap-3 md:gap-4 lg:gap-5 will-change-transform fixed lg:rounded-b-xl lg:left-1/2 lg:-translate-x-1/2 lg:w-4/5 xl:w-3/5 left-0 top-0 z-20"
+  [pad-by]="14"
+  class="w-full px-1 my-1 h-[10vh] flex mt-2 text-inverse left-1/2 ml-[-50%] fixed justify-center top-0 z-20"
 >
-  <div class="w-full h-full flex py-2 px-2">
+  <div class="w-full h-full flex sm:w-4/5 lg:w-3/5 xl:w-[40vw]">
     <site-logo></site-logo>
     <div class="flex-1"></div>
     <!-- @if (this.mobileMode) {
@@ -43,7 +44,7 @@
   } -->
 
     <vs-search
-      class="w-fit h-full overflow-hidden flex flex-row justify-self-end hover:scale-[98%] transition-all active:scale-90"
+      class="w-fit h-full flex flex-row justify-self-end hover:scale-[98%] drop-shadow-xl transition-all active:scale-95"
       [internalStyle]="this.themeBarStyle"
       [animationSeekAt]="this.topbarScrollProgress"
       (click)="this.emitThemeBarClickedEvent()"

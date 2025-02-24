@@ -6,24 +6,40 @@
 
 <div
   id="massive-container"
-  class="min-h-screen font-inter bg-system bg-noise bg-blend-soft-light"
+  class="min-h-screen font-inter bg-theme-900 bg-noise bg-blend-soft-light overflow-x-hidden relative"
   correct-overflow
-  [pad-by]="10"
 >
-  <div class="h-[10vh] w-full"></div>
   <top-bar
-  [themeBarStyle]="this.themeBarStyle" (themeButtonClicked)="this.themeButtonClicked()"></top-bar>
+    [themeBarStyle]="this.themeBarStyle"
+    (themeButtonClicked)="this.themeButtonClicked()"
+  ></top-bar>
   <div
     id="contentarea"
     #contentarea
-    class="w-full h-min bottom-0 rounded-[1rem] lg:rounded-[2rem]"
+    class="w-full h-min bottom-0 pt-4 flex justify-center"
   >
+    <div
+      class="absolute hidden sm:flex sm:w-[49px] top-0 sm:left-0 lg:left-[12vw] xl:left-[25vw] h-full select-none"
+    >
+      <div
+        class="absolute w-full h-full bg-noise opacity-20 dark:opacity-50"
+      ></div>
+      <div class="w-full h-full block bg-accent1"></div>
+      <div class="w-full h-full block bg-accent2"></div>
+      <div class="w-full h-full block bg-theme-300"></div>
+      <div class="w-full h-full block bg-theme-600"></div>
+      <div class="w-full h-full block bg-theme-900"></div>
+      <div class="w-full h-full block bg-system"></div>
+      <div class="w-full h-full block bg-foreground"></div>
+    </div>
+
     <main
-      class="w-full h-full transition-colors text-contrast rounded-[1rem] lg:rounded-[2rem]"
+      class="w-full sm:w-4/5 lg:w-3/5 xl:w-[40vw] h-full transition-colors text-contrast px-3 lg:px-0 antialiased"
       id="main"
       #main
     >
       <router-outlet></router-outlet>
+      <footer class="w-full font-inter"></footer>
     </main>
-  </div>
+  </div>  
 </div>

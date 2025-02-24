@@ -1,28 +1,19 @@
 <div class="flex flex-row justify-center gap-2 min-h-screen">
   <div
-    class="view-blog-page relative top-0 flex flex-col lg:w-4/5 xl:w-3/5 h-full bg-theme-900 rounded-[1rem] lg:rounded-[2rem]"
+    class="view-blog-page relative top-4 flex flex-col w-full h-full"
   >
     <div
-      class="flex flex-col gap-2 p-4 lg:p-6 w-full bg-theme-300 rounded-t-[1rem] lg:rounded-t-[2rem]"
+      class="flex flex-col gap-2 w-full pb-4"
     >
       <div
-        class="text-foreground text-2xl md:text-xl lg:text-2xl xl:text-4xl font-bold"
+        class="text-foreground text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold"
       >
         {{ blogPost?.title }}
       </div>
       <div class="flex flex-wrap gap-x-4 gap-y-0">
-        <div class="text-foreground text-lg">
-          <span>Created </span
-          ><span class="font-bold text-accent1">{{
-            blogPost?.created_at
-          }}</span>
-        </div>
-        <div class="text-foreground text-lg">
-          <span>Edited </span
-          ><span class="font-bold text-accent1">{{
-            blogPost?.last_updated
-          }}</span>
-        </div>
+        <span class="font-bold text-contrast">{{
+          blogPost?.created_at
+        }}</span>
       </div>
     </div>
     @if (this.isLoading) {
@@ -41,7 +32,7 @@
         ></markdown-editor>
         @if (this.markdownNode) {
         <markdown-renderer-html
-          class="inline-block text-wrap p-3 lg:px-7 pt-4 lg:m-1 lg:pb-5"
+          class="inline-block text-wrap pt-4 [&_h3]:font-bold [&&_h3]:mb-1 [&&_h3]:mt-6"
           [parsedContent]="this.markdownNode.content"
         >
         </markdown-renderer-html>
@@ -49,7 +40,7 @@
       </div>
     </div>
     }
-    <div class="absolute bottom-0 self-end place-self-end mb-4 mr-32">
+    <!-- <div class="absolute bottom-0 self-end place-self-end mb-4 mr-32">
       You can edit this post and submit your corrections ➡️
     </div>
 
@@ -58,7 +49,6 @@
       (click)="this.editButtonClicked()"
     >
       <edit-icon></edit-icon>
-    </div>
+    </div> -->
   </div>
 </div>
-<footer></footer>
