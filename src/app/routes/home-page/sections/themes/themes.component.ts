@@ -65,7 +65,7 @@ export class ThemesComponent {
     return {} as VSExtension;
   });
   vsCardTheme: VsCardStyle = new VsCardStyle({
-    bg300Class: 'bg-theme-300',
+    bg300Class: 'bg-theme-900',
     bg900Class: 'bg-theme-900',
     fgTextClass: 'text-foreground',
     fgTextAccent: 'text-accent1',

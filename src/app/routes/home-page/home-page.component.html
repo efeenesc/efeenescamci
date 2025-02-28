@@ -1,37 +1,82 @@
-<div
-  class="flex flex-col mx-auto h-max gap-16"
->
+<div class="flex flex-col mx-auto h-max gap-16">
   <section class="h-full flex-shrink-0 flex transition-colors">
-    <div
-      class="w-full grid"
-    >
-      <div
-        class="flex-1 flex flex-col transition-colors text-nowrap"
-      >
-        @if (this.markdown) {
-        <markdown-renderer-html
-          class="inline-block text-wrap [&_h1]:!mt-0 [&_h1]:!mb-0 [&&_h3]:mt-0 [&_img]:drop-shadow-lg [&_img]:outline [&_img]:outline-1 [&_img]:outline-border1 [&_img:hover]:scale-110 [&&_img:hover]:drop-shadow-2xl [&_img]:transition-all xl:[&&&_img]:w-1/3"
-          [parsedContent]="this.markdown.content"
-        >
-        </markdown-renderer-html>
-        }
-      </div>
-
-      <div id="blank hidden lg:block"></div>
-
-      <div
-        class="hidden lg:hidden h-auto flex-col shadow-xl bg-theme-600 group border-border1 border rounded-2xl focus-within:rounded-3xl focus-within:shadow-2xl transition-all overflow-hidden"
-      >
+    <div class="w-full grid">
+      <div class="flex-1 flex flex-col transition-colors text-nowrap">
         <div
-          class="title w-full h-[6%] flex items-center opacity-50 group-has-[:focus]:opacity-100 justify-center"
+          class="inline-block text-wrap"
+          style="line-height: 1.5; font-weight: 450"
         >
-          <span class="select-none text-sm lg:text-lg">ABOUT.md</span>
+          <img
+            src="https://avatars.githubusercontent.com/u/79850104?v=4"
+            class="w-full rounded-xl max-w-[300px] lg:max-w-[50%] xl:w-1/3 mb-4 drop-shadow-lg transition-all hover:scale-110 hover:drop-shadow-2xl outline outline-1 outline-border1"
+            alt="Efe Enes Çamcı"
+          />
+          <h1
+            class="text-4xl my-0 sm:text-5xl lg:text-6xl font-extrabold !text-foreground"
+          >
+            Efe Enes Çamcı
+          </h1>
+          <h3 class="text-xl mb-4 md:text-3xl lg:text-4xl !text-accent1">
+            Solutions Architect
+          </h3>
+          <p class="text-contrast text-base lg:text-lg">
+            I develop websites, desktop programs, mobile apps; increase
+            organizational security, automate business-critical workflows,
+            manage cloud infrastructure; experiment with ideas, take on new
+            challenges, reinvent the wheel, and have fun.
+          </p>
+          <div class="flex gap-3 mt-4">
+            <a
+              class="relative rounded-3xl shadow-light bg-gradient-to-tl from-neutral-800 to-neutral-900 w-20 aspect-square object-contain overflow-hidden block p-3 transition-all
+              after:absolute after:rounded-3xl after:top-0 after:left-0 after:block after:shadow-light after:w-full after:h-full after:transition-opacity active:after:opacity-0
+               hover:from-neutral-800 hover:via-neutral-900 hover:to-neutral-900 hover:scale-105 active:scale-100 active:translate-y-1"
+              href="https://github.com/efeenesc"
+              target="_blank"
+              ><img
+                class="object-contain pointer-events-none select-none"
+                src="assets/github-mark-white.png"
+                alt="GitHub"
+            /></a>
+            <a
+              class="relative rounded-3xl shadow-light bg-gradient-to-tl from-[#0a66c2] to-blue-400 w-20 aspect-square object-contain overflow-hidden block p-2 transition-all
+              after:absolute after:rounded-3xl after:top-0 after:left-0 after:block after:shadow-light after:w-full after:h-full after:transition-opacity active:after:opacity-0
+               hover:from-[#0a66c2] hover:via-[#0a66c2] hover:to-blue-400 hover:scale-105 active:scale-100 active:translate-y-1"
+              href="https://linkedin.com/in/efeenescamci"
+              target="_blank"
+              ><img
+                class="object-contain pointer-events-none select-none"
+                src="assets/InBug-White-Inverse.png"
+                alt="LinkedIn"
+            /></a>
+            <a
+              class="relative rounded-3xl shadow-lg bg-gradient-to-tl from-theme-300 to-theme-900 w-20 aspect-square object-contain block p-3 transition-all
+              after:absolute after:rounded-3xl after:top-0 after:left-0 after:block after:shadow-light after:w-full after:h-full after:transition-opacity active:after:opacity-0
+               hover:from-theme-300 hover:via-theme-300 hover:to-theme-900 hover:scale-105 active:scale-100 active:translate-y-1"
+              href="mailto:hello@efeenescamci.com"
+              target="_blank"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                class="stroke-contrast"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7.39999 6.32003L15.89 3.49003C19.7 2.22003 21.77 4.30003 20.51 8.11003L17.68 16.6C15.78 22.31 12.66 22.31 10.76 16.6L9.91999 14.08L7.39999 13.24C1.68999 11.34 1.68999 8.23003 7.39999 6.32003Z"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M10.11 13.6501L13.69 10.0601"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+          </div>
         </div>
-        <markdown-editor
-          class="overflow-hidden block h-full rounded-xl"
-          (result)="markdownChanged($event)"
-          [showRenderer]="false"
-        ></markdown-editor>
       </div>
     </div>
   </section>
@@ -48,6 +93,10 @@
     <blog-section></blog-section>
   </section>
 
-  <div class="blog-page fixed bottom-0 left-0 w-full sm:w-4/5 lg:w-3/5 xl:w-[40vw] lg:left-1/2 lg:-translate-x-1/2"></div>
-  <div class="view-blog-page fixed bottom-0 left-0 w-full sm:w-4/5 lg:w-3/5 xl:w-[40vw] lg:left-1/2 lg:-translate-x-1/2"></div>
+  <div
+    class="blog-page fixed bottom-0 left-0 w-full sm:w-4/5 lg:w-3/5 xl:w-[40vw] lg:left-1/2 lg:-translate-x-1/2"
+  ></div>
+  <div
+    class="view-blog-page fixed bottom-0 left-0 w-full sm:w-4/5 lg:w-3/5 xl:w-[40vw] lg:left-1/2 lg:-translate-x-1/2"
+  ></div>
 </div>

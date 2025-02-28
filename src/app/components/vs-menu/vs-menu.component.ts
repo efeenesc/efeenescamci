@@ -86,7 +86,7 @@ export class VsMenuComponent implements OnDestroy {
       }
         
     })
-    this.vsSvc.activeThemeVariantName.subscribe((newVariant) => { this.currentVariantName = newVariant; console.log(newVariant); });
+    this.vsSvc.activeThemeVariantName.subscribe((newVariant) => { this.currentVariantName = newVariant; });
   }
 
   showVariantPanel() {

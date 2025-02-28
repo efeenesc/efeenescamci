@@ -20,8 +20,9 @@
   >
     <div
       class="absolute hidden sm:flex sm:w-[49px] top-0 sm:left-0 lg:left-[12vw] xl:left-[25vw] h-full select-none"
+      style="background: var(--rainbow-bg)"
     >
-      <div
+      <!-- <div
         class="absolute w-full h-full bg-noise opacity-20 dark:opacity-50"
       ></div>
       <div class="w-full h-full block bg-accent1"></div>
@@ -30,7 +31,7 @@
       <div class="w-full h-full block bg-theme-600"></div>
       <div class="w-full h-full block bg-theme-900"></div>
       <div class="w-full h-full block bg-system"></div>
-      <div class="w-full h-full block bg-foreground"></div>
+      <div class="w-full h-full block bg-foreground"></div> -->
     </div>
 
     <main
@@ -38,8 +39,10 @@
       id="main"
       #main
     >
-      <router-outlet></router-outlet>
-      <footer class="w-full font-inter"></footer>
+      <router-outlet (activate)="this.routerActivated()"></router-outlet>
+      @if (this.showFooter) {
+        <footer class="w-full font-inter"></footer>
+      }
     </main>
   </div>  
 </div>

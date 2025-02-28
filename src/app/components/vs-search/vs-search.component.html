@@ -1,17 +1,18 @@
 <div id="vs-search-main"
-class="flex flex-row gap-2 rounded-full bg-gradient-to-tl from-theme-300 to-theme-900 py-2 pl-2 pr-6 select-none cursor-pointer will-change-transform"
+class="card-bg flex flex-row gap-2 rounded-full transition-transform bg-gradient-to-tl from-theme-300 to-theme-900 
+py-2 pl-2 pr-6 select-none cursor-pointer shadow-light
+hover:scale-105 hover:from-theme-300 hover:via-theme-300 hover:to-theme-900 active:shadow-none active:scale-100"
 [style]="this.internalStyle"
-style="box-shadow: rgba(255, 255, 255, 0.3) 0px 1px 1px inset, rgba(0, 0, 0, 0.2) 0px 7px 13px -3px, rgba(0, 0, 0, 0.1) 0px -3px 0px inset;"
 >
   <img
     id="theme_icon"
-    class="object-contain h-full aspect-square rounded-full bg-theme-300 select-none"
+    class="object-contain h-full aspect-square rounded-full select-none p-1 bg-none pointer-events-none"
     [src]="this.themeIcon"
   />
   <div class="flex flex-col h-full text-contrast justify-center overflow-hidden">
-    <span id="theme-name" class="transition-color text-ellipsis will-change-transform relative text-nowrap font-extrabold {{this.internalStyle == '' ? '' : 'font-normal'}}">{{
+    <span id="theme-name" class="transition-color text-ellipsis relative text-nowrap font-extrabold {{this.internalStyle == '' ? '' : 'font-normal'}}">{{
       this.themeName
     }}</span>
-      <span id="theme-author" class="transition-color opacity-100 will-change-transform">{{ this.themeAuthor }}</span>
+      <span id="theme-author" class="transition-color opacity-100">{{ this.themeAuthor }}</span>
   </div>
 </div>

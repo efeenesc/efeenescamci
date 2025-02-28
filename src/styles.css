@@ -24,9 +24,27 @@
   --dark-system-600: #2c2c2e;
   --dark-system-300: #616368;
   --dark-system-200: #787b81;
+
+  --rainbow-bg: linear-gradient(
+    to right,
+    var(--accent1) 0%,
+    var(--accent1) 14.28%,
+    var(--accent2) 14.28%,
+    var(--accent2) 28.57%,
+    var(--theme-300) 28.57%,
+    var(--theme-300) 42.85%,
+    var(--theme-600) 42.85%,
+    var(--theme-600) 57.14%,
+    var(--theme-900) 57.14%,
+    var(--theme-900) 71.42%,
+    var(--system) 71.42%,
+    var(--system) 85.71%,
+    var(--foreground) 85.71%,
+    var(--foreground) 100%
+  );
 }
 
-[data-theme='light'] {
+[data-theme="light"] {
   --system-900: var(--light-system-900);
   --system-700: var(--light-system-700);
   --system-600: var(--light-system-600);
@@ -34,7 +52,7 @@
   --system-200: var(--light-system-200);
 }
 
-[data-theme='dark'] {
+[data-theme="dark"] {
   --system-900: var(--dark-system-900);
   --system-700: var(--dark-system-700);
   --system-600: var(--dark-system-600);
@@ -83,7 +101,7 @@ body {
 }
 
 ::-webkit-scrollbar-button {
-  display:none;
+  display: none;
 }
 
 ::-moz-selection {

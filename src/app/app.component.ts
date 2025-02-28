@@ -43,6 +43,7 @@ export class AppComponent {
   elTranslatePos: { current: number } = { current: 0 };
   themeBarStyle: string = '';
   drawerOpened: boolean = false;
+  showFooter: boolean = false;
   // mainResizeObserver: ResizeObserver = new ResizeObserver((entries) => this.onMainResized(entries));
   private pageScrollTween?: gsap.core.Tween;
 
@@ -98,6 +99,10 @@ export class AppComponent {
             : 'bg-blend-hard-light';
       }
     });
+  }
+
+  routerActivated() {
+    this.showFooter = true;
   }
 
   onMainResized(entries: ResizeObserverEntry[]) {

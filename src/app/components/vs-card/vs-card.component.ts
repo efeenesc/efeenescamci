@@ -58,6 +58,21 @@ export class VsCardComponent implements OnDestroy {
   }
   loadingContainerDiv!: HTMLDivElement;
 
+  @ViewChild('shadowcontainer') set _sc(content: ElementRef) {
+    this.shadowContainerDiv = content.nativeElement;
+  }
+  shadowContainerDiv!: HTMLDivElement;
+
+  @ViewChild('maincontainer') set _mc(content: ElementRef) {
+    this.mainContainerDiv = content.nativeElement;
+  }
+  mainContainerDiv!: HTMLDivElement;
+
+  @ViewChild('background') set _bg(content: ElementRef) {
+    this.backgroundDiv = content.nativeElement;
+  }
+  backgroundDiv!: HTMLDivElement;
+
   @Input() cardInfo!: VSExtension;
   @Input() cardType: 'small' | 'large' = 'large'
   @Input('cardStyle') set _style(content: VsCardStyle) {
@@ -118,29 +133,45 @@ export class VsCardComponent implements OnDestroy {
 
   startLoadingAnimation() {
     // Fade in the loading container
+    gsap.to(this.shadowContainerDiv, {
+      opacity: 0,
+      duration: 0.05
+    });
+    gsap.to(this.mainContainerDiv, {
+      translateY: "0.25rem",
+      duration: 0.05
+    });
     gsap.to(this.loadingContainerDiv, {
       opacity: 1,
       duration: 0.05
     });
   
     // Scale the theme info div
-    gsap.to(this.themeInfoDiv, {
-      scale: 0.95,
-      duration: 0.25,
+    gsap.to(this.backgroundDiv, {
+      opacity: 0,
+      duration: 1,
       ease: 'power1.inOut'
     });
   }
 
   stopLoadingAnimation() {
+    gsap.to(this.mainContainerDiv, {
+      translateY: 0,
+      duration: 0.05
+    });
+    gsap.to(this.shadowContainerDiv, {
+      opacity: 1,
+      duration: 0.05
+    })
     gsap.to(this.loadingContainerDiv, {
       opacity: 0,
-      duration: 0.05
+      duration: 0.5
     });
     
     // Second animation (scale the theme info div back to 1.0)
-    gsap.to(this.themeInfoDiv, {
-      scale: 1,
-      duration: 0.25,
+    gsap.to(this.backgroundDiv, {
+      opacity: 1,
+      duration: 1,
       ease: 'power1.inOut'
     });
   }
@@ -158,7 +189,7 @@ export class VsCardComponent implements OnDestroy {
           setTimeout(() => {
             // console.log(this.currentProgress);
             this.stopLoadingAnimation();
-          }, 25);
+          }, 250);
         }
       }
     });

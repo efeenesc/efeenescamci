@@ -8,7 +8,7 @@ import gsap from 'gsap';
 @Component({
     selector: 'top-bar',
     imports: [VsSearchComponent, SiteLogoComponent, OverflowDirective],
-    templateUrl: './top-bar.component.html'
+    templateUrl: './top-bar.component.html',
 })
 export class TopBarComponent {
   @ViewChild('topbar') set _tb(content: ElementRef) {

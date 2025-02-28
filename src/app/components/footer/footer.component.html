@@ -1,4 +1,4 @@
-<div class="relative w-full flex flex-col mt-24">
+<div class="w-full flex flex-col mt-24">
   <!-- <div class="absolute w-full flex sm:flex">
     <div class="lg:w-[calc(12vw+21px)] xl:w-[calc(25vw+21px)]">
       <div class="lg:w-[calc(12vw)] xl:w-[calc(25vw)] h-2 bg-accent1"></div>
@@ -13,30 +13,61 @@
     </div>
   </div> -->
 
+  <div class="container absolute hidden sm:flex sm:w-[49px] sm:left-0 lg:left-[12vw] xl:left-[25vw] h-24 select-none" style="perspective: 0px; perspective-origin: top;">
+    <div class="test"></div>
+  </div>
+  
+
   <div class="w-full">
     <div
       class="flex h-full flex-col justify-end items-end py-6 z-10 mx-auto w-full sm:w-4/5 lg:w-3/5 xl:w-[40vw] text-contrast"
     >
       All rights of themes available for use on this website go to their
       rightful owners.
-      <div class="flex gap-4">
+      <div class="flex gap-3 mt-2">
         <a
+          class="relative rounded-xl shadow-light bg-gradient-to-tl from-neutral-800 to-neutral-900 w-12 aspect-square object-contain overflow-hidden block p-3 transition-all after:absolute after:rounded-xl after:top-0 after:left-0 after:block after:shadow-light after:w-full after:h-full after:transition-opacity active:after:opacity-0 hover:from-neutral-800 hover:via-neutral-900 hover:to-neutral-900 hover:scale-105 active:scale-100 active:translate-y-1"
           href="https://github.com/efeenesc"
           target="_blank"
-          class="text-accent1 font-bold hover:underline"
-          >GitHub</a
-        >
+          ><img
+            class="object-contain pointer-events-none select-none"
+            src="assets/github-mark-white.png"
+            alt="GitHub"
+        /></a>
         <a
+          class="relative rounded-xl shadow-light bg-gradient-to-tl from-[#0a66c2] to-blue-400 w-12 aspect-square object-contain overflow-hidden block p-2 transition-all after:absolute after:rounded-xl after:top-0 after:left-0 after:block after:shadow-light after:w-full after:h-full after:transition-opacity active:after:opacity-0 hover:from-[#0a66c2] hover:via-[#0a66c2] hover:to-blue-400 hover:scale-105 active:scale-100 active:translate-y-1"
           href="https://linkedin.com/in/efeenescamci"
           target="_blank"
-          class="text-accent1 font-bold hover:underline"
-          >LinkedIn</a
-        >
+          ><img
+            class="object-contain pointer-events-none select-none"
+            src="assets/InBug-White-Inverse.png"
+            alt="LinkedIn"
+        /></a>
         <a
+          class="relative rounded-xl shadow-lg bg-gradient-to-tl from-theme-300 to-theme-900 w-12 aspect-square object-contain block p-3 transition-all after:absolute after:rounded-xl after:top-0 after:left-0 after:block after:shadow-light after:w-full after:h-full after:transition-opacity active:after:opacity-0 hover:from-theme-300 hover:via-theme-300 hover:to-theme-900 hover:scale-105 active:scale-100 active:translate-y-1"
           href="mailto:hello@efeenescamci.com"
-          class="text-accent1 font-bold hover:underline"
-          >Email</a
+          target="_blank"
         >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            class="stroke-contrast"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7.39999 6.32003L15.89 3.49003C19.7 2.22003 21.77 4.30003 20.51 8.11003L17.68 16.6C15.78 22.31 12.66 22.31 10.76 16.6L9.91999 14.08L7.39999 13.24C1.68999 11.34 1.68999 8.23003 7.39999 6.32003Z"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M10.11 13.6501L13.69 10.0601"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </a>
       </div>
     </div>
   </div>

@@ -5,7 +5,6 @@ import { MdNode } from '../../classes/markdown';
 import { MarkdownRendererHtmlComponent } from '../../components/markdown-renderer-html/markdown-renderer-html.component';
 import { SkeletonLoaderComponent } from '../../components/skeleton-loader/skeleton-loader.component';
 import { Meta } from '@angular/platform-browser';
-import { FooterComponent } from "../../components/footer/footer.component";
 import gsap from "gsap";
 
 @Component({
@@ -14,7 +13,6 @@ import gsap from "gsap";
     MarkdownEditorComponent,
     MarkdownRendererHtmlComponent,
     SkeletonLoaderComponent,
-    FooterComponent,
 ],
   templateUrl: './view-blog-page.component.html',
 })
