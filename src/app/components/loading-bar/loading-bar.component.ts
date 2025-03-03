@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import gsap from 'gsap';
 
@@ -11,7 +11,7 @@ import gsap from 'gsap';
   </div>
   `
 })
-export class LoadingBarComponent {
+export class LoadingBarComponent implements OnInit {
   @Input() set progress(v: number | undefined) { if (v === undefined) return; this.pProgress = v; this.progress$.next(null); }
   private pProgress!: number
   protected readonly progress$ = new ReplaySubject(1);

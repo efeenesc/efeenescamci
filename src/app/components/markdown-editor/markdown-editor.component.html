@@ -4,7 +4,7 @@
   ? 'pointer-events-none select-none opacity-50'
   : 'opacity-100 scale-100'"
 >
-  @if (this.showRenderer) {
+  @if (this.showRenderer()) {
   <div
     class="preview bg-theme-600 flex-1 justify-center overflow-auto flex p-5 flex-col transition-colors text-nowrap text-foreground"
   >
@@ -33,6 +33,7 @@
       (paste)="this.onPaste($event)"
       (keydown)="this.keyDownEvent($event)"
       (click)="this.clickEvent()"
+      tabindex="0"
       id="markdownArea"
       class="w-full flex flex-col h-max min-h-full flex-grow bg-transparent outline-none border-none resize-none text-wrap overflow-x-auto 
       justify-stretch items-stretch justify-items-stretch place-content-stretch"

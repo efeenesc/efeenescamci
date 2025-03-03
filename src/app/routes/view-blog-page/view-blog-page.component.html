@@ -27,7 +27,7 @@
       >
         <markdown-editor
           class="md-editor hidden overflow-hidden h-full w-full absolute top-0 left-0 right-0 bottom-0 z-10 opacity-0"
-          (result)="markdownChanged($event)"
+          (mdResult)="markdownChanged($event)"
           [showRenderer]="false"
         ></markdown-editor>
         @if (this.markdownNode) {

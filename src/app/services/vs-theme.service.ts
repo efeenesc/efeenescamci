@@ -22,8 +22,8 @@ export interface ThemeInfo {
 })
 export class VsThemeService {
   private dJSZip?: JSZip; // Dynamically imported JSZip
-  private dPlistParse?: (input: string | ArrayBuffer) => any; // Dynamically imported 'parse' method of the '@plist/parse' library
-  activeThemeVariantName: BehaviorSubject<string> = new BehaviorSubject('');
+  private dPlistParse?: (input: string | ArrayBuffer) => unknown; // Dynamically imported 'parse' method of the '@plist/parse' library
+  activeThemeVariantName = new BehaviorSubject<string>('');
 
   constructor(private _lss: LocalStorageService) {
     const currentVariant = this._lss.get('theme_variant');
@@ -46,7 +46,7 @@ export class VsThemeService {
    */
   getFilteredResults = async (
     requestedFilter: vst.VSFilterBody,
-    downloadIcons: iconDownloadConfig = 'small'
+    downloadIcons: iconDownloadConfig = 'none'
   ): Promise<vst.VSResultBody | null> => {
     const postBody = JSON.stringify(requestedFilter);
 
@@ -65,12 +65,11 @@ export class VsThemeService {
     const finalObj = (await postResult.json()) as vst.VSResultBody;
 
     if (downloadIcons !== 'none') {
-      finalObj.results.map((result) => {
-        result.extensions.map(
-          async (ext) =>
-            (ext.extensionIcon = await this.getIcon(ext, downloadIcons))
-        );
-      });
+      for (const result of finalObj.results) {
+        for (const ext of result.extensions) {
+          ext.extensionIcon = await this.getIcon(ext, downloadIcons)
+        }
+      }
     }
 
     finalObj.results[0].extensions = finalObj.results[0].extensions.filter(
@@ -343,7 +342,7 @@ export class VsThemeService {
     colorTheme: ThemeType
   ): Promise<ColorScheme> {
     if (typeof this.dPlistParse === 'undefined') {
-      this.dPlistParse = (await import('@plist/parse')) as any; // I'm not going to spend 5 years trying to get TypeScript to comply. 'any' to the rescue
+      this.dPlistParse = (await import('@plist/parse')) as never;
     }
 
     const pfile = this.dPlistParse!(filestr);

@@ -1,11 +1,11 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MarkdownEditorComponent } from '../../components/markdown-editor/markdown-editor.component';
 import { MdNode } from '../../classes/markdown';
 import { MarkdownRendererHtmlComponent } from '../../components/markdown-renderer-html/markdown-renderer-html.component';
 import { SkeletonLoaderComponent } from '../../components/skeleton-loader/skeleton-loader.component';
 import { Meta } from '@angular/platform-browser';
-import gsap from "gsap";
+import gsap from 'gsap';
 
 @Component({
   selector: 'view-blog-page',
@@ -13,7 +13,7 @@ import gsap from "gsap";
     MarkdownEditorComponent,
     MarkdownRendererHtmlComponent,
     SkeletonLoaderComponent,
-],
+  ],
   templateUrl: './view-blog-page.component.html',
 })
 export class ViewBlogPageComponent {
@@ -26,7 +26,8 @@ export class ViewBlogPageComponent {
       this.mdEditor.inputText(this.markdownText);
     }
   }
-  @ViewChild(MarkdownEditorComponent, { read: ElementRef }) mdEditorRef!: ElementRef;
+  @ViewChild(MarkdownEditorComponent, { read: ElementRef })
+  mdEditorRef!: ElementRef;
   mdEditor!: MarkdownEditorComponent;
 
   private _blogPost: FullBlog | null = null;
@@ -49,7 +50,7 @@ export class ViewBlogPageComponent {
     }
   }
 
-  private _editingEnabled: boolean = false;
+  private _editingEnabled = false;
   public get editingEnabled(): boolean {
     return this._editingEnabled;
   }
@@ -66,7 +67,8 @@ export class ViewBlogPageComponent {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private meta: Meta
+    private meta: Meta,
+    private ngZone: NgZone
   ) {
     this.route.data.subscribe((data) => {
       const blogPost = data['blogPost'] as FullBlog | null;
@@ -81,7 +83,10 @@ export class ViewBlogPageComponent {
   }
 
   updateMetaTags(blog: FullBlog) {
-    this.meta.updateTag({ property: 'og:title', content: blog.title + " - efeenescamci.com" });
+    this.meta.updateTag({
+      property: 'og:title',
+      content: blog.title + ' - efeenescamci.com',
+    });
     this.meta.updateTag({ property: 'og:url', content: this.router.url });
   }
 
@@ -98,17 +103,23 @@ export class ViewBlogPageComponent {
   }
 
   animateEditorAppear(visible: boolean) {
-    gsap.to(this.mdEditorRef.nativeElement, {
-      opacity: visible ? 1.0 : 0.0,
-      duration: 0.2,
-      onStart: () => {
-        if (visible)
-          (this.mdEditorRef.nativeElement as unknown as HTMLDivElement).style.display = "flex";
-      },
-      onComplete: () => {
-        if (!visible)
-          (this.mdEditorRef.nativeElement as unknown as HTMLDivElement).style.display = "hidden";
-      }
-    })
+    this.ngZone.runOutsideAngular(() => {
+      gsap.to(this.mdEditorRef.nativeElement, {
+        opacity: visible ? 1.0 : 0.0,
+        duration: 0.2,
+        onStart: () => {
+          if (visible)
+            (
+              this.mdEditorRef.nativeElement as unknown as HTMLDivElement
+            ).style.display = 'flex';
+        },
+        onComplete: () => {
+          if (!visible)
+            (
+              this.mdEditorRef.nativeElement as unknown as HTMLDivElement
+            ).style.display = 'hidden';
+        },
+      });
+    });
   }
 }

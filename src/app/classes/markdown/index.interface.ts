@@ -25,7 +25,7 @@ export type MdNodeType =
   | 'br'
   | 'document';
 
-export const typeMap: { [key: string]: MdNodeType } = {
+export const typeMap: Record<string, MdNodeType> = {
   '#': 'h1',
   '##': 'h2',
   '###': 'h3',

@@ -33,10 +33,10 @@ export class VSFilterBody {
 
 export class VSFilters {
   criteria: VSCriteria[] = [];
-  pageNumber: number = 1;
-  pageSize: number = 20;
-  sortBy: number = 0;
-  sortOrder: number = 0;
+  pageNumber = 1;
+  pageSize = 20;
+  sortBy = 0;
+  sortOrder = 0;
 }
 
 /*

@@ -45,8 +45,6 @@ export class ExperimentsComponent {
     }
   ]
 
-  constructor() {}
-
   setLoaded(id: number) {
     this.expCards[id].loaded = true;
   }

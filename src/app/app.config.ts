@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, provideExperimentalZonelessChangeDetection } from '@angular/core';
 import {
   provideRouter,
   withInMemoryScrolling,
@@ -31,5 +31,6 @@ export const appConfig: ApplicationConfig = {
     FormControl,
     imgConfig,
     provideHttpClient(withFetch()),
+    provideExperimentalZonelessChangeDetection(),
   ],
 };

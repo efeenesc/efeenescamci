@@ -1,4 +1,4 @@
-@if (this.drawerOpened) {
+@if (this.drawerOpened()) {
 <drawer-component (closed)="this.drawerClosed()">
   <vs-menu></vs-menu>
 </drawer-component>
@@ -40,7 +40,7 @@
       #main
     >
       <router-outlet (activate)="this.routerActivated()"></router-outlet>
-      @if (this.showFooter) {
+      @if (this.showFooter()) {
         <footer class="w-full font-inter"></footer>
       }
     </main>

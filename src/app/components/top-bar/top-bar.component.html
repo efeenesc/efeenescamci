@@ -3,7 +3,7 @@
   id="topbar"
   #topbar
   correct-overflow
-  [pad-by]="14"
+  [padBy]="14"
   class="w-full px-1 my-1 h-[10vh] flex mt-2 text-inverse left-1/2 ml-[-50%] fixed justify-center top-0 z-20"
 >
   <div class="w-full h-full flex sm:w-4/5 lg:w-3/5 xl:w-[40vw]">
@@ -45,9 +45,9 @@
 
     <vs-search
       class="search w-fit h-full flex flex-row justify-self-end drop-shadow-xl duration-75 transition-all active:translate-y-1"
-      [internalStyle]="this.themeBarStyle"
-      [animationSeekAt]="this.topbarScrollProgress"
-      (click)="this.emitThemeBarClickedEvent()"
+      [internalStyle]="this.themeBarStyle()"
+      [animationSeekAt]="this.topbarScrollProgress()"
+      (clicked)="this.emitThemeBarClickedEvent()"
     />
   </div>
 </div>

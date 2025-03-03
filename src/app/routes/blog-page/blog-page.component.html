@@ -13,6 +13,8 @@
         <div
           class="aspect-square text-xl px-2 rounded-md cursor-pointer transition-all hover:brightness-105"
           [class]="page.current ? 'bg-accent1' : 'bg-theme-300'"
+          tabindex="0"
+          (keydown)="this.pageNumberClicked(page)"
           (click)="this.pageNumberClicked(page)"
         >
           {{ page.pageNumber + 1 }}
@@ -24,7 +26,9 @@
     @if (this.blogs) { @for (b of this.blogs; track b.id) {
     <div
       class="flex flex-col gap-2 p-2 lg:p-6 w-full bg-theme-300 rounded-[1rem] shadow-lg cursor-pointer outline outline-1 outline-border1"
-      (click)="this.blogCardClicked($event, b)"
+      tabindex="0"
+      (keydown)="this.blogCardClicked(b)"
+      (click)="this.blogCardClicked(b)"
     >
       <div class="text-foreground text-lg lg:text-2xl font-bold">
         {{ b.title }}

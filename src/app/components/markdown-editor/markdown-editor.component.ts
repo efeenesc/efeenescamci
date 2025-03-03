@@ -1,11 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Component,
   ElementRef,
-  Output,
-  EventEmitter,
   ViewChild,
-  Input,
-  ViewEncapsulation,
+  ViewEncapsulation, OnInit,
+  input,
+  output,
 } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, Subject } from 'rxjs';
@@ -20,7 +20,7 @@ import { MarkdownRendererComponent } from '../markdown-renderer/markdown-rendere
   templateUrl: './markdown-editor.component.html',
   styleUrl: './markdown-editor.component.css',
 })
-export class MarkdownEditorComponent {
+export class MarkdownEditorComponent implements OnInit {
   @ViewChild('markdownArea') set content(content: ElementRef) {
     this.textarea = content.nativeElement as HTMLTextAreaElement;
     setTimeout(() => {
@@ -28,24 +28,24 @@ export class MarkdownEditorComponent {
       this.processMd(this.getText());
     }, 0);
   }
-  @Input() showRenderer: boolean = true;
-  @Output() result: EventEmitter<MdNode> = new EventEmitter();
+  showRenderer = input(true);
+  mdResult = output<MdNode>();
 
-  textChanged: Subject<null> = new Subject();
+  textChanged = new Subject<null>();
   textarea!: HTMLTextAreaElement;
   focusedLine?: number;
   lineCount: number[] = [0];
-  selectedLineNumber: number = 0;
+  selectedLineNumber = 0;
   selectedLine: HTMLElement | null = null;
   selectedLineDiv: HTMLElement | null = null;
 
   results?: vst.VSExtension;
   markdownControl!: FormControl;
-  debounce: number = 300;
-  htmlElements: string = '';
+  debounce = 300;
+  htmlElements = '';
   mdTree?: MdNode;
 
-  animationPlaying: boolean = false;
+  animationPlaying = false;
 
   constructor() {
     if (typeof Worker !== 'undefined') {
@@ -54,9 +54,9 @@ export class MarkdownEditorComponent {
         new URL('../../workers/markdown-runner.worker.ts', import.meta.url)
       );
       worker.onmessage = ({ data }) => {
-        if (this.showRenderer) this.mdTree = data;
+        if (this.showRenderer()) this.mdTree = data;
 
-        this.result.emit(data);
+        this.mdResult.emit(data);
       };
 
       this.textChanged.pipe(debounceTime(this.debounce)).subscribe(() => {
@@ -96,7 +96,7 @@ export class MarkdownEditorComponent {
     this.animationPlaying = false;
   }
 
-  inputText(newText: string, changeMd: boolean = true) {
+  inputText(newText: string, changeMd = true) {
     const splitText = newText.split('\n');
     const html = splitText
       .map((line) =>
@@ -124,7 +124,7 @@ export class MarkdownEditorComponent {
   }
 
   getText() {
-    let finalText: string = '';
+    let finalText = '';
 
     this.textarea.childNodes.forEach((node, idx) => {
       (node as HTMLElement).id = idx.toString();
@@ -160,7 +160,7 @@ export class MarkdownEditorComponent {
 
     event.preventDefault();
     event.stopPropagation();
-    (event.target as any).blur();
+    (event.target as HTMLDivElement).blur();
   }
 
   /* 
@@ -257,9 +257,9 @@ export class MarkdownEditorComponent {
 
   processMd(md: string) {
     const mdTree = ConvertToHtmlTree(md);
-    if (this.showRenderer) this.mdTree = mdTree;
+    if (this.showRenderer()) this.mdTree = mdTree;
 
-    this.result.emit(mdTree);
+    this.mdResult.emit(mdTree);
   }
 
   private delay(ms: number) {

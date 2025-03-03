@@ -18,18 +18,18 @@
     </div>
     <button
       (click)="
-        this.viewingVariants ? this.hideVariantPanel() : this.showVariantPanel()
+        this.viewingVariants() ? this.hideVariantPanel() : this.showVariantPanel()
       "
       class="flex gap-2 items-center justify-center flex-grow h-12 transition-color border-[1px] border-border1 rounded-lg text-sm lg:text-base font-bold transition-all hover:bg-opacity-80 active:bg-opacity-80 active:scale-[98%]"
       [class]="
-        this.viewingVariants
+        this.viewingVariants()
           ? 'bg-system-700 text-contrast'
           : 'bg-theme-300 text-foreground'
       "
     >
-      @if (!this.viewingVariants) { Change variant of current theme
+      @if (!this.viewingVariants()) { Change variant of current theme
       <div class="rounded-lg p-1 bg-theme-600 text-accent1">
-        {{ this.variants.length }} total
+        {{ this.variants().length }} total
       </div>
       } @else { Go back to marketplace }
     </button>
@@ -39,13 +39,13 @@
     id="content"
     class="transition-color pb-4 flex-grow flex h-full relative justify-center overflow-y-scroll lg:pr-3 mb-3"
   >
-    @if (this.viewingVariants) {
+    @if (this.viewingVariants()) {
     <div class="flex flex-col w-full h-fit rounded-2xl lg:mt-4 overflow-hidden">
-      @for (ext of variants; track ext.name) {
+      @for (ext of this.variants(); track ext.name) {
       <button
         class="flex w-full relative overflow-hidden transition-colors cursor-pointer px-4 py-2 outline outline-border1 outline-1 text-start flex-wrap gap-2"
         [class]="
-          ext.name === this.currentVariantName
+          ext.name === this.currentVariantName()
             ? 'bg-accent1 hover:brightness-105 active:brightness-110 text-theme-900'
             : 'bg-system-700 hover:bg-system-900'
         "
@@ -57,7 +57,7 @@
           <span
             class="rounded-lg px-4 w-fit"
             [class]="
-              ext.name === this.currentVariantName
+              ext.name === this.currentVariantName()
                 ? 'bg-theme-900 text-contrast'
                 : 'bg-accent1 text-theme-900'
             "
@@ -113,14 +113,14 @@
       id="contentbody"
       class="grid grid-flow-row-dense h-fit justify-between rounded-lg grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 lg:pt-4 flex-grow gap-2"
     >
-      @if (searching || searchResults === undefined) { @for (i of
+      @if (this.searching() || this.searchResults() === null) { @for (i of
       [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]; track i) {
       <div
         class="w-full h-full bg-system-700 rounded-lg border-[1px] border-border1 overflow-hidden"
       >
         <skeleton-loader class="w-full h-full aspect-square"></skeleton-loader>
       </div>
-      } } @else { @for (ext of searchResults!.results[0].extensions; track
+      } } @else { @for (ext of searchResults()!.results[0].extensions; track
       ext.extensionId) {
       <vs-card
         class="w-full lg:w-full h-fit aspect-square"

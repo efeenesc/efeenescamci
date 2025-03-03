@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-for-of */
 import { MdWrapChar } from "./index.interface";
 
 export function lex(mdstr: string): string[][] {
@@ -34,7 +35,7 @@ function processToken(token: string): string[] {
   const buffer: string[] = [];
   let isSpecial = false;
   let specialRepeat = 0;
-  let lastChar: string = "";
+  let lastChar = "";
 
   for (let i = 0; i < token.length; i++) {
       const char = token[i];
@@ -110,9 +111,9 @@ function handleNonSpecialCharAfterSpecial(
 function flushBuffer(
   newTokens: string[],
   buffer: string[],
-  isSpecial: boolean = false,
-  lastChar: string = "",
-  specialRepeat: number = 0
+  isSpecial = false,
+  lastChar = "",
+  specialRepeat = 0
 ) {
   if (buffer.length > 0) {
       newTokens.push(buffer.join(""));
