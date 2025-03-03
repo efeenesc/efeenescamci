@@ -80,8 +80,8 @@ export interface VSExtension {
   deploymentType: number;
 
   // extensionIcon is not included in the response from VS. The icon is downloaded via a GET and the Base64 string is saved here.
-  // For convenience extensionIcon may be set to a boolean false value to indicate that there is no extensionIcon
-  extensionIcon?: string | boolean;
+  // extensionIcon may be set to null to indicate that there is no extensionIcon
+  extensionIcon?: string | null;
 }
 
 export interface VSExtensionPublisherInfo {

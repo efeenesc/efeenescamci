@@ -39,6 +39,7 @@ module.exports = {
         "2xl-alt": "0 0 50px 6px rgb(0 0 0 / 0.25)",
         "deep": "0px 22px 70px 4px rgba(0, 0, 0, 0.56)",
         "light": "rgba(255, 255, 255, 0.3) 0px 1px 1px inset, rgba(0, 0, 0, 0.2) 0px 7px 13px -3px, rgba(0, 0, 0, 0.1) 0px -3px 0px inset",
+        "light-inset": "rgba(255, 255, 255, 0.3) 0px 1px 1px inset, rgba(0, 0, 0, 0.1) 0px -3px 0px inset",
       },
     },
   },

@@ -284,12 +284,12 @@ export class VsThemeService {
    *
    * @param ext - The Visual Studio extension containing the icon.
    * @param iconSizePreference - Preferred icon size ('small' or 'large').
-   * @returns A promise resolving to a Base64 string, undefined, or false if the icon is not found.
+   * @returns A promise resolving to a Base64 string, or null if the icon is not found.
    */
   async getIcon(
     ext: vst.VSExtension,
     iconSizePreference: 'small' | 'large' = 'small'
-  ): Promise<string | undefined | boolean> {
+  ): Promise<string | null> {
     let extUri;
 
     if (iconSizePreference === 'small') {
@@ -306,15 +306,14 @@ export class VsThemeService {
       )?.source;
     }
 
-    if (!extUri) return false;
+    if (!extUri) return null;
 
     const res = await fetch(extUri);
     const blob = await res.blob();
     const base64 = await this.blobToBase64(blob);
 
     if (typeof base64 === 'string') return base64;
-
-    return false;
+    return null;
   }
 
   /**

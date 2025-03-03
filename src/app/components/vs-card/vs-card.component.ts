@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { VSExtension } from '../../types/vs-types';
 import { SkeletonLoaderComponent } from '../skeleton-loader/skeleton-loader.component';
-import { ArrowUpRightFromSquareComponent } from '../../icons/arrow-up-right-from-square/arrow-up-right-from-square.component';
+import { ArrowUpRightComponent } from '../../icons/arrow-up-right/arrow-up-right.component';
 import { VsThemeService } from '../../services/vs-theme.service';
 import beigeIcon from '../../icons/beige-theme-icon/beigeiconb64';
 import gsap from 'gsap';
@@ -41,7 +41,7 @@ export class VsCardStyle {
 
 @Component({
   selector: 'vs-card',
-  imports: [SkeletonLoaderComponent, ArrowUpRightFromSquareComponent],
+  imports: [SkeletonLoaderComponent, ArrowUpRightComponent],
   templateUrl: './vs-card.component.html',
 })
 export class VsCardComponent implements OnDestroy {
@@ -78,6 +78,7 @@ export class VsCardComponent implements OnDestroy {
   cardInfo = input.required<VSExtension>();
   cardType = input<'small' | 'large'>('large');
   cardStyle = input<VsCardStyle>();
+  cardIcon = signal<string | undefined | null>(undefined);
 
   abortController: AbortController | null = null;
 
@@ -85,13 +86,13 @@ export class VsCardComponent implements OnDestroy {
   bg300 = signal<string>('bg-system-700');
   fgText = signal<string>('text-contrast');
   fgAccent = signal<string>(
-    'text-neutral-400 text-bold border-neutral-400 [&_svg]:fill-neutral-400'
+    'text-neutral-400 text-bold border-neutral-400 [&_svg]:stroke-neutral-400'
   );
   currentProgress = 0;
   downloadProgress = 0;
   downloadProgressObj = { current: 0 };
 
-  constructor(private vs: VsThemeService, private ngZone: NgZone) {
+  constructor(private vs: VsThemeService, private ngZone: NgZone, private vsSvc: VsThemeService) {
     effect(() => {
       if (!this.cardStyle()) return;
       this.bg900.set(this.cardStyle()!.bg900);
@@ -99,6 +100,19 @@ export class VsCardComponent implements OnDestroy {
       this.fgText.set(this.cardStyle()!.fgText);
       this.fgAccent.set(this.cardStyle()!.fgAccent);
     });
+
+    effect(() => {
+      if (this.cardInfo() && this.cardInfo().versions)
+        this.getIcon();
+    })
+  }
+
+  async getIcon() {
+    if (typeof this.cardInfo().extensionIcon === 'string') {
+      this.cardIcon.set(this.cardInfo().extensionIcon as string);
+      return;
+    };
+    this.cardIcon.set(await this.vsSvc.getIcon(this.cardInfo(), this.cardType()) ?? null);
   }
 
   themeSelected(event: { target: EventTarget | null }) {

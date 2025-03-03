@@ -37,17 +37,17 @@
 
   <div
     id="content"
-    class="transition-color pb-4 flex-grow flex h-full relative justify-center overflow-y-scroll lg:pr-3 mb-3"
+    class="transition-color pb-4 flex-grow flex h-full relative w-full overflow-y-scroll justify-center lg:pr-3 mb-3 lg:pt-3"
   >
     @if (this.viewingVariants()) {
-    <div class="flex flex-col w-full h-fit rounded-2xl lg:mt-4 overflow-hidden">
+    <div class="flex flex-col w-full h-fit gap-2">
       @for (ext of this.variants(); track ext.name) {
       <button
-        class="flex w-full relative overflow-hidden transition-colors cursor-pointer px-4 py-2 outline outline-border1 outline-1 text-start flex-wrap gap-2"
+        class="grid grid-cols-[55%_45%] md:grid-cols-[50%_50%] lg:grid-cols-[45%_55%] xl:grid-cols-[40%_60%] w-full cursor-pointer px-4 py-2 text-start flex-wrap gap-2 shadow-light-inset rounded-xl active:shadow-none active:scale-[99%] active:translate-y-1 transition-all"
         [class]="
           ext.name === this.currentVariantName()
             ? 'bg-accent1 hover:brightness-105 active:brightness-110 text-theme-900'
-            : 'bg-system-700 hover:bg-system-900'
+            : 'bg-system-700 hover:bg-system-600'
         "
         (click)="this.changeVariant(ext.name)"
       >
@@ -55,7 +55,7 @@
           <span class="font-semibold">{{ ext.name }}</span>
 
           <span
-            class="rounded-lg px-4 w-fit"
+            class="rounded-lg mt-1 py-1 px-4 w-fit"
             [class]="
               ext.name === this.currentVariantName()
                 ? 'bg-theme-900 text-contrast'
@@ -65,40 +65,33 @@
           >
         </div>
 
-        <div class="absolute -top-4 right-0 flex w-1/2 h-24">
+        <div class="flex rounded-lg overflow-hidden h-24 outline outline-1 outline-system-300">
           <div
             class="w-full h-full block -mr-7"
-            style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)"
             [style.background]="ext.accent1"
           ></div>
           <div
             class="w-full h-full block -mr-7"
-            style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)"
             [style.background]="ext.accent2"
           ></div>
           <div
             class="w-full h-full block -mr-7"
-            style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)"
             [style.background]="ext.theme300"
           ></div>
           <div
             class="w-full h-full block -mr-7"
-            style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)"
             [style.background]="ext.theme600"
           ></div>
           <div
             class="w-full h-full block -mr-7"
-            style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)"
             [style.background]="ext.theme900"
           ></div>
           <div
             class="w-full h-full block -mr-7"
-            style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)"
             [style.background]="ext.system"
           ></div>
           <div
             class="w-full h-full block -mr-7"
-            style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)"
             [style.background]="ext.text"
           ></div>
         </div>
@@ -111,12 +104,12 @@
     } @else {
     <div
       id="contentbody"
-      class="grid grid-flow-row-dense h-fit justify-between rounded-lg grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 lg:pt-4 flex-grow gap-2"
+      class="grid grid-flow-row-dense h-fit justify-between rounded-lg grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 flex-grow gap-2"
     >
       @if (this.searching() || this.searchResults() === null) { @for (i of
       [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]; track i) {
       <div
-        class="w-full h-full bg-system-700 rounded-lg border-[1px] border-border1 overflow-hidden"
+        class="w-full h-full bg-system-700 rounded-3xl overflow-hidden"
       >
         <skeleton-loader class="w-full h-full aspect-square"></skeleton-loader>
       </div>
@@ -125,7 +118,7 @@
       <vs-card
         class="w-full lg:w-full h-fit aspect-square"
         [cardInfo]="ext"
-        [cardType]="'large'"
+        [cardType]="'small'"
       ></vs-card>
       } }
     </div>

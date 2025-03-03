@@ -17,7 +17,7 @@
   <div class="grid grid-cols-2 w-full flex-wrap gap-2 z-0 sm:grid-cols-3">
     @for (ext of this.placeholders(); track ext().extensionId) {
       <vs-card
-        class="shadow-lg relative rounded-xl"
+        class="shadow-lg relative rounded-3xl"
         [cardInfo]="ext()"
         [cardStyle]="this.vsCardTheme"
       ></vs-card>
