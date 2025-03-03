@@ -9,10 +9,13 @@
   class="min-h-screen font-inter bg-theme-900 bg-noise bg-blend-soft-light overflow-x-hidden relative"
   correct-overflow
 >
+@if (showUI()) {
   <top-bar
-    [themeBarStyle]="this.themeBarStyle"
-    (themeButtonClicked)="this.themeButtonClicked()"
-  ></top-bar>
+  [themeBarStyle]="this.themeBarStyle"
+  (themeButtonClicked)="this.themeButtonClicked()"
+></top-bar>
+}
+  
   <div
     id="contentarea"
     #contentarea
@@ -40,7 +43,7 @@
       #main
     >
       <router-outlet (activate)="this.routerActivated()"></router-outlet>
-      @if (this.showFooter()) {
+      @if (this.showUI()) {
         <footer class="w-full font-inter"></footer>
       }
     </main>

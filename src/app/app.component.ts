@@ -42,7 +42,7 @@ export class AppComponent implements OnInit, AfterContentInit {
   elTranslatePos: { current: number } = { current: 0 };
   themeBarStyle = '';
   drawerOpened = signal<boolean>(false);
-  showFooter = signal<boolean>(false);
+  showUI = signal<boolean>(false);
   // mainResizeObserver: ResizeObserver = new ResizeObserver((entries) => this.onMainResized(entries));
   // private pageScrollTween?: gsap.core.Tween;
 
@@ -101,7 +101,7 @@ export class AppComponent implements OnInit, AfterContentInit {
   }
 
   routerActivated() {
-    this.showFooter.set(true);
+    this.showUI.set(true);
   }
 
   onMainResized(entries: ResizeObserverEntry[]) {
