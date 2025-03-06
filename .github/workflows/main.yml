@@ -19,11 +19,14 @@ jobs:
       with:
         node-version: 'latest'
 
+    - name: Install yarn
+      run: npm install --global yarn
+
     - name: Install dependencies
-      run: npm install
+      run: yarn install
 
     - name: Build project
-      run: npm run build
+      run: yarn run build
 
     - name: Copy to /var/www/dev.efeenescamci.com
       run: yes | cp -rf ./dist/efeenescamci/browser/* /var/www/dev.efeenescamci.com/
