@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { BackendService } from '../../../../services/backend.service';
 import { Router } from '@angular/router';
 import { SkeletonLoaderComponent } from "../../../../components/skeleton-loader/skeleton-loader.component";
@@ -16,7 +16,7 @@ import { SkeletonLoaderComponent } from "../../../../components/skeleton-loader/
   `,
 })
 export class BlogSectionComponent implements OnInit {
-  blogs: BlogRoute[] = [];
+  blogs = signal<BlogRoute[]>([]);
   errorMessage?: string;
 
   constructor(private backend: BackendService, private router: Router) {}
@@ -24,7 +24,7 @@ export class BlogSectionComponent implements OnInit {
   ngOnInit() {
     this.backend.getNewBlogPostBriefs().subscribe({
       next: (data: BlogQueryResult) => {
-        this.blogs = data.briefs;
+        this.blogs.set(data.briefs);
       },
       error: (error: unknown) => {
         this.errorMessage = 'Error fetching new blog post briefs';

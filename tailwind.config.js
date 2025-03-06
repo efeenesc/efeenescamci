@@ -1,10 +1,12 @@
-/* eslint-disable no-undef */
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{html,ts}",],
   darkMode: ['selector', '[data-theme="dark"]'],
   theme: {
     extend: {
+      screens: {
+        "xs": "450px"
+      },
       colors: {
         "theme-900": "var(--theme-900)",
         "theme-600": "var(--theme-600)",
@@ -16,6 +18,7 @@ module.exports = {
         "contrast": "var(--contrast)",
         "inverse": "var(--inverse)",
         "highlight": "var(--highlight)",
+        "highlight-solid": "var(--highlight-solid)",
         "system": "var(--system)",
         "system-900": "var(--system-900)",
         "system-700": "var(--system-700)",
@@ -26,6 +29,7 @@ module.exports = {
       fontFamily: {
         "fantasque": "Fantasque Sans Mono, monospace",
         "inter": "Inter Tight, monospace",
+        "inter-tight": "Inter Tight, monospace"
       },
       backgroundImage: {
         "noise": "url('assets/noise2.png')"
@@ -40,6 +44,7 @@ module.exports = {
         "deep": "0px 22px 70px 4px rgba(0, 0, 0, 0.56)",
         "light": "rgba(255, 255, 255, 0.3) 0px 1px 1px inset, rgba(0, 0, 0, 0.2) 0px 7px 13px -3px, rgba(0, 0, 0, 0.1) 0px -3px 0px inset",
         "light-inset": "rgba(255, 255, 255, 0.3) 0px 1px 1px inset, rgba(0, 0, 0, 0.1) 0px -3px 0px inset",
+        "dark-inset": "rgba(0, 0, 0, 0.1) 0px 3px 3px inset"
       },
     },
   },

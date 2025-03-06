@@ -1,23 +1,22 @@
 <div
   defer
   (deferLoad)="this.beginLoading()"
-  class="w-full py-2 min-h-full flex flex-grow flex-col items-center justify-center relative"
+  class="relative flex min-h-full w-full grow flex-col items-center justify-center py-2"
 >
-  <h1 class="text-2xl md:text-3xl lg:text-4xl mb-4 text-accent1 font-extrabold self-start">Themes</h1>
-  <div class="w-full flex flex-col gap-5 text-lg lg:text-xl mb-4">
-    <h4>
+  <h1 class="mb-4 self-start text-2xl font-extrabold text-accent1 md:text-3xl lg:text-4xl">Themes</h1>
+  <div class="mb-4 w-full flex-col text-base text-contrast lg:text-lg">
+    <p class="mb-4">
       I couldn't decide on a theme or a color scheme. Choose one yourself from the 
       <b class="text-accent2">Visual Studio marketplace!</b>
-    </h4>
-    <h4>
+    </p>
+    <p>
       Click the theme button on the top right corner to search for your favorite
       Visual Studio Code theme, or pick from one of my favorites:
-    </h4>
+    </p>
   </div>
-  <div class="grid grid-cols-2 w-full flex-wrap gap-2 z-0 sm:grid-cols-3">
+  <div class="z-0 grid w-full grid-cols-2 flex-wrap gap-2 sm:grid-cols-3">
     @for (ext of this.placeholders(); track ext().extensionId) {
       <vs-card
-        class="shadow-lg relative rounded-3xl"
         [cardInfo]="ext()"
         [cardStyle]="this.vsCardTheme"
       ></vs-card>

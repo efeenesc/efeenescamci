@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   template: `<svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 762 328"
-    class="w-full h-auto aspect-w-762 aspect-h-328"
+    class="aspect-w-762 aspect-h-328 h-auto w-full"
   >
   <path d="M305.3,196.4c1.6,0.2,3.3-0.2,7.1-1.7c3.8-1.5,6.3-2.8,12.1-6c5.7-3.1,9.5-5.2,16.5-9.7c7-4.5,11.1-7.4,18.4-13
 	c7.4-5.6,11.5-8.8,18.4-14.8c7-6,10.7-9.3,16.5-15c5.8-5.8,8.6-8.7,12.5-13.7c4-5,5.7-7.3,7.3-11.5c1.6-4.2,2.1-6.4,0.8-9.3

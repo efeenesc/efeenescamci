@@ -1,4 +1,4 @@
-import { Component, input, NgZone, OnDestroy, signal, ViewChild, OnInit, effect, output } from '@angular/core';
+import { Component, input, OnDestroy, signal, ViewChild, OnInit, effect, output } from '@angular/core';
 import { LocalStorageService } from '../../services/local-storage.service';
 import gsap from 'gsap';
 import { Subscription } from 'rxjs';
@@ -21,7 +21,7 @@ export class VsSearchComponent implements OnDestroy, OnInit {
 
   valueChangesSubscription!: Subscription;
 
-  constructor(private lss: LocalStorageService, private ngZone: NgZone) {
+  constructor(private lss: LocalStorageService) {
     effect(() => {
       this.playScrollAnimation(this.animationSeekAt());
     })
@@ -74,7 +74,6 @@ export class VsSearchComponent implements OnDestroy, OnInit {
   playScrollAnimation(progress: number) {
     const pad = progress * 8 + 'px';
 
-    this.ngZone.runOutsideAngular(() => {
     gsap.to('#vs-search-main', {
       paddingLeft: pad,
       paddingTop: pad,
@@ -96,7 +95,6 @@ export class VsSearchComponent implements OnDestroy, OnInit {
       duration: 0.01,
       ease: 'none',
     });
-  })
   }
 
   ngOnDestroy(): void {

@@ -3,7 +3,7 @@ import * as vst from '../types/vs-types';
 import stripJsonComments from 'strip-json-comments';
 import type JSZip from 'jszip';
 import { ScopeFinder } from '../classes/scopefinder';
-import { ColorScheme, ThemeType } from '../classes/colorscheme';
+import { ColorScheme, ThemeColors, ThemeType } from '../classes/colorscheme';
 import { LocalStorageService } from './local-storage.service';
 import { ThemeMetadata, ThemePackage } from '../types/vs/manifest';
 import { BehaviorSubject } from 'rxjs';
@@ -164,8 +164,12 @@ export class VsThemeService {
       'string'
     );
     const pkg_json = JSON.parse(packagemanifest) as ThemePackage;
-    const pkg_logo_path: string = pkg_json.icon;
+    let pkg_logo_path = pkg_json.icon;
     const pkg_themes = pkg_json.contributes.themes;
+
+    if (pkg_logo_path.charAt(0) === '/') { 
+      pkg_logo_path = pkg_logo_path.substring(1);
+    }
 
     const themeName = pkg_json.displayName;
     const themeAuthor = pkg_json.publisher;
@@ -283,7 +287,7 @@ export class VsThemeService {
    * Fetches an extension's icon based on the preferred icon size and converts it to a Base64 string.
    *
    * @param ext - The Visual Studio extension containing the icon.
-   * @param iconSizePreference - Preferred icon size ('small' or 'large').
+   * @param iconSizePreference - Preferred icon size ('small' or 'large'). Defaults to small
    * @returns A promise resolving to a Base64 string, or null if the icon is not found.
    */
   async getIcon(
@@ -333,37 +337,38 @@ export class VsThemeService {
    * Reads and parses a Plist file, extracting color scheme details from it.
    *
    * @param filestr - The content of the Plist file as a string.
-   * @param colorTheme - The type of color theme ('dark' or 'light').
+   * @param themeType - The type of color theme ('dark' or 'light').
    * @returns A ColorScheme object with extracted color details.
    */
   private async readPlistFile(
     filestr: string,
-    colorTheme: ThemeType
+    themeType: ThemeType
   ): Promise<ColorScheme> {
     if (typeof this.dPlistParse === 'undefined') {
-      this.dPlistParse = (await import('@plist/parse')) as never;
+      this.dPlistParse = (await import('@plist/parse') as any).parse;
     }
 
     const pfile = this.dPlistParse!(filestr);
 
     const sf = new ScopeFinder('plist', pfile);
-    const cs = new ColorScheme(colorTheme);
+    const tc: ThemeColors = {};
 
-    cs.theme900 = sf.GetForeground('background')!;
-    cs.theme600 = sf.GetForeground('editor.background')!;
-    cs.theme300 = sf.GetForeground('input.background') || cs.theme600;
-    cs.text =
-      sf.GetForeground('foreground')! ||
-      sf.GetForeground('constant.other')! ||
-      sf.GetForeground('variable.other.constant')! ||
-      sf.GetForeground('constant.other.color')! ||
-      sf.GetForeground('constant')!;
-    cs.accent1 = sf.GetForeground('constant.language')!;
-    cs.accent2 = sf.GetForeground('variable.parameter')!;
-    cs.highlight = sf.GetForeground('lineHighlight')!;
+    tc.theme900 = sf.GetForeground('background');
+    tc.theme600 = sf.GetForeground('editor.background');
+    tc.theme300 = sf.GetForeground('input.background');
+    tc.text =
+      sf.GetForeground('foreground') ||
+      sf.GetForeground('constant.other') ||
+      sf.GetForeground('variable.other.constant') ||
+      sf.GetForeground('constant.other.color') ||
+      sf.GetForeground('constant');
+    tc.accent1 = sf.GetForeground('constant.language') ?? sf.GetForeground('string');
+    tc.accent2 = sf.GetForeground('constant.numeric');
+    tc.highlight = sf.GetForeground('lineHighlight');
+    tc.border1 = sf.GetForeground('editor.border');
 
-    const b1 = sf.GetForeground('editor.border');
-    if (b1) cs.border1 = b1;
+    const cs = new ColorScheme(themeType);
+    cs.assignColorsSafe(tc);
 
     return cs;
   }
@@ -384,22 +389,23 @@ export class VsThemeService {
     const tokenc = theme_json['tokenColors'];
 
     const sf = new ScopeFinder('json', tokenc);
+    const tc: ThemeColors = {};
+
+    tc.theme900 = themec['sideBar.background'];
+    tc.theme600 = themec['editor.background'];
+    tc.theme300 = themec['input.background'];
+    tc.text =
+      sf.GetForeground('constant.other') ||
+      sf.GetForeground('variable.other.constant') ||
+      sf.GetForeground('constant.other.color') ||
+      sf.GetForeground('constant');
+    tc.accent1 = sf.GetForeground('string');
+    tc.accent2 = sf.GetForeground('variable.parameter');
+    tc.highlight = themec['editor.lineHighlightBackground'];
+    tc.border1 = sf.GetForeground('editor.border');
+
     const cs = new ColorScheme(colorTheme);
-
-    cs.theme900 = themec['sideBar.background'];
-    cs.theme600 = themec['editor.background'];
-    cs.theme300 = themec['input.background'] || cs.theme300;
-    cs.text =
-      sf.GetForeground('constant.other')! ||
-      sf.GetForeground('variable.other.constant')! ||
-      sf.GetForeground('constant.other.color')! ||
-      sf.GetForeground('constant')!;
-    cs.accent1 = sf.GetForeground('string')!;
-    cs.accent2 = sf.GetForeground('variable.parameter')!;
-    cs.highlight = themec['editor.lineHighlightBackground']!;
-
-    const b1 = sf.GetForeground('editor.border');
-    if (b1) cs.border1 = b1;
+    cs.assignColorsSafe(tc);
 
     return cs;
   }
@@ -427,6 +433,7 @@ export class VsThemeService {
     root.style.setProperty('--inverse', cs.inverse);
 
     root.style.setProperty('--highlight', cs.highlight);
+    root.style.setProperty('--highlight-solid', cs.highlight_solid);
     root.style.setProperty(
       '--system',
       `color-mix(in srgb, ${cs.theme900} 50%, ${cs.system} 50%)`
@@ -452,22 +459,23 @@ export class VsThemeService {
     }
     
     const colorSchemes: ColorScheme[] = [
-      {
+      Object.assign(new ColorScheme('light'), {
         name: 'Beige Light',
         theme900: '#ded8c4',
-        theme600: '#D3CEB6',
-        theme300: '#c7c4a8',
+        theme600: '#e5dfca',
+        theme300: '#eee8d2',
         text: '#3d3929',
         accent1: '#ad8b63',
         accent2: '#4b4848',
         border1: '#747474',
         contrast: '#000000',
-        highlight: '#f3c092',
+        highlight: '#f3c0927c',
+        highlight_solid: '#f3c092',
         theme: 'light',
         inverse: '#ffffff',
         system: '#1c1c1e',
-      },
-      {
+      }),
+      Object.assign(new ColorScheme('dark'), {
         name: 'Beige Dark',
         theme900: '#2d2c29',
         theme600: '#403F3A',
@@ -477,12 +485,13 @@ export class VsThemeService {
         accent2: '#594a9b',
         border1: '#414141',
         contrast: '#ffffff',
-        highlight: '#a68364',
+        highlight: '#735a457c',
+        highlight_solid: '#735a45',
         theme: 'dark',
         inverse: '#000000',
         system: '#0d0d0d',
-      },
-      {
+      }),
+      Object.assign(new ColorScheme('dark'), {
         name: 'Beige Inverted',
         theme900: '#20263a',
         theme600: '#373a56',
@@ -492,11 +501,12 @@ export class VsThemeService {
         accent2: '#b3b6b6',
         border1: '#8a8a8a',
         contrast: '#ffffff',
-        highlight: '#0d3e6c',
+        highlight: '#0d3e6c7c',
+        highlight_solid: '#0d3e6c',
         theme: 'dark',
         inverse: '#000000',
         system: '#0d0d0d',
-      },
+      }),
     ];
 
     const newTheme = colorSchemes.find((cs) => cs.theme === theme)!;

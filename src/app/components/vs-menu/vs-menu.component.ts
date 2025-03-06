@@ -52,6 +52,7 @@ import { LocalStorageService } from '../../services/local-storage.service';
 export class VsMenuComponent implements OnDestroy, OnInit {
   @ViewChild('themebtn') themeBtn!: ElementRef<HTMLElement>;
   @ViewChildren(VsCardComponent) cards!: QueryList<VsCardComponent>;
+  @ViewChild('searchbar') searchBar!: ElementRef<HTMLElement>;
 
   // Removed unused property: results?: vst.VSExtension;
   searchControl!: FormControl;
@@ -152,5 +153,9 @@ export class VsMenuComponent implements OnDestroy, OnInit {
     this.searchFilter.addSearchFilter(query);
     const results = await this.vsSvc.getFilteredResults(this.searchFilter);
     this.searchResults.set(results);
+  }
+
+  inputContainerDivClicked() {
+    this.searchBar.nativeElement.focus();
   }
 }

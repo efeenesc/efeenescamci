@@ -1,4 +1,4 @@
-import { Component, input, NgZone, OnInit } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import gsap from 'gsap';
 import { WindowObserverService } from '../../services/window-observer.service';
@@ -8,7 +8,7 @@ import { WindowObserverService } from '../../services/window-observer.service';
   imports: [],
   template: ` <div
       id="site-logo-placeholder"
-      class="h-full w-auto aspect-square block"
+      class="block aspect-square h-full w-auto"
     ></div>
     <svg
       viewBox="0 0 101 101"
@@ -17,11 +17,11 @@ import { WindowObserverService } from '../../services/window-observer.service';
       (mouseleave)="this.restoreLogoPos()"
       (click)="this.onClick()"
       id="website-logo-svg"
-      class="will-change-transform bg-gradient-to-tl from-theme-300 to-theme-900 hover:from-theme-300 hover:to-theme-900 hover:via-theme-300 duration-500 transition-colors h-full w-auto fixed z-10 aspect-square hover:cursor-pointer rounded-full overflow-hidden"
+      class="fixed z-10 aspect-square h-full w-auto overflow-hidden rounded-full bg-gradient-to-tl from-theme-300 to-theme-900 transition-colors duration-500 will-change-transform hover:cursor-pointer hover:from-theme-300 hover:via-theme-300 hover:to-highlight-solid focus:outline-0 focus-visible:outline-1"
       (mousedown)="this.startDragging($event)"
       (focus)="this.onMouseOver()"
       (pointerdown)="this.startDragging($event)"
-      (keydown)="this.onClick()"
+      (keydown)="this.keyPressed($event)"
       tabindex="0"
       style="box-shadow: rgba(255, 255, 255, 0.3) 0px 2px 1px inset, rgba(0, 0, 0, 0.2) 0px 7px 13px -3px, rgba(0, 0, 0, 0.1) 0px -3px 0px inset;"
     >
@@ -35,7 +35,8 @@ import { WindowObserverService } from '../../services/window-observer.service';
 })
 export class SiteLogoComponent implements OnInit {
   animate = input<boolean>(true);
-  restoreTween?: gsap.core.Tween;
+  private restoreTween?: gsap.core.Tween;
+  private clickAnimationTween?: gsap.core.Tween;
   private _isDragging = false;
 
   set isDragging(v: boolean) {
@@ -57,8 +58,7 @@ export class SiteLogoComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private woSvc: WindowObserverService,
-    private ngZone: NgZone
+    private woSvc: WindowObserverService
   ) {}
 
   ngOnInit() {
@@ -95,45 +95,47 @@ export class SiteLogoComponent implements OnInit {
   }
 
   onMouseOver() {
-    if (this.animate()) this.playHoverAnimation();
+    if (this.animate() && !this.clickAnimationTween?.isActive()) this.playHoverAnimation();
+  }
+
+  keyPressed(event: KeyboardEvent) {
+    if (event.key === 'Enter')
+      this.onClick();
   }
 
   playClickAnimation() {
-    this.ngZone.runOutsideAngular(() => {
-      gsap.to('#website-logo-svg', {
-        scale: 0.8,
-        rotateZ: (Math.random() - 0.5) * 100, // Rotate different amounts to the left or right
-        duration: 0.1,
-        ease: 'power2.out',
-        onComplete: () => {
-          this.restoreLogoPos();
-        },
-      });
+    if (this.clickAnimationTween)
+      this.clickAnimationTween.kill();
+    
+    this.clickAnimationTween = gsap.to('#website-logo-svg', {
+      scale: 0.8,
+      rotateZ: (Math.random() - 0.5) * 100, // Rotate different amounts to the left or right
+      duration: 0.1,
+      ease: 'power2.out',
+      onComplete: () => {
+        this.restoreLogoPos();
+      },
     });
   }
 
   restoreLogoPos() {
     if (this.restoreTween) this.restoreTween.kill();
 
-    this.ngZone.runOutsideAngular(() => {
-      this.restoreTween = gsap.to('#website-logo-svg', {
-        scale: 1,
-        rotateZ: 0,
-        duration: 0.25,
-        ease: 'power2.in',
-      });
+    this.restoreTween = gsap.to('#website-logo-svg', {
+      scale: 1,
+      rotateZ: 0,
+      duration: 0.25,
+      ease: 'power2.in',
     });
   }
 
   private playHoverAnimation() {
-    this.ngZone.runOutsideAngular(() => {
-      if (this.restoreTween?.isActive()) return;
+    if (this.restoreTween?.isActive()) return;
 
-      gsap.to('#website-logo-svg', {
-        scale: 1.05,
-        duration: 0.1,
-        ease: 'power2.inOut',
-      });
+    gsap.to('#website-logo-svg', {
+      scale: 1.05,
+      duration: 0.1,
+      ease: 'power2.inOut',
     });
   }
 
@@ -151,34 +153,30 @@ export class SiteLogoComponent implements OnInit {
   }
 
   drag(event: MouseEvent | TouchEvent) {
-    this.ngZone.runOutsideAngular(() => {
-      if (!this.isDragging) return;
+    if (!this.isDragging) return;
 
-      const { x, y } = this.getDragPosition(event);
+    const { x, y } = this.getDragPosition(event);
 
-      gsap.to('#website-logo-svg', {
-        x: x - this.initialPos!.offset.x,
-        y: y - this.initialPos!.offset.y,
-        left: 0,
-        top: 0,
-      });
+    gsap.to('#website-logo-svg', {
+      x: x - this.initialPos!.offset.x,
+      y: y - this.initialPos!.offset.y,
+      left: 0,
+      top: 0,
     });
   }
 
   stopDragging() {
-    this.ngZone.runOutsideAngular(() => {
-      if (!this.isDragging) return;
-      this.isDragging = false;
-      gsap.to('#website-logo-svg', {
-        x: 0,
-        y: 0,
-        left: this.initialPos!.x,
-        top: this.initialPos!.y,
-        duration: 0.8,
-        ease: 'elastic.out(0.5, 0.5)',
-      });
-
-      this.initialPos!.offset = { x: 0, y: 0 };
+    if (!this.isDragging) return;
+    this.isDragging = false;
+    gsap.to('#website-logo-svg', {
+      x: 0,
+      y: 0,
+      left: this.initialPos!.x,
+      top: this.initialPos!.y,
+      duration: 0.8,
+      ease: 'elastic.out(0.5, 0.5)',
     });
+
+    this.initialPos!.offset = { x: 0, y: 0 };
   }
 }

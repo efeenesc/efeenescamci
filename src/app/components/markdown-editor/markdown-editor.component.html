@@ -1,12 +1,12 @@
 <div
-  class="flex h-full w-full overflow-hidden transition-all flex-col xl:flex-row"
+  class="flex size-full flex-col overflow-hidden transition-all xl:flex-row"
   [class]="this.animationPlaying
   ? 'pointer-events-none select-none opacity-50'
   : 'opacity-100 scale-100'"
 >
   @if (this.showRenderer()) {
   <div
-    class="preview bg-theme-600 flex-1 justify-center overflow-auto flex p-5 flex-col transition-colors text-nowrap text-foreground"
+    class="preview flex flex-1 flex-col justify-center overflow-auto text-nowrap bg-theme-600 p-5 text-foreground transition-colors"
   >
     @if (this.mdTree) {
     <markdown-renderer
@@ -17,10 +17,10 @@
   }
 
   <div
-    class="editor bg-theme-300 h-full w-full flex-1 flex p-2 text-contrast relative overflow-y-auto font-fantasque"
+    class="editor relative flex size-full flex-1 overflow-y-auto bg-theme-300 p-2 font-fantasque text-contrast"
   >
     <div
-      class="w-8 h-full flex flex-col pointer-events-none select-none left-0"
+      class="pointer-events-none left-0 flex h-full w-8 select-none flex-col"
     >
       <!-- Empty area for line counter -->
     </div>
@@ -35,8 +35,8 @@
       (click)="this.clickEvent()"
       tabindex="0"
       id="markdownArea"
-      class="w-full flex flex-col h-max min-h-full flex-grow bg-transparent outline-none border-none resize-none text-wrap overflow-x-auto 
-      justify-stretch items-stretch justify-items-stretch place-content-stretch"
+      class="flex h-max min-h-full w-full grow resize-none flex-col place-content-stretch place-items-stretch overflow-x-auto text-wrap border-none 
+      bg-transparent outline-none"
     >
     </div>
   </div>

@@ -3,7 +3,6 @@ import {
   effect,
   ElementRef,
   input,
-  NgZone,
   OnDestroy,
   signal,
   ViewChild,
@@ -11,6 +10,7 @@ import {
 import { VSExtension } from '../../types/vs-types';
 import { SkeletonLoaderComponent } from '../skeleton-loader/skeleton-loader.component';
 import { ArrowUpRightComponent } from '../../icons/arrow-up-right/arrow-up-right.component';
+import { MissingIconComponent } from '../../icons/missing-icon/missing-icon.component';
 import { VsThemeService } from '../../services/vs-theme.service';
 import beigeIcon from '../../icons/beige-theme-icon/beigeiconb64';
 import gsap from 'gsap';
@@ -18,6 +18,7 @@ import gsap from 'gsap';
 export interface VsCardStyleProps {
   bg900Class?: string;
   bg300Class?: string;
+  hoverClass?: string;
   fgTextClass?: string;
   fgTextAccent?: string;
   fgSvg?: string;
@@ -26,6 +27,7 @@ export interface VsCardStyleProps {
 export class VsCardStyle {
   bg900 = 'bg-system-900';
   bg300 = 'bg-system-700';
+  hover = 'bg-system-300';
   fgText = 'text-contrast';
   fgAccent = 'text-contrast text-bold';
   fgSvg = '[&_svg]:fill-contrast';
@@ -33,6 +35,7 @@ export class VsCardStyle {
     if (!props) return;
     if (props.bg900Class) this.bg900 = props.bg900Class;
     if (props.bg300Class) this.bg300 = props.bg300Class;
+    if (props.hoverClass) this.hover = props.hoverClass;
     if (props.fgTextClass) this.fgText = props.fgTextClass;
     if (props.fgTextAccent) this.fgAccent = props.fgTextAccent;
     if (props.fgSvg) this.fgSvg = props.fgSvg;
@@ -41,7 +44,11 @@ export class VsCardStyle {
 
 @Component({
   selector: 'vs-card',
-  imports: [SkeletonLoaderComponent, ArrowUpRightComponent],
+  imports: [
+    SkeletonLoaderComponent,
+    ArrowUpRightComponent,
+    MissingIconComponent,
+  ],
   templateUrl: './vs-card.component.html',
 })
 export class VsCardComponent implements OnDestroy {
@@ -84,6 +91,7 @@ export class VsCardComponent implements OnDestroy {
 
   bg900 = signal<string>('bg-system-900');
   bg300 = signal<string>('bg-system-700');
+  hover = signal<string>('group-hover:bg-system-600 dark:group-hover:bg-system-300');
   fgText = signal<string>('text-contrast');
   fgAccent = signal<string>(
     'text-neutral-400 text-bold border-neutral-400 [&_svg]:stroke-neutral-400'
@@ -92,27 +100,29 @@ export class VsCardComponent implements OnDestroy {
   downloadProgress = 0;
   downloadProgressObj = { current: 0 };
 
-  constructor(private vs: VsThemeService, private ngZone: NgZone, private vsSvc: VsThemeService) {
+  constructor(private vs: VsThemeService, private vsSvc: VsThemeService) {
     effect(() => {
       if (!this.cardStyle()) return;
       this.bg900.set(this.cardStyle()!.bg900);
       this.bg300.set(this.cardStyle()!.bg300);
+      this.hover.set(this.cardStyle()!.hover);
       this.fgText.set(this.cardStyle()!.fgText);
       this.fgAccent.set(this.cardStyle()!.fgAccent);
     });
 
     effect(() => {
-      if (this.cardInfo() && this.cardInfo().versions)
-        this.getIcon();
-    })
+      if (this.cardInfo() && this.cardInfo().versions) this.getIcon();
+    });
   }
 
   async getIcon() {
     if (typeof this.cardInfo().extensionIcon === 'string') {
       this.cardIcon.set(this.cardInfo().extensionIcon as string);
       return;
-    };
-    this.cardIcon.set(await this.vsSvc.getIcon(this.cardInfo(), this.cardType()) ?? null);
+    }
+    this.cardIcon.set(
+      (await this.vsSvc.getIcon(this.cardInfo(), 'large')) ?? null
+    );
   }
 
   themeSelected(event: { target: EventTarget | null }) {
@@ -166,73 +176,67 @@ export class VsCardComponent implements OnDestroy {
   }
 
   startLoadingAnimation() {
-    this.ngZone.runOutsideAngular(() => {
-      gsap.to(this.shadowContainerDiv, {
-        opacity: 0,
-        duration: 0.05,
-      });
-      gsap.to(this.mainContainerDiv, {
-        translateY: '0.25rem',
-        duration: 0.05,
-      });
+    gsap.to(this.shadowContainerDiv, {
+      opacity: 0,
+      duration: 0.05,
+    });
+    gsap.to(this.mainContainerDiv, {
+      translateY: '0.25rem',
+      duration: 0.05,
+    });
 
-      // Fade in the loading containerQ
-      gsap.to(this.loadingContainerDiv, {
-        opacity: 1,
-        duration: 0.05,
-      });
+    // Fade in the loading containerQ
+    gsap.to(this.loadingContainerDiv, {
+      opacity: 1,
+      duration: 0.05,
+    });
 
-      // Scale the theme info div
-      gsap.to(this.backgroundDiv, {
-        opacity: 0,
-        duration: 1,
-        ease: 'power1.inOut',
-      });
+    // Scale the theme info div
+    gsap.to(this.backgroundDiv, {
+      opacity: 0,
+      duration: 1,
+      ease: 'power1.inOut',
     });
   }
 
   stopLoadingAnimation() {
-    this.ngZone.runOutsideAngular(() => {
-      gsap.to(this.mainContainerDiv, {
-        translateY: 0,
-        duration: 0.05,
-      });
-      gsap.to(this.shadowContainerDiv, {
-        opacity: 1,
-        duration: 0.05,
-      });
-      gsap.to(this.loadingContainerDiv, {
-        opacity: 0,
-        duration: 0.5,
-      });
+    gsap.to(this.mainContainerDiv, {
+      translateY: 0,
+      duration: 0.05,
+    });
+    gsap.to(this.shadowContainerDiv, {
+      opacity: 1,
+      duration: 0.05,
+    });
+    gsap.to(this.loadingContainerDiv, {
+      opacity: 0,
+      duration: 0.5,
+    });
 
-      // Second animation (scale the theme info div back to 1.0)
-      gsap.to(this.backgroundDiv, {
-        opacity: 1,
-        duration: 1,
-        ease: 'power1.inOut',
-      });
+    // Second animation (scale the theme info div back to 1.0)
+    gsap.to(this.backgroundDiv, {
+      opacity: 1,
+      duration: 1,
+      ease: 'power1.inOut',
     });
   }
 
   setCalculatedGradient(downloadProgress: number) {
-    this.ngZone.runOutsideAngular(() => {
-      gsap.to(this.downloadProgressObj, {
-        current: downloadProgress,
-        ease: 'power1.out', // Equivalent to 'easeOutQuad' in GSAP
-        duration: 0.1, // 100ms converted to seconds (0.1s)
-        onUpdate: () => {
-          this.currentProgress = this.downloadProgressObj.current;
-          this.loadingDiv.style.background = `conic-gradient(#3b82f6 ${this.currentProgress}% 0, transparent 0%)`;
+    gsap.to(this.downloadProgressObj, {
+      current: downloadProgress,
+      ease: 'power1.out', // Equivalent to 'easeOutQuad' in GSAP
+      duration: 0.1, // 100ms converted to seconds (0.1s)
+      onUpdate: () => {
+        this.currentProgress = this.downloadProgressObj.current;
+        this.loadingDiv.style.background = `conic-gradient(#3b82f6 ${this.currentProgress}% 0, transparent 0%)`;
 
-          if (this.currentProgress === 100) {
-            setTimeout(() => {
-              // console.log(this.currentProgress);
-              this.stopLoadingAnimation();
-            }, 250);
-          }
-        },
-      });
+        if (this.currentProgress === 100) {
+          setTimeout(() => {
+            // console.log(this.currentProgress);
+            this.stopLoadingAnimation();
+          }, 250);
+        }
+      },
     });
   }
 

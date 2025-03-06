@@ -6,23 +6,24 @@
 
 <div
   id="massive-container"
-  class="min-h-screen font-inter bg-theme-900 bg-noise bg-blend-soft-light overflow-x-hidden relative"
+  class="relative min-h-screen overflow-x-hidden bg-theme-900 bg-noise font-inter bg-blend-soft-light"
   correct-overflow
 >
-@if (showUI()) {
+  @if (showUI()) {
   <top-bar
-  [themeBarStyle]="this.themeBarStyle"
-  (themeButtonClicked)="this.themeButtonClicked()"
-></top-bar>
-}
-  
+    [themeBarStyle]="this.themeBarStyle"
+    (themeButtonClicked)="this.themeButtonClicked()"
+  ></top-bar>
+  }
+
+  <fake-loading-bar></fake-loading-bar>
   <div
     id="contentarea"
     #contentarea
-    class="w-full h-min bottom-0 pt-4 flex justify-center"
+    class="bottom-0 flex h-min w-full justify-center pt-4"
   >
     <div
-      class="absolute hidden sm:flex sm:w-[49px] top-0 sm:left-0 lg:left-[12vw] xl:left-[25vw] h-full select-none"
+      class="absolute top-0 hidden h-full select-none sm:left-0 sm:flex sm:w-[49px] lg:left-[12vw] xl:left-[25vw]"
       style="background: var(--rainbow-bg)"
     >
       <!-- <div
@@ -38,14 +39,14 @@
     </div>
 
     <main
-      class="w-full sm:w-4/5 lg:w-3/5 xl:w-[40vw] h-full transition-colors text-contrast px-3 lg:px-0 antialiased"
+      class="size-full px-3 text-contrast antialiased transition-colors xs:w-4/5 md:w-3/5 lg:w-1/2 lg:px-0 xl:w-2/5"
       id="main"
       #main
     >
       <router-outlet (activate)="this.routerActivated()"></router-outlet>
       @if (this.showUI()) {
-        <footer class="w-full font-inter"></footer>
+      <footer class="w-full font-inter"></footer>
       }
     </main>
-  </div>  
+  </div>
 </div>

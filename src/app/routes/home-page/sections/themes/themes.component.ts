@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, signal } from '@angular/core';
 import { VSExtension, VSFilterBody } from '../../../../types/vs-types';
 import { VsThemeService } from '../../../../services/vs-theme.service';
@@ -62,8 +61,9 @@ export class ThemesComponent {
     return signal<VSExtension>({ extensionId: id } as VSExtension);
   }));
   vsCardTheme: VsCardStyle = new VsCardStyle({
-    bg300Class: 'bg-theme-900',
+    bg300Class: 'bg-theme-600',
     bg900Class: 'bg-theme-900',
+    hoverClass: 'group-hover:bg-highlight-solid',
     fgTextClass: 'text-foreground',
     fgTextAccent: 'text-accent1',
     fgSvg: '[&_svg]:fill-accent1'

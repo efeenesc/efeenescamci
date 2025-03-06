@@ -1,4 +1,10 @@
-import { Component, ElementRef, signal, ViewChild, OnInit, AfterContentInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  signal,
+  ViewChild,
+  OnInit,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LocalStorageService } from './services/local-storage.service';
 import { MdNode } from './classes/markdown/index.interface';
@@ -6,10 +12,15 @@ import { VsThemeService } from './services/vs-theme.service';
 import { DrawerComponent } from './components/drawer/drawer.component';
 import { VsMenuComponent } from './components/vs-menu/vs-menu.component';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
-import { WindowObserverService } from './services/window-observer.service';
 import { OverflowDirective } from './directives/overflow.directive';
 import { FooterComponent } from './components/footer/footer.component';
 import beigeIcon from './icons/beige-theme-icon/beigeiconb64';
+import {
+  FakeLoadingBarService,
+  LoadingState,
+} from './services/fake-loading-bar.service';
+import gsap from 'gsap';
+import { FakeLoadingBarComponent } from "./components/fake-loading-bar/fake-loading-bar.component";
 
 @Component({
   selector: 'app-root',
@@ -19,12 +30,13 @@ import beigeIcon from './icons/beige-theme-icon/beigeiconb64';
     VsMenuComponent,
     TopBarComponent,
     OverflowDirective,
-    FooterComponent
+    FooterComponent,
+    FakeLoadingBarComponent
 ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
-export class AppComponent implements OnInit, AfterContentInit {
+export class AppComponent implements OnInit {
   @ViewChild('main') set _m(content: ElementRef) {
     this.main = content.nativeElement as HTMLDivElement;
   }
@@ -43,15 +55,46 @@ export class AppComponent implements OnInit, AfterContentInit {
   themeBarStyle = '';
   drawerOpened = signal<boolean>(false);
   showUI = signal<boolean>(false);
-  // mainResizeObserver: ResizeObserver = new ResizeObserver((entries) => this.onMainResized(entries));
-  // private pageScrollTween?: gsap.core.Tween;
+  showPageTween?: gsap.core.Tween;
 
   constructor(
     private lss: LocalStorageService,
     private vsSvc: VsThemeService,
-    private woSvc: WindowObserverService,
+    private fakeLoadingBarSvc: FakeLoadingBarService
   ) {
     this.restoreLastTheme();
+    fakeLoadingBarSvc.state.subscribe((state) => {
+      if (state === LoadingState.STARTED) {
+        this.hidePage();
+      } else {
+        setTimeout(() => {
+          this.showPage();
+        }, 100);
+      }
+    });
+  }
+
+  hidePage() {
+    if (this.main) {
+      if (this.showPageTween) {
+        this.showPageTween.kill();
+        this.showPageTween = undefined;
+      }
+
+      this.main.style.opacity = '0';
+    }
+  }
+
+  showPage() {
+    if (this.showPageTween) {
+      this.showPageTween.kill();
+      this.showPageTween = undefined;
+    }
+
+    this.showPageTween = gsap.to(this.main, {
+      opacity: 1,
+      duration: 0.5,
+    });
   }
 
   ngOnInit() {
@@ -78,18 +121,6 @@ export class AppComponent implements OnInit, AfterContentInit {
 █████████████████████████████████████
 `
     );
-  }
-
-  ngAfterContentInit() {
-    this.lss.valueChanges.subscribe((newVal) => {
-      if (newVal.key === 'theme_val') {
-        const themeObj = JSON.parse(newVal.value);
-        this.blendClass =
-          themeObj['theme'] === 'dark'
-            ? 'bg-blend-soft-light'
-            : 'bg-blend-hard-light';
-      }
-    });
   }
 
   drawerClosed() {

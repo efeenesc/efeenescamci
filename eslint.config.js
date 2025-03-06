@@ -2,6 +2,7 @@
 const eslint = require("@eslint/js");
 const tseslint = require("typescript-eslint");
 const angular = require("angular-eslint");
+const tailwind = require("eslint-plugin-tailwindcss");
 
 module.exports = tseslint.config(
   {
@@ -11,33 +12,22 @@ module.exports = tseslint.config(
       ...tseslint.configs.recommended,
       ...tseslint.configs.stylistic,
       ...angular.configs.tsRecommended,
+      ...tailwind.configs["flat/recommended"],
     ],
     processor: angular.processInlineTemplates,
-    // rules: {
-    //   "@angular-eslint/directive-selector": [
-    //     "error",
-    //     {
-    //       type: "attribute",
-    //       prefix: "app",
-    //       style: "camelCase",
-    //     },
-    //   ],
-    //   "@angular-eslint/component-selector": [
-    //     "error",
-    //     {
-    //       type: "element",
-    //       prefix: "app",
-    //       style: "kebab-case",
-    //     },
-    //   ],
-    // },
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off"
+    }
   },
   {
     files: ["**/*.html"],
     extends: [
       ...angular.configs.templateRecommended,
       ...angular.configs.templateAccessibility,
+      ...tailwind.configs["flat/recommended"]
     ],
-    rules: {},
+    rules: {
+      "tailwindcss/no-custom-classname": "off"
+    },
   }
 );

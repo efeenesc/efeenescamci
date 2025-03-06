@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, input, NgZone, Output, signal, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, input, signal, ViewChild, OnInit, output } from '@angular/core';
 import { VsSearchComponent } from '../vs-search/vs-search.component';
 import { WindowObserverService, WindowSize } from '../../services/window-observer.service';
 import { SiteLogoComponent } from "../../icons/site-logo/site-logo.component";
@@ -16,9 +16,7 @@ export class TopBarComponent implements OnInit {
   }
   topbar!: HTMLDivElement;
   themeBarStyle = input.required<string>();
-
-  @Output()
-  themeButtonClicked = new EventEmitter<boolean>();
+  themeButtonClicked = output<void>();
   
   topbarScrollProgress = signal<number>(1);
   topbarExtended = signal<boolean>(true);
@@ -27,7 +25,7 @@ export class TopBarComponent implements OnInit {
   maxScrollY = 200;
   private topBarTween!: gsap.core.Tween;
 
-  constructor(private woSvc: WindowObserverService, private ngZone: NgZone) { }
+  constructor(private woSvc: WindowObserverService) { }
 
   ngOnInit() {
     this.woSvc.scrollObservable.subscribe((newYval) => this.trackScroll(newYval));
@@ -61,7 +59,6 @@ export class TopBarComponent implements OnInit {
   }
 
   playNewTopBarAnimation(progress: number) {
-    this.ngZone.runOutsideAngular(() => {
     const baseHeight = 5; // Height in vh (viewport height)
     const extraHeight = progress * 5;
 
@@ -76,6 +73,5 @@ export class TopBarComponent implements OnInit {
         height: newHeight,
         ease: 'elastic.out(1.2, 1)'
       });
-    })
-  }
+    }
 }

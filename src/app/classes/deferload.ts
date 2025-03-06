@@ -1,11 +1,11 @@
-import { Directive, ElementRef, EventEmitter, Output, AfterViewInit, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, output, AfterViewInit, OnDestroy } from '@angular/core';
 
 @Directive({
   selector: '[defer]',
   standalone: true
 })
 export class DeferLoadDirective implements AfterViewInit, OnDestroy {
-  @Output() deferLoad = new EventEmitter<void>();
+  deferLoad = output<void>();
 
   private intersectionObserver?: IntersectionObserver;
 

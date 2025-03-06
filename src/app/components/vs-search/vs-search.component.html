@@ -1,22 +1,29 @@
-<div id="vs-search-main"
-class="card-bg flex flex-row gap-2 rounded-full transition-transform bg-gradient-to-tl from-theme-300 to-theme-900 
-py-2 pl-2 pr-6 select-none cursor-pointer shadow-light
-hover:scale-105 hover:from-theme-300 hover:via-theme-300 hover:to-theme-900 active:shadow-none active:scale-100"
-tabindex="0"
-(keydown)="this.keyPressed($event)"
-(click)="this.cardClicked()"
-[style]="this.internalStyle()"
+<div
+  id="vs-search-main"
+  class="card-bg flex cursor-pointer select-none flex-row gap-2 rounded-full bg-gradient-to-tl from-theme-300 to-theme-900 py-2 pl-2 pr-6 shadow-light transition-transform will-change-transform hover:scale-105 hover:from-theme-300 hover:via-theme-300 hover:to-highlight-solid active:scale-100 active:shadow-dark-inset"
+  tabindex="0"
+  (keydown)="this.keyPressed($event)"
+  (click)="this.cardClicked()"
+  [style]="this.internalStyle()"
 >
   <img
     id="theme_icon"
     [alt]="'Icon for ' + this.themeName()"
-    class="object-contain h-full aspect-square rounded-full select-none p-1 bg-none pointer-events-none"
+    class="pointer-events-none aspect-square h-full select-none rounded-full bg-none object-contain p-1"
     [src]="this.themeIcon()"
   />
-  <div class="flex flex-col h-full text-contrast justify-center overflow-hidden">
-    <span id="theme-name" class="transition-color text-ellipsis relative text-nowrap font-extrabold {{this.internalStyle() === '' ? '' : 'font-normal'}}">{{
-      this.themeName()
+  <div
+    class="flex h-full flex-col justify-center overflow-hidden text-contrast"
+  >
+    <span
+      id="theme-name"
+      class="transition-color text-ellipsis relative text-nowrap font-extrabold {{
+        this.internalStyle() === '' ? '' : 'font-normal'
+      }}"
+      >{{ this.themeName() }}</span
+    >
+    <span id="theme-author" class="transition-color opacity-100">{{
+      this.themeAuthor()
     }}</span>
-      <span id="theme-author" class="transition-color opacity-100">{{ this.themeAuthor() }}</span>
   </div>
 </div>

@@ -6,8 +6,8 @@ import gsap from 'gsap';
     selector: 'loading-bar',
     imports: [],
     template: `
-  <div class="w-full h-full rounded-full outline outline-1 outline-border1 bg-theme-300 overflow-hidden block items-center justify-center">
-    <div id="progressbar" class="h-full bg-blue-500 w-0"></div>
+  <div class="block size-full items-center justify-center overflow-hidden rounded-full bg-theme-300 outline outline-1 outline-border1">
+    <div id="progressbar" class="h-full w-0 bg-blue-500"></div>
   </div>
   `
 })
