@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-type KeyValuePair = {
+interface KeyValuePair {
   key: string
   value: string
 }
@@ -11,7 +11,6 @@ type KeyValuePair = {
 })
 export class LocalStorageService {
   valueChanges: Subject<KeyValuePair> = new Subject<KeyValuePair>();
-  constructor() { }
   
   get(variableName: string) : string | null {
     return window.localStorage.getItem(variableName);

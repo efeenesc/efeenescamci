@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { BlogPostResolver } from './services/backend-resolver.service';
+import { BlogPostResolver } from './resolvers/blog-resolver.resolver';
 
 export const routes: Routes = [
   {

@@ -15,7 +15,18 @@ export class WindowObserverService implements OnDestroy {
   sizeObservable!: Subject<WindowSize>;
   mouseUpObservable!: Subject<void>;
   mousePositionObservable!: Subject<MouseEvent | TouchEvent>;
-  firstOpenedPage: boolean = true;
+  firstOpenedPage = true;
+
+  throttle(fn: () => void, duration: number) {
+    // eslint-disable-next-line no-var
+    var time = performance.now();
+    return function() {
+      if ((time + duration - performance.now()) < 0) {
+        fn();
+        time = performance.now();
+      }
+    }
+  }
 
   /**
    * Tracks window events and forwards them to subscribers.
@@ -34,7 +45,7 @@ export class WindowObserverService implements OnDestroy {
     window.addEventListener('mouseup', () => this.mouseUpObservable.next());
 
     window.addEventListener('resize', this.onWindowResize);
-    window.addEventListener('scroll', this.onWindowScroll);
+    window.addEventListener('scroll', this.throttle(this.onWindowScroll, 3));
   }
   
   ngOnDestroy(): void {

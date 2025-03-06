@@ -38,14 +38,12 @@ export class ExperimentsComponent {
       id: 2,
       icon_url: "assets/efeenescamci-logo.png",
       name: "efeenescamci",
-      desc: "This website. Built with Angular.",
+      desc: "This website. Built using Angular.",
       source_url: "https://github.com/efeenesc/efeenescamci",
       read_more: "",
       loaded: false
     }
   ]
-
-  constructor() {}
 
   setLoaded(id: number) {
     this.expCards[id].loaded = true;

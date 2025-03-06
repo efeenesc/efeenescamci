@@ -15,8 +15,8 @@ interface Page {
   templateUrl: './blog-page.component.html',
 })
 export class BlogPageComponent {
-  limit: number = 10;
-  skip: number = 0;
+  limit = 10;
+  skip = 0;
   pages?: Page[];
 
   private _total?: number;
@@ -35,7 +35,7 @@ export class BlogPageComponent {
     this.getPosts();
   }
 
-  blogCardClicked(ev: MouseEvent, blog: BlogRoute) {
+  blogCardClicked(blog: BlogRoute) {
     this.router.navigateByUrl('/blog/' + blog.route);
   }
 
@@ -46,7 +46,7 @@ export class BlogPageComponent {
 
         this.blogs = data.briefs;
       },
-      error: (error: any) => {
+      error: (error: unknown) => {
         this.errorMessage = 'Error fetching new blog post briefs';
         console.error(error);
       },

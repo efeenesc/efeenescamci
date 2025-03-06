@@ -25,7 +25,7 @@ import { Component } from '@angular/core';
   }
   `,
     template: `
-  <div class="skeleton w-full h-full"></div>
+  <div class="skeleton size-full"></div>
   `
 })
 export class SkeletonLoaderComponent {}

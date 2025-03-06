@@ -33,10 +33,10 @@ export class VSFilterBody {
 
 export class VSFilters {
   criteria: VSCriteria[] = [];
-  pageNumber: number = 1;
-  pageSize: number = 20;
-  sortBy: number = 0;
-  sortOrder: number = 0;
+  pageNumber = 1;
+  pageSize = 20;
+  sortBy = 0;
+  sortOrder = 0;
 }
 
 /*
@@ -80,8 +80,8 @@ export interface VSExtension {
   deploymentType: number;
 
   // extensionIcon is not included in the response from VS. The icon is downloaded via a GET and the Base64 string is saved here.
-  // For convenience extensionIcon may be set to a boolean false value to indicate that there is no extensionIcon
-  extensionIcon?: string | boolean;
+  // extensionIcon may be set to null to indicate that there is no extensionIcon
+  extensionIcon?: string | null;
 }
 
 export interface VSExtensionPublisherInfo {

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import gsap from 'gsap';
 
@@ -6,12 +6,12 @@ import gsap from 'gsap';
     selector: 'loading-bar',
     imports: [],
     template: `
-  <div class="w-full h-full rounded-full outline outline-1 outline-border1 bg-theme-300 overflow-hidden block items-center justify-center">
-    <div id="progressbar" class="h-full bg-blue-500 w-0"></div>
+  <div class="block size-full items-center justify-center overflow-hidden rounded-full bg-theme-300 outline outline-1 outline-border1">
+    <div id="progressbar" class="h-full w-0 bg-blue-500"></div>
   </div>
   `
 })
-export class LoadingBarComponent {
+export class LoadingBarComponent implements OnInit {
   @Input() set progress(v: number | undefined) { if (v === undefined) return; this.pProgress = v; this.progress$.next(null); }
   private pProgress!: number
   protected readonly progress$ = new ReplaySubject(1);

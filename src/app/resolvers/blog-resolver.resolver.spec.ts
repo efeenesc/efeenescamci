@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { BackendResolverService } from './backend-resolver.service';
+import { BackendResolverService } from './blog-resolver.resolver';
 
 describe('BackendResolverService', () => {
   let service: BackendResolverService;

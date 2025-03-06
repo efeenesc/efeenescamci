@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, input, OnDestroy, signal, ViewChild, OnInit, effect, output } from '@angular/core';
 import { LocalStorageService } from '../../services/local-storage.service';
 import gsap from 'gsap';
 import { Subscription } from 'rxjs';
@@ -8,43 +8,42 @@ import { Subscription } from 'rxjs';
   imports: [],
   templateUrl: './vs-search.component.html',
 })
-export class VsSearchComponent implements OnDestroy {
+export class VsSearchComponent implements OnDestroy, OnInit {
   @ViewChild('themebtn') themeBtn!: HTMLElement;
+  animationSeekAt = input(0);
 
-  @Input('animationSeekAt') set _seek(s: number) {
-    this.animationSeekAt = s;
-    this.playScrollAnimation(this.animationSeekAt);
-  }
-  animationSeekAt: number = 0;
+  internalStyle = input<string | undefined>();
+  clicked = output();
 
-  @Input() internalStyle?: string;
-  @Input() displayKeys: boolean = true;
-
-  themeName?: string | null;
-  themeAuthor?: string | null;
-  themeIcon?: string | null;
+  themeName = signal<string | null>(null);
+  themeAuthor = signal<string | null>(null);
+  themeIcon = signal<string | null>(null);
 
   valueChangesSubscription!: Subscription;
 
-  constructor(private _lss: LocalStorageService) {}
+  constructor(private lss: LocalStorageService) {
+    effect(() => {
+      this.playScrollAnimation(this.animationSeekAt());
+    })
+  }
 
   ngOnInit() {
     this.restoreThemeInformation();
-    this.valueChangesSubscription = this._lss.valueChanges.subscribe((obj) => {
+    this.valueChangesSubscription = this.lss.valueChanges.subscribe((obj) => {
       switch (obj.key) {
         case 'theme_author':
-          this.themeAuthor = obj.value;
+          this.themeAuthor.set(obj.value);
           break;
 
         case 'theme_name':
-          this.themeName = obj.value;
+          this.themeName.set(obj.value);
           break;
 
         case 'theme_icon':
           if (obj.value.startsWith('data:image')) {
-            this.themeIcon = obj.value;
+            this.themeIcon.set(obj.value);
           } else {
-            this.themeIcon = 'data:image/png;base64,' + obj.value;
+            this.themeIcon.set('data:image/png;base64,' + obj.value);
           }
           break;
       }
@@ -52,16 +51,24 @@ export class VsSearchComponent implements OnDestroy {
   }
 
   restoreThemeInformation() {
-    this.themeAuthor = this._lss.get('theme_author');
-    this.themeName = this._lss.get('theme_name');
-    const themeIcon = this._lss.get('theme_icon');
+    this.themeAuthor.set(this.lss.get('theme_author'));
+    this.themeName.set(this.lss.get('theme_name'));
+    const themeIcon = this.lss.get('theme_icon');
     if (!themeIcon) return;
 
     if (themeIcon.startsWith('data:image')) {
-      this.themeIcon = themeIcon;
+      this.themeIcon.set(themeIcon);
     } else {
-      this.themeIcon = 'data:image/png;base64,' + themeIcon;
+      this.themeIcon.set('data:image/png;base64,' + themeIcon);
     }
+  }
+
+  cardClicked() {
+    this.clicked.emit();
+  }
+
+  keyPressed(event: KeyboardEvent) {
+    if (event.key === 'Enter') this.cardClicked();
   }
 
   playScrollAnimation(progress: number) {

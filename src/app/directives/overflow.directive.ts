@@ -1,26 +1,26 @@
-import { Directive, ElementRef, Input } from '@angular/core';
+import { Directive, ElementRef, OnInit, OnDestroy, input } from '@angular/core';
 
 enum OverflowState {
   NOT_CORRECTED,
   CORRECTED
 }
 @Directive({
-  selector: '[correct-overflow]'
+  selector: '[correct-overflow]',
 })
-export class OverflowDirective {
-  @Input('pad-by') padBy: number = 10;
-  @Input('use-transform') useTransform: boolean = false;
-  private static elements: Set<{ el: HTMLElement, val: number, useTransform: boolean }> = new Set();
+export class OverflowDirective implements OnInit, OnDestroy {
+  padBy = input(10);
+  useTransform = input(false);
+  private static elements = new Set<{ el: HTMLElement, val: number, useTransform: boolean }>();
   static state: OverflowState = OverflowState.NOT_CORRECTED;
 
   constructor(private el: ElementRef) {}
 
   ngOnInit(): void {
-    OverflowDirective.elements.add({el: this.el.nativeElement, val: this.padBy, useTransform: this.useTransform });
+    OverflowDirective.elements.add({el: this.el.nativeElement, val: this.padBy(), useTransform: this.useTransform() });
   }
 
   ngOnDestroy(): void {
-    OverflowDirective.elements.delete({el: this.el.nativeElement, val: this.padBy, useTransform: this.useTransform});
+    OverflowDirective.elements.delete({el: this.el.nativeElement, val: this.padBy(), useTransform: this.useTransform() });
   }
 
   static getAllElements(): { el: HTMLElement, val: number, useTransform: boolean }[] {

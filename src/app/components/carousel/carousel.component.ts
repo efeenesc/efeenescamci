@@ -2,7 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  ViewChild,
+  ViewChild, OnInit,
 } from '@angular/core';
 import { WindowObserverService } from '../../services/window-observer.service';
 import gsap from 'gsap';
@@ -17,7 +17,7 @@ interface MousePosition {
     imports: [],
     templateUrl: './carousel.component.html'
 })
-export class CarouselComponent implements AfterViewInit {
+export class CarouselComponent implements AfterViewInit, OnInit {
   @ViewChild('carousel') set _carouselDiv(content: ElementRef) {
     this.carousel = content.nativeElement as HTMLDivElement;
   }
@@ -28,17 +28,17 @@ export class CarouselComponent implements AfterViewInit {
   }
   contentDiv!: HTMLDivElement;
 
-  isDragging: boolean = false;
-  dragStartTime: number = 0;
-  dragStartPos: number = 0;
-  translatePos: number = 0;
+  isDragging = false;
+  dragStartTime = 0;
+  dragStartPos = 0;
+  translatePos = 0;
   elTranslatePos: { current: number } = { current: 0 };
   carouselRect!: DOMRect;
   carouselBounds!: [number, number];
   private currentMousePos: MousePosition | null = { x: 0, time: 0 };
   private prevMousePos: MousePosition | null = { x: 0, time: 0 };
   private carouselTween?: gsap.core.Tween;
-  private supressClick: boolean = false;
+  private supressClick = false;
 
   constructor(private woSvc: WindowObserverService) {}
 

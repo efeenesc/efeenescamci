@@ -1,24 +1,28 @@
 <div
+  #mainOverlay
   id="mainOverlay"
-  class="flex justify-center items-center w-screen h-screen fixed pointer-events-none z-30"
+  class="pointer-events-none fixed z-30 flex h-screen w-screen items-center justify-center"
 >
   <div
     id="drawerMain"
     #drawerMain
-    class="w-full lg:w-4/5 xl:w-3/5 h-screen p-2 rounded-[2rem] bg-system-900 text-contrast relative top-full left-0 z-20 flex flex-col items-center select-none lg:[&_*]:!text-sm"
+    class="relative left-0 top-full z-20 flex h-screen w-full select-none flex-col items-center rounded-[2rem] bg-system-900 p-2 text-contrast lg:w-4/5 xl:w-3/5 lg:[&_*]:!text-sm"
   >
-    <div class="flex w-full h-[98vh] flex-col overflow-hidden">
+    <div class="flex h-[98vh] w-full flex-col overflow-hidden">
       <div
         id="grabberDiv"
-        class="flex justify-end cursor-grab active:cursor-grabbing h-[5vh] mb-2"
+        class="mb-2 flex h-[5vh] cursor-grab justify-end active:cursor-grabbing"
         (mousedown)="this.startDragging($event)"
       >
         <div
           id="grabberImg"
-          class="w-1/4 lg:w-1/5 h-2 bg-system-300 rounded-full mt-2 absolute left-1/2 -translate-x-1/2"
+          class="absolute left-1/2 mt-2 h-2 w-1/4 -translate-x-1/2 rounded-full bg-system-300 lg:w-1/5"
         ></div>
         <div
-          class="rounded-full aspect-square h-10 md:h-12 lg:h-14 bg-system-600 cursor-pointer justify-end"
+          class="aspect-square h-10 cursor-pointer justify-end rounded-full bg-system-600 md:h-12 lg:h-14"
+          role="button"
+          tabindex="0"
+          (keydown)="this.keyPressed($event)"
           (click)="this.clickedOutside()"
         >
           <xmark
@@ -27,7 +31,7 @@
           />
         </div>
       </div>
-      <div class="h-[93vh] mb-2">
+      <div class="mb-2 h-[93vh]">
         <ng-content></ng-content>
       </div>
     </div>
@@ -36,7 +40,8 @@
   <div
     id="darkenedBg"
     #darkenedBg
-    class="w-screen h-screen fixed top-0 left-0 bg-black opacity-0 transition-all"
+    class="fixed left-0 top-0 h-screen w-screen bg-black opacity-0 transition-all"
+    aria-hidden="true"
     (click)="this.clickedOutside()"
   ></div>
 </div>

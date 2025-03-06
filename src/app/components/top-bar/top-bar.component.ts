@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, input, signal, ViewChild, OnInit, output } from '@angular/core';
 import { VsSearchComponent } from '../vs-search/vs-search.component';
 import { WindowObserverService, WindowSize } from '../../services/window-observer.service';
 import { SiteLogoComponent } from "../../icons/site-logo/site-logo.component";
@@ -8,25 +8,21 @@ import gsap from 'gsap';
 @Component({
     selector: 'top-bar',
     imports: [VsSearchComponent, SiteLogoComponent, OverflowDirective],
-    templateUrl: './top-bar.component.html',
+    templateUrl: './top-bar.component.html'
 })
-export class TopBarComponent {
+export class TopBarComponent implements OnInit {
   @ViewChild('topbar') set _tb(content: ElementRef) {
     this.topbar = content.nativeElement as HTMLDivElement;
   }
   topbar!: HTMLDivElement;
-
-  @Input()
-  themeBarStyle?: string;
-
-  @Output()
-  themeButtonClicked: EventEmitter<boolean> = new EventEmitter();
+  themeBarStyle = input.required<string>();
+  themeButtonClicked = output<void>();
   
-  topbarScrollProgress!: number;
-  topbarExtended: boolean = true;
-  mobileMode: boolean = false;
-  minScrollY: number = 0;
-  maxScrollY: number = 200;
+  topbarScrollProgress = signal<number>(1);
+  topbarExtended = signal<boolean>(true);
+  mobileMode = signal<boolean>(false);
+  minScrollY = 0;
+  maxScrollY = 200;
   private topBarTween!: gsap.core.Tween;
 
   constructor(private woSvc: WindowObserverService) { }
@@ -48,18 +44,18 @@ export class TopBarComponent {
     }
 
     if (newYval > this.maxScrollY) {
-      this.topbarScrollProgress = 0;
+      this.topbarScrollProgress.set(0);
     } else {
-      this.topbarScrollProgress = 1 - (newYval / this.maxScrollY);
+      this.topbarScrollProgress.set(1 - (newYval / this.maxScrollY));
     }
 
-    this.playNewTopBarAnimation(this.topbarScrollProgress);
+    this.playNewTopBarAnimation(this.topbarScrollProgress());
   }
 
   // This relies on the window size to determine whether the user is on mobile or not.
   // If on mobile, a different top bar will be shown.
   setTopBarMode(newWndSize: WindowSize) {
-    this.mobileMode = newWndSize.x < 768 ? true : false;
+    this.mobileMode.set(newWndSize.x < 768 ? true : false);
   }
 
   playNewTopBarAnimation(progress: number) {
@@ -72,9 +68,10 @@ export class TopBarComponent {
     if (this.topBarTween)
       this.topBarTween.kill();
 
-    this.topBarTween = gsap.to(['#topbar', '#website-logo-svg'], {
-      height: newHeight,
-      ease: 'elastic.out(1.2, 1)'
-    });
-  }
+    
+      this.topBarTween = gsap.to(['#topbar', '#website-logo-svg'], {
+        height: newHeight,
+        ease: 'elastic.out(1.2, 1)'
+      });
+    }
 }

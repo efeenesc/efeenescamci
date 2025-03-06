@@ -1,35 +1,38 @@
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
 <div
   id="inner-fullscreen"
-  class="w-full h-full flex lg:p-4 gap-2 flex-col relative font-inter"
+  class="relative flex size-full flex-col gap-2 font-inter lg:p-4"
 >
-  <div class="flex flex-row flex-wrap justify-between items-center gap-2">
+  <div class="flex flex-row flex-wrap items-center justify-between gap-2">
     <div
-      class="flex w-full border-[1px] border-border1 lg:w-1/2 h-12 transition-all bg-system-700 focus-within:bg-system-600 rounded-lg p-2 gap-2"
+      (click)="this.inputContainerDivClicked()"
+      (keydown)="this.inputContainerDivClicked()"
+      (focus)="this.inputContainerDivClicked()"
+      class="flex h-12 w-full gap-2 rounded-lg bg-system-700 p-2 shadow-light-inset transition-all focus-within:bg-system-600 focus-within:shadow-none active:translate-y-1 active:shadow-dark-inset lg:w-1/2"
     >
       <magnifying-glass
-        class="h-full aspect-square p-2 outline-none [&_svg]:fill-system-200"
+        class="aspect-square h-full p-2 outline-none [&_svg]:fill-system-200"
       />
       <input
+        #searchbar
         (click)="this.hideVariantPanel()"
-        class="w-full bg-transparent group focus:outline-none placeholder:text-system-200 text-sm lg:text-base font-bold text-contrast"
+        class="group w-full bg-transparent text-sm font-bold text-contrast placeholder:text-system-200 focus:outline-none lg:text-base"
         [formControl]="searchControl"
         placeholder="Search themes in VS marketplace"
       />
     </div>
     <button
-      (click)="
-        this.viewingVariants ? this.hideVariantPanel() : this.showVariantPanel()
-      "
-      class="flex gap-2 items-center justify-center flex-grow h-12 transition-color border-[1px] border-border1 rounded-lg text-sm lg:text-base font-bold transition-all hover:bg-opacity-80 active:bg-opacity-80 active:scale-[98%]"
+      (click)="this.viewingVariants() ? this.hideVariantPanel() : this.showVariantPanel()"
+      class="transition-color flex h-12 grow items-center justify-center gap-2 rounded-lg text-sm font-bold shadow-light-inset transition-all active:translate-y-1 active:shadow-dark-inset lg:text-base"
       [class]="
-        this.viewingVariants
+        this.viewingVariants()
           ? 'bg-system-700 text-contrast'
           : 'bg-theme-300 text-foreground'
       "
     >
-      @if (!this.viewingVariants) { Change variant of current theme
-      <div class="rounded-lg p-1 bg-theme-600 text-accent1">
-        {{ this.variants.length }} total
+      @if (!this.viewingVariants()) { Change variant of current theme
+      <div class="rounded-lg bg-theme-600 p-1 text-accent1">
+        {{ this.variants().length }} total
       </div>
       } @else { Go back to marketplace }
     </button>
@@ -37,27 +40,27 @@
 
   <div
     id="content"
-    class="transition-color pb-4 flex-grow flex h-full relative justify-center overflow-y-scroll lg:pr-3 mb-3"
+    class="transition-color relative mb-3 flex size-full grow justify-center overflow-y-scroll pb-4 lg:pr-3 lg:pt-3"
   >
-    @if (this.viewingVariants) {
-    <div class="flex flex-col w-full h-fit rounded-2xl lg:mt-4 overflow-hidden">
-      @for (ext of variants; track ext.name) {
+    @if (this.viewingVariants()) {
+    <div class="flex h-fit w-full flex-col gap-2">
+      @for (ext of this.variants(); track ext.name) {
       <button
-        class="flex w-full relative overflow-hidden transition-colors cursor-pointer px-4 py-2 outline outline-border1 outline-1 text-start flex-wrap gap-2"
+        class="grid w-full cursor-pointer grid-cols-[55%_45%] flex-wrap gap-2 rounded-xl px-4 py-2 text-start shadow-light-inset transition-all active:translate-y-1 active:shadow-dark-inset md:grid-cols-[50%_50%] lg:grid-cols-[45%_55%] xl:grid-cols-[40%_60%]"
         [class]="
-          ext.name === this.currentVariantName
+          ext.name === this.currentVariantName()
             ? 'bg-accent1 hover:brightness-105 active:brightness-110 text-theme-900'
-            : 'bg-system-700 hover:bg-system-900'
+            : 'bg-system-700 hover:bg-system-600'
         "
         (click)="this.changeVariant(ext.name)"
       >
-        <div class="flex flex-col w-full h-full">
+        <div class="flex size-full flex-col">
           <span class="font-semibold">{{ ext.name }}</span>
 
           <span
-            class="rounded-lg px-4 w-fit"
+            class="mt-1 w-fit rounded-lg px-4 py-1"
             [class]="
-              ext.name === this.currentVariantName
+              ext.name === this.currentVariantName()
                 ? 'bg-theme-900 text-contrast'
                 : 'bg-accent1 text-theme-900'
             "
@@ -65,40 +68,33 @@
           >
         </div>
 
-        <div class="absolute -top-4 right-0 flex w-1/2 h-24">
+        <div class="flex h-24 overflow-hidden rounded-lg outline outline-1 outline-system-300">
           <div
-            class="w-full h-full block -mr-7"
-            style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)"
+            class="block size-full"
             [style.background]="ext.accent1"
           ></div>
           <div
-            class="w-full h-full block -mr-7"
-            style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)"
+            class="block size-full"
             [style.background]="ext.accent2"
           ></div>
           <div
-            class="w-full h-full block -mr-7"
-            style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)"
+            class="block size-full"
             [style.background]="ext.theme300"
           ></div>
           <div
-            class="w-full h-full block -mr-7"
-            style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)"
+            class="block size-full"
             [style.background]="ext.theme600"
           ></div>
           <div
-            class="w-full h-full block -mr-7"
-            style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)"
+            class="block size-full"
             [style.background]="ext.theme900"
           ></div>
           <div
-            class="w-full h-full block -mr-7"
-            style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)"
+            class="block size-full"
             [style.background]="ext.system"
           ></div>
           <div
-            class="w-full h-full block -mr-7"
-            style="clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)"
+            class="block size-full"
             [style.background]="ext.text"
           ></div>
         </div>
@@ -111,21 +107,21 @@
     } @else {
     <div
       id="contentbody"
-      class="grid grid-flow-row-dense h-fit justify-between rounded-lg grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 lg:pt-4 flex-grow gap-2"
+      class="grid h-fit grow grid-flow-row-dense grid-cols-2 justify-between gap-2 rounded-lg sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5"
     >
-      @if (searching || searchResults === undefined) { @for (i of
+      @if (this.searching() || this.searchResults() === null) { @for (i of
       [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]; track i) {
       <div
-        class="w-full h-full bg-system-700 rounded-lg border-[1px] border-border1 overflow-hidden"
+        class="size-full overflow-hidden rounded-3xl bg-system-700"
       >
-        <skeleton-loader class="w-full h-full aspect-square"></skeleton-loader>
+        <skeleton-loader class="aspect-square size-full"></skeleton-loader>
       </div>
-      } } @else { @for (ext of searchResults!.results[0].extensions; track
+      } } @else { @for (ext of searchResults()!.results[0].extensions; track
       ext.extensionId) {
       <vs-card
-        class="w-full lg:w-full h-fit aspect-square"
+        class="aspect-square h-fit w-full lg:w-full"
         [cardInfo]="ext"
-        [cardType]="'large'"
+        [cardType]="'small'"
       ></vs-card>
       } }
     </div>

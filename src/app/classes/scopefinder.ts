@@ -8,7 +8,7 @@ export class ScopeFinder {
     this.theme = _theme;
   }
 
-  GetForeground(scope: string): string | null {
+  GetForeground(scope: string): string | undefined {
     if (this.type === 'plist') {
       return this.getForegroundPlist(scope);
     } else {
@@ -16,37 +16,35 @@ export class ScopeFinder {
     }
   }
 
-  private getForegroundPlist(scope: string): string | null {
-    function find(target: any, pname: string) {
+  private getForegroundPlist(scope: string): string | undefined {
+    function find(target: any, pname: string): string | undefined {
       if (Array.isArray(target)) {
         for (const list of target) {
-          if (list['scope'] !== undefined && list['scope'] === pname) {
-            return (
-              list['settings']['foreground'] ?? list['settings']['background']
-            );
-          } else if (list['settings'] !== undefined) {
-            return find(list['settings'], pname);
+          if (list.scope === pname) {
+            return list.settings?.foreground ?? list.settings?.background;
+          } 
+          
+          if (list.settings) {
+            const result = find(list.settings, pname);
+            if (result) return result;
           }
         }
-      } else {
-        if (target[pname] !== undefined) {
-          return target[pname];
-        }
+      } else if (typeof target === 'object' && target !== null) {
+        return target[pname];
       }
+      return undefined;
     }
-
-    let found = null;
-
+  
     try {
-      found = find(this.theme.settings, scope);
-    } catch {
+      const found = find(this.theme.settings, scope);
       return found;
+    } catch (error) {
+      console.error("Error in getForegroundPlist:", error);
+      return undefined;
     }
+  }  
 
-    return found;
-  }
-
-  private getForegroundJSON(scope: string): string | null {
+  private getForegroundJSON(scope: string): string | undefined {
     try {
       for (const c of this.theme) {
         if (c.scope && c.scope.includes(scope)) {
@@ -55,9 +53,9 @@ export class ScopeFinder {
         }
       }
     } catch {
-      return null;
+      return;
     }
 
-    return null;
+    return;
   }
 }

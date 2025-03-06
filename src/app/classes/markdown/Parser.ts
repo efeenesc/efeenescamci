@@ -114,7 +114,7 @@ function lookAheadFind(
 
 function processTokens(
 	tokens: string[],
-	index: number = 0,
+	index = 0,
 	closingToken?: string
 ): { nodes: MdNode[]; index: number } {
 	const arrlen = tokens.length;

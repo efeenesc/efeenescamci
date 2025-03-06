@@ -1,14 +1,15 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, provideExperimentalZonelessChangeDetection } from '@angular/core';
 import {
   provideRouter,
   withInMemoryScrolling,
   withRouterConfig,
-  withViewTransitions,
 } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { routes } from './app.routes';
 import { IMAGE_CONFIG } from '@angular/common';
 import { provideHttpClient, withFetch } from '@angular/common/http';
+// import { provideLoadingBarRouter } from '@ngx-loading-bar/router';
+import { provideLoadingBar } from './services/fake-loading-bar-injector.service';
 
 const imgConfig = {
   provide: IMAGE_CONFIG,
@@ -22,7 +23,6 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(
       routes,
-      withViewTransitions(),
       withRouterConfig({ onSameUrlNavigation: 'ignore' }),
       withInMemoryScrolling({
         scrollPositionRestoration: 'enabled',
@@ -31,5 +31,7 @@ export const appConfig: ApplicationConfig = {
     FormControl,
     imgConfig,
     provideHttpClient(withFetch()),
+    provideExperimentalZonelessChangeDetection(),
+    provideLoadingBar(),
   ],
 };
