@@ -32,7 +32,7 @@ module.exports = {
         "inter-tight": "Inter Tight, monospace"
       },
       backgroundImage: {
-        "noise": "url('assets/noise2.png')"
+        "noise": "url('assets/noise.png')"
       },
       boxShadow: {
         "sm-alt": "0 0 2px 0 rgb(0 0 0 / 0.05)",

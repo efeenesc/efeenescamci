@@ -17,7 +17,7 @@ import { WindowObserverService } from '../../services/window-observer.service';
       (mouseleave)="this.restoreLogoPos()"
       (click)="this.onClick()"
       id="website-logo-svg"
-      class="fixed z-10 aspect-square h-full w-auto overflow-hidden rounded-full bg-gradient-to-tl from-theme-300 to-theme-900 transition-colors duration-500 will-change-transform hover:cursor-pointer hover:from-theme-300 hover:via-theme-300 hover:to-highlight-solid focus:outline-0 focus-visible:outline-1"
+      class="fixed z-10 aspect-square h-full w-auto overflow-hidden rounded-full bg-highlight-solid bg-gradient-to-tl from-theme-300 to-theme-900 transition-colors duration-500 will-change-transform hover:cursor-pointer hover:bg-none focus:outline-0 focus-visible:outline-1"
       (mousedown)="this.startDragging($event)"
       (focus)="this.onMouseOver()"
       (pointerdown)="this.startDragging($event)"

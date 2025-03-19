@@ -1,9 +1,9 @@
 <div class="flex min-h-screen flex-row justify-center gap-2">
   <div
-    class="view-blog-page relative top-4 flex size-full flex-col"
+    class="view-blog-page relative flex size-full flex-col"
   >
     <div
-      class="flex w-full flex-col gap-2 border-b border-contrast pb-4"
+      class="flex w-full flex-col gap-2 pb-4"
     >
       <div
         class="text-3xl font-bold text-foreground md:text-4xl lg:text-5xl xl:text-6xl"
@@ -34,7 +34,7 @@
 
         <!-- '[&_div_*:first-of-type]:!mt-0' removes the first element's top margin -->
         <markdown-renderer-html
-          class="inline-block text-wrap pt-4 [&&_h3]:mb-1 [&&_h3]:mt-6 [&_div_*:first-of-type]:!mt-0 [&_h3]:font-bold"
+          class="inline-block text-wrap pt-4 [&&_h3]:mb-1 [&&_h3]:mt-6 [&_h3]:font-bold"
           [parsedContent]="this.markdownNode()!.content"
         >
         </markdown-renderer-html>

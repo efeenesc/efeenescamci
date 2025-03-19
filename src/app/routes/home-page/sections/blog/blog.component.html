@@ -10,7 +10,7 @@
     
     @if (this.blogs().length > 1) { @for (b of this.blogs(); track b.id) {
     <div
-      class="flex w-full cursor-pointer flex-col rounded-3xl bg-theme-600 px-2 py-6 shadow-light transition-all hover:bg-highlight-solid active:translate-y-1 active:shadow-dark-inset"
+      class="flex w-full cursor-pointer flex-col rounded-3xl bg-theme-600 p-4 shadow-light transition-all hover:bg-highlight-solid active:translate-y-1 active:shadow-dark-inset"
       tabindex="0"
       (keydown)="this.keyPressed($event, b)"
       (click)="this.blogCardClicked(b)"
