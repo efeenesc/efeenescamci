@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, throwError } from 'rxjs';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BackendService {
-  // private api = 'https://api.efeenescamci.com';
-  private api = 'http://localhost:3000';
+  private api = environment.api;
   private monthNames = ["Jan", "Feb", "Mar", "Apr",
     "May", "Jun", "Jul", "Aug",
     "Sep", "Oct", "Nov", "Dec"];

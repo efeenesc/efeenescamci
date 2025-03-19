@@ -107,7 +107,6 @@ export class VsThemeService {
       // Abort logic
       if (signal) {
         signal.addEventListener('abort', () => {
-          console.log('Aborting!!!');
           client.abort();
           reject(new Error('Download aborted'));
         });

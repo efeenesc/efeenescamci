@@ -59,7 +59,6 @@ export class FakeLoadingBarComponent {
 
       this.loadingBar.style.opacity = '1';
       this.loadingBar.style.width = '';
-      console.log("Starting");
     };
   }
 
@@ -76,7 +75,6 @@ export class FakeLoadingBarComponent {
   }
 
   hideLoadingBar() {
-    console.log("Killing");
     if (this.loadingTween?.isActive()) {
       gsap.killTweensOf(this.loadingTween);
     }
@@ -85,9 +83,6 @@ export class FakeLoadingBarComponent {
       opacity: 0,
       duration: 0.5,
       ease: 'expo.inOut',
-      onComplete: () => {
-        console.log("Killed")
-      }
     })
   }
 }
