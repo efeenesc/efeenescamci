@@ -28,5 +28,8 @@ jobs:
     - name: Build project
       run: yarn run build
 
+    - name: Clean up /var/www/dev folder
+      run: rm -rf /var/www/dev.efeenescamci.com/*
+
     - name: Copy to /var/www/dev.efeenescamci.com
-      run: yes | cp -rf ./dist/efeenescamci/browser/* /var/www/dev.efeenescamci.com/
+      run: cp -rf ./dist/efeenescamci/browser/* /var/www/dev.efeenescamci.com/
