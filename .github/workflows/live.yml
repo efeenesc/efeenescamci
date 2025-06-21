@@ -1,0 +1,23 @@
+name: Push to live
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.7
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build project
+        run: yarn run build
+
+      - name: Clean up /var/www/efeenescamci.com folder
+        run: rm -rf /var/www/efeenescamci.com/*
+
+      - name: Copy to /var/www/efeenescamci.com
+        run: cp -rf ./dist/efeenescamci/browser/* /var/www/efeenescamci.com/

@@ -6,18 +6,17 @@
   (click)="this.cardClicked()"
   [style]="this.internalStyle()"
 >
-<!-- Safari fix - need div to enforce aspect-square on img -->
-<div class="h-full object-contain aspect-square">
-  <img
-  id="theme_icon"
+  <!-- Safari fix - need div to enforce aspect-square on img -->
+  <div class="aspect-square h-full object-contain">
+    <img
+      id="theme_icon"
       [alt]="'Icon for ' + this.themeName()"
       class="pointer-events-none aspect-square h-full select-none rounded-full bg-none object-contain p-1"
       [src]="this.themeIcon()"
     />
-
-</div>
+  </div>
   <div
-    class="flex h-full flex-col justify-center overflow-hidden text-contrast"
+    class="flex h-full flex-col justify-center overflow-visible text-contrast"
   >
     <span
       id="theme-name"

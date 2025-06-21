@@ -2,7 +2,6 @@
 const eslint = require("@eslint/js");
 const tseslint = require("typescript-eslint");
 const angular = require("angular-eslint");
-const tailwind = require("eslint-plugin-tailwindcss");
 
 module.exports = tseslint.config(
   {
@@ -12,7 +11,6 @@ module.exports = tseslint.config(
       ...tseslint.configs.recommended,
       ...tseslint.configs.stylistic,
       ...angular.configs.tsRecommended,
-      ...tailwind.configs["flat/recommended"],
     ],
     processor: angular.processInlineTemplates,
     rules: {
@@ -24,7 +22,6 @@ module.exports = tseslint.config(
     extends: [
       ...angular.configs.templateRecommended,
       ...angular.configs.templateAccessibility,
-      ...tailwind.configs["flat/recommended"]
     ],
     rules: {
       "tailwindcss/no-custom-classname": "off"

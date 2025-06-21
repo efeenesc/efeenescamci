@@ -10,20 +10,21 @@ import { WindowObserverService } from '../../services/window-observer.service';
       id="site-logo-placeholder"
       class="block aspect-square h-full w-auto rounded-full"
     ></div>
+    <!-- Safari fix - box-shadow gets cut off despite overflow-visible being set, delete the outside box-shadow, add filter: drop-shadow instead which won't get cut off -->
     <svg
-    id="website-logo-svg"
+      id="website-logo-svg"
       viewBox="0 0 101 101"
       xmlns="http://www.w3.org/2000/svg"
       (mouseover)="this.onMouseOver()"
       (mouseleave)="this.restoreLogoPos()"
       (click)="this.onClick()"
-      class="fixed z-10 aspect-square h-full w-auto overflow-hidden rounded-full bg-highlight-solid bg-gradient-to-tl from-theme-300 to-theme-900 transition-colors duration-500 will-change-transform hover:cursor-pointer hover:bg-none focus:outline-0 focus-visible:outline-1"
+      class="fixed z-10 aspect-square h-full min-h-[40px] w-auto rounded-full bg-highlight-solid bg-gradient-to-tl from-theme-300 to-theme-900 transition-colors duration-500 will-change-transform hover:cursor-pointer hover:bg-none focus:outline-0 focus-visible:outline-1"
       (mousedown)="this.startDragging($event)"
       (focus)="this.onMouseOver()"
       (pointerdown)="this.startDragging($event)"
       (keydown)="this.keyPressed($event)"
       tabindex="0"
-      style="box-shadow: rgba(255, 255, 255, 0.3) 0px 2px 1px inset, rgba(0, 0, 0, 0.2) 0px 7px 13px -3px, rgba(0, 0, 0, 0.1) 0px -3px 0px inset;"
+      style="box-shadow: rgba(255, 255, 255, 0.3) 0px 2px 1px inset, rgba(0, 0, 0, 0.1) 0px -3px 0px inset; filter: drop-shadow(0px 10px 10px rgba(0,0,0,0.2));"
     >
       <path
         fill-rule="evenodd"
@@ -42,8 +43,8 @@ export class SiteLogoComponent implements OnInit {
   set isDragging(v: boolean) {
     this._isDragging = v;
     // Safari fix - do not use .style here for user-select
-    if (v) document.body.classList.add("select-none");
-    else document.body.classList.remove("select-none");
+    if (v) document.body.classList.add('select-none');
+    else document.body.classList.remove('select-none');
   }
   get isDragging(): boolean {
     return this._isDragging;
@@ -59,14 +60,14 @@ export class SiteLogoComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private woSvc: WindowObserverService
+    private woSvc: WindowObserverService,
   ) {}
 
   ngOnInit() {
     this.woSvc.mousePositionObservable.subscribe(
       (event: MouseEvent | TouchEvent) => {
         this.drag(event);
-      }
+      },
     );
     this.woSvc.mouseUpObservable.subscribe(() => {
       this.stopDragging();
@@ -96,17 +97,16 @@ export class SiteLogoComponent implements OnInit {
   }
 
   onMouseOver() {
-    if (this.animate() && !this.clickAnimationTween?.isActive()) this.playHoverAnimation();
+    if (this.animate() && !this.clickAnimationTween?.isActive())
+      this.playHoverAnimation();
   }
 
   keyPressed(event: KeyboardEvent) {
-    if (event.key === 'Enter')
-      this.onClick();
+    if (event.key === 'Enter') this.onClick();
   }
 
   playClickAnimation() {
-    if (this.clickAnimationTween)
-      this.clickAnimationTween.kill();
+    if (this.clickAnimationTween) this.clickAnimationTween.kill();
 
     this.clickAnimationTween = gsap.to('#website-logo-svg', {
       scale: 0.8,

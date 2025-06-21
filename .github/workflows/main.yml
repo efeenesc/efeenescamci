@@ -3,33 +3,25 @@ name: Deploy site locally
 on:
   push:
     branches:
-    - master
-    
-  workflow_dispatch: 
+      - master
+
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: self-hosted
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4.1.7
-    
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v4.0.3
-      with:
-        node-version: 'latest'
+      - name: Checkout
+        uses: actions/checkout@v4.1.7
 
-    - name: Install yarn
-      run: npm install --global yarn
+      - name: Install dependencies
+        run: yarn install
 
-    - name: Install dependencies
-      run: yarn install
+      - name: Build project
+        run: yarn run build
 
-    - name: Build project
-      run: yarn run build
+      - name: Clean up /var/www/dev folder
+        run: rm -rf /var/www/dev.efeenescamci.com/*
 
-    - name: Clean up /var/www/dev folder
-      run: rm -rf /var/www/dev.efeenescamci.com/*
-
-    - name: Copy to /var/www/dev.efeenescamci.com
-      run: cp -rf ./dist/efeenescamci/browser/* /var/www/dev.efeenescamci.com/
+      - name: Copy to /var/www/dev.efeenescamci.com
+        run: cp -rf ./dist/efeenescamci/browser/* /var/www/dev.efeenescamci.com/
