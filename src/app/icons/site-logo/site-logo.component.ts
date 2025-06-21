@@ -8,15 +8,15 @@ import { WindowObserverService } from '../../services/window-observer.service';
   imports: [],
   template: ` <div
       id="site-logo-placeholder"
-      class="block aspect-square h-full w-auto"
+      class="block aspect-square h-full w-auto rounded-full"
     ></div>
     <svg
+    id="website-logo-svg"
       viewBox="0 0 101 101"
       xmlns="http://www.w3.org/2000/svg"
       (mouseover)="this.onMouseOver()"
       (mouseleave)="this.restoreLogoPos()"
       (click)="this.onClick()"
-      id="website-logo-svg"
       class="fixed z-10 aspect-square h-full w-auto overflow-hidden rounded-full bg-highlight-solid bg-gradient-to-tl from-theme-300 to-theme-900 transition-colors duration-500 will-change-transform hover:cursor-pointer hover:bg-none focus:outline-0 focus-visible:outline-1"
       (mousedown)="this.startDragging($event)"
       (focus)="this.onMouseOver()"
@@ -41,8 +41,9 @@ export class SiteLogoComponent implements OnInit {
 
   set isDragging(v: boolean) {
     this._isDragging = v;
-    if (v) document.body.style.userSelect = 'none';
-    else document.body.style.userSelect = '';
+    // Safari fix - do not use .style here for user-select
+    if (v) document.body.classList.add("select-none");
+    else document.body.classList.remove("select-none");
   }
   get isDragging(): boolean {
     return this._isDragging;
@@ -106,7 +107,7 @@ export class SiteLogoComponent implements OnInit {
   playClickAnimation() {
     if (this.clickAnimationTween)
       this.clickAnimationTween.kill();
-    
+
     this.clickAnimationTween = gsap.to('#website-logo-svg', {
       scale: 0.8,
       rotateZ: (Math.random() - 0.5) * 100, // Rotate different amounts to the left or right
