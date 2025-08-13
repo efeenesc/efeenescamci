@@ -1,8 +1,11 @@
-import { ApplicationConfig, provideExperimentalZonelessChangeDetection } from '@angular/core';
 import {
-  provideRouter,
-  withInMemoryScrolling,
-  withRouterConfig,
+	ApplicationConfig,
+	provideExperimentalZonelessChangeDetection,
+} from '@angular/core';
+import {
+	provideRouter,
+	withInMemoryScrolling,
+	withRouterConfig,
 } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { routes } from './app.routes';
@@ -12,26 +15,26 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideLoadingBar } from './services/fake-loading-bar-injector.service';
 
 const imgConfig = {
-  provide: IMAGE_CONFIG,
-  useValue: {
-    disableImageSizeWarning: true,
-    disableImageLazyLoadWarning: true,
-  },
+	provide: IMAGE_CONFIG,
+	useValue: {
+		disableImageSizeWarning: true,
+		disableImageLazyLoadWarning: true,
+	},
 };
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideRouter(
-      routes,
-      withRouterConfig({ onSameUrlNavigation: 'ignore' }),
-      withInMemoryScrolling({
-        scrollPositionRestoration: 'enabled',
-      })
-    ),
-    FormControl,
-    imgConfig,
-    provideHttpClient(withFetch()),
-    provideExperimentalZonelessChangeDetection(),
-    provideLoadingBar(),
-  ],
+	providers: [
+		provideRouter(
+			routes,
+			withRouterConfig({ onSameUrlNavigation: 'ignore' }),
+			withInMemoryScrolling({
+				scrollPositionRestoration: 'enabled',
+			}),
+		),
+		FormControl,
+		imgConfig,
+		provideHttpClient(withFetch()),
+		provideExperimentalZonelessChangeDetection(),
+		provideLoadingBar(),
+	],
 };

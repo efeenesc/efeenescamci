@@ -1,47 +1,47 @@
 <div
-  #mainOverlay
-  id="mainOverlay"
-  class="pointer-events-none fixed z-30 flex h-screen w-screen items-center justify-center"
+	#mainOverlay
+	id="mainOverlay"
+	class="pointer-events-none fixed z-30 flex h-screen w-screen items-center justify-center"
 >
-  <div
-    id="drawerMain"
-    #drawerMain
-    class="relative left-0 top-full z-20 flex h-screen w-full select-none flex-col items-center rounded-[2rem] bg-system-900 p-2 text-contrast lg:w-4/5 xl:w-3/5 lg:[&_*]:!text-sm"
-  >
-    <div class="flex h-[98vh] w-full flex-col overflow-hidden">
-      <div
-        id="grabberDiv"
-        class="mb-2 flex h-[5vh] cursor-grab justify-end active:cursor-grabbing"
-        (mousedown)="this.startDragging($event)"
-      >
-        <div
-          id="grabberImg"
-          class="absolute left-1/2 mt-2 h-2 w-1/4 -translate-x-1/2 rounded-full bg-system-300 lg:w-1/5"
-        ></div>
-        <div
-          class="aspect-square h-10 cursor-pointer justify-end rounded-full bg-system-600 md:h-12 lg:h-14"
-          role="button"
-          tabindex="0"
-          (keydown)="this.keyPressed($event)"
-          (click)="this.clickedOutside()"
-        >
-          <xmark
-            class="fill-system-300"
-            [internalClasses]="'h-full w-full p-2'"
-          />
-        </div>
-      </div>
-      <div class="mb-2 h-[93vh]">
-        <ng-content></ng-content>
-      </div>
-    </div>
-  </div>
+	<div
+		id="drawerMain"
+		#drawerMain
+		class="relative left-0 top-full z-20 flex h-screen w-full select-none flex-col items-center rounded-[2rem] bg-system-900 p-2 text-contrast lg:w-4/5 xl:w-3/5 lg:[&_*]:!text-sm"
+	>
+		<div class="flex h-[98vh] w-full flex-col overflow-hidden">
+			<div
+				id="grabberDiv"
+				class="mb-2 flex h-[5vh] cursor-grab justify-end active:cursor-grabbing"
+				(mousedown)="this.startDragging($event)"
+			>
+				<div
+					id="grabberImg"
+					class="absolute left-1/2 mt-2 h-2 w-1/4 -translate-x-1/2 rounded-full bg-system-300 lg:w-1/5"
+				></div>
+				<div
+					class="aspect-square h-10 cursor-pointer justify-end rounded-full bg-system-600 md:h-12 lg:h-14"
+					role="button"
+					tabindex="0"
+					(keydown)="this.keyPressed($event)"
+					(click)="this.clickedOutside()"
+				>
+					<xmark
+						class="fill-system-300"
+						[internalClasses]="'h-full w-full p-2'"
+					/>
+				</div>
+			</div>
+			<div class="mb-2 h-[93vh]">
+				<ng-content></ng-content>
+			</div>
+		</div>
+	</div>
 
-  <div
-    id="darkenedBg"
-    #darkenedBg
-    class="fixed left-0 top-0 h-screen w-screen bg-black opacity-0 transition-all"
-    aria-hidden="true"
-    (click)="this.clickedOutside()"
-  ></div>
+	<div
+		id="darkenedBg"
+		#darkenedBg
+		class="fixed left-0 top-0 h-screen w-screen bg-black opacity-0 transition-all"
+		aria-hidden="true"
+		(click)="this.clickedOutside()"
+	></div>
 </div>

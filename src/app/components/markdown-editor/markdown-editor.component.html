@@ -1,43 +1,43 @@
 <div
-  class="flex size-full flex-col overflow-hidden transition-all xl:flex-row"
-  [class]="this.animationPlaying
-  ? 'pointer-events-none select-none opacity-50'
-  : 'opacity-100 scale-100'"
+	class="flex size-full flex-col overflow-hidden transition-all xl:flex-row"
+	[class]="
+		this.animationPlaying
+			? 'pointer-events-none select-none opacity-50'
+			: 'scale-100 opacity-100'
+	"
 >
-  @if (this.showRenderer()) {
-  <div
-    class="preview flex flex-1 flex-col justify-center overflow-auto text-nowrap bg-theme-600 p-5 text-foreground transition-colors"
-  >
-    @if (this.mdTree) {
-    <markdown-renderer
-      [parsedContent]="this.mdTree.content"
-    ></markdown-renderer>
-    }
-  </div>
-  }
+	@if (this.showRenderer()) {
+		<div
+			class="preview flex flex-1 flex-col justify-center overflow-auto text-nowrap bg-theme-600 p-5 text-foreground transition-colors"
+		>
+			@if (this.mdTree) {
+				<markdown-renderer
+					[parsedContent]="this.mdTree.content"
+				></markdown-renderer>
+			}
+		</div>
+	}
 
-  <div
-    class="editor relative flex size-full flex-1 overflow-y-auto bg-theme-300 p-2 font-fantasque text-contrast"
-  >
-    <div
-      class="pointer-events-none left-0 flex h-full w-8 select-none flex-col"
-    >
-      <!-- Empty area for line counter -->
-    </div>
+	<div
+		class="editor relative flex size-full flex-1 overflow-y-auto bg-theme-300 p-2 font-fantasque text-contrast"
+	>
+		<div
+			class="pointer-events-none left-0 flex h-full w-8 select-none flex-col"
+		>
+			<!-- Empty area for line counter -->
+		</div>
 
-    <!-- Pseudoclasses and attributes of markdownArea are declared in the css file -->
-    <div
-      [contentEditable]="true"
-      #markdownArea
-      (focus)="this.onFocus($event)"
-      (paste)="this.onPaste($event)"
-      (keydown)="this.keyDownEvent($event)"
-      (click)="this.clickEvent()"
-      tabindex="0"
-      id="markdownArea"
-      class="flex h-max min-h-full w-full grow resize-none flex-col place-content-stretch place-items-stretch overflow-x-auto text-wrap border-none 
-      bg-transparent outline-none"
-    >
-    </div>
-  </div>
+		<!-- Pseudoclasses and attributes of markdownArea are declared in the css file -->
+		<div
+			[contentEditable]="true"
+			#markdownArea
+			(focus)="this.onFocus($event)"
+			(paste)="this.onPaste($event)"
+			(keydown)="this.keyDownEvent($event)"
+			(click)="this.clickEvent()"
+			tabindex="0"
+			id="markdownArea"
+			class="flex h-max min-h-full w-full grow resize-none flex-col place-content-stretch place-items-stretch overflow-x-auto text-wrap border-none bg-transparent outline-none"
+		></div>
+	</div>
 </div>

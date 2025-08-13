@@ -4,14 +4,8 @@ import { ExperimentsComponent } from './sections/experiments/experiments.compone
 import { BlogSectionComponent } from './sections/blog/blog.component';
 
 @Component({
-  selector: 'home-page',
-  imports: [
-    ThemesComponent,
-    ExperimentsComponent,
-    BlogSectionComponent,
-  ],
-  templateUrl: './home-page.component.html',
+	selector: 'home-page',
+	imports: [ThemesComponent, ExperimentsComponent, BlogSectionComponent],
+	templateUrl: './home-page.component.html',
 })
-export class HomePageComponent {
-
-}
+export class HomePageComponent {}

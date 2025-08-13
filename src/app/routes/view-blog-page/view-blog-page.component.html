@@ -1,48 +1,43 @@
 <div class="flex min-h-screen flex-row justify-center gap-2">
-  <div
-    class="view-blog-page relative flex size-full flex-col"
-  >
-    <div
-      class="flex w-full flex-col gap-2 pb-4"
-    >
-      <div
-        class="text-3xl font-bold text-foreground md:text-4xl lg:text-5xl xl:text-6xl"
-      >
-        {{ blogPost()?.title }}
-      </div>
-      <div class="flex flex-wrap gap-x-4 gap-y-0 font-semibold lg:text-lg xl:text-xl">
-        <span class="text-contrast">{{
-          blogPost()?.created_at
-        }}</span>
-      </div>
-    </div>
-    @if (this.isLoading()) {
-    <skeleton-loader
-      class="size-full min-h-screen flex-1 bg-theme-900 [&_div]:h-screen"
-    />
-    } @else {
-    <div class="relative size-full">
-      <div
-        class="flex flex-1 flex-col overflow-auto text-nowrap text-foreground transition-colors"
-      >
-        <markdown-editor
-          class="md-editor absolute inset-0 z-10 hidden size-full overflow-hidden opacity-0"
-          (mdResult)="markdownChanged($event)"
-          [showRenderer]="false"
-        ></markdown-editor>
-        @if (this.markdownNode()) {
-
-        <!-- '[&_div_*:first-of-type]:!mt-0' removes the first element's top margin -->
-        <markdown-renderer-html
-          class="inline-block text-wrap pt-4 [&&_h3]:mb-1 [&&_h3]:mt-6 [&_h3]:font-bold"
-          [parsedContent]="this.markdownNode()!.content"
-        >
-        </markdown-renderer-html>
-        }
-      </div>
-    </div>
-    }
-    <!-- <div class="absolute bottom-0 self-end place-self-end mb-4 mr-32">
+	<div class="view-blog-page relative flex size-full flex-col">
+		<div class="flex w-full flex-col gap-2 pb-4">
+			<div
+				class="text-3xl font-bold text-foreground md:text-4xl lg:text-5xl xl:text-6xl"
+			>
+				{{ blogPost()?.title }}
+			</div>
+			<div
+				class="flex flex-wrap gap-x-4 gap-y-0 font-semibold lg:text-lg xl:text-xl"
+			>
+				<span class="text-contrast">{{ blogPost()?.created_at }}</span>
+			</div>
+		</div>
+		@if (this.isLoading()) {
+			<skeleton-loader
+				class="size-full min-h-screen flex-1 bg-theme-900 [&_div]:h-screen"
+			/>
+		} @else {
+			<div class="relative size-full">
+				<div
+					class="flex flex-1 flex-col overflow-auto text-nowrap text-foreground transition-colors"
+				>
+					<markdown-editor
+						class="md-editor absolute inset-0 z-10 hidden size-full overflow-hidden opacity-0"
+						(mdResult)="markdownChanged($event)"
+						[showRenderer]="false"
+					></markdown-editor>
+					@if (this.markdownNode()) {
+						<!-- '[&_div_*:first-of-type]:!mt-0' removes the first element's top margin -->
+						<markdown-renderer-html
+							class="inline-block text-wrap pt-4 [&&_h3]:mb-1 [&&_h3]:mt-6 [&_h3]:font-bold"
+							[parsedContent]="this.markdownNode()!.content"
+						>
+						</markdown-renderer-html>
+					}
+				</div>
+			</div>
+		}
+		<!-- <div class="absolute bottom-0 self-end place-self-end mb-4 mr-32">
       You can edit this post and submit your corrections ➡️
     </div>
 
@@ -52,5 +47,5 @@
     >
       <edit-icon></edit-icon>
     </div> -->
-  </div>
+	</div>
 </div>

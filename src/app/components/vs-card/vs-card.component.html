@@ -1,74 +1,98 @@
 <div
-  #maincontainer
-  (click)="this.themeSelected($event)"
-  (keydown)="this.keyPressed($event)"
-  tabindex="0"
-  class="group relative flex aspect-square size-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-3xl
-  text-sm transition-all will-change-transform active:!translate-y-1 md:text-xl"
+	#maincontainer
+	(click)="this.themeSelected($event)"
+	(keydown)="this.keyPressed($event)"
+	tabindex="0"
+	class="group relative flex aspect-square size-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-3xl text-sm transition-all will-change-transform active:!translate-y-1 md:text-xl"
 >
-  <div #themeinfo class="z-30 flex size-full flex-col items-center justify-center overflow-hidden rounded-3xl transition-colors">
-    <div class="flex aspect-square h-full max-w-[40vw] items-center justify-center overflow-hidden p-4">
-      <!-- BEGIN ICON -->
-      @defer (when this.cardIcon() !== undefined) {
-        <!-- If extensionIcon is not yet loaded: -->
-        @if (!this.cardIcon()) {
-          <!-- If extensionIcon is false (therefore the icon doesn't exist): -->
-          <div class="flex aspect-square h-full w-fit items-center justify-center rounded-3xl bg-system-200 text-2xl font-extrabold text-black [&_svg]:stroke-white">
-            <icon-missing-icon class="aspect-square w-12 fill-black stroke-black"></icon-missing-icon>
-          </div>
-        }
-        
-        @else {
-          <!-- If extensionIcon is not false (and is therefore a string per the type definition): -->
-          <img id="theme_icon"
-            draggable="false"
-            class="block aspect-square h-full w-fit select-none overflow-hidden rounded-3xl object-cover"
-            [alt]="'Icon for ' + this.cardInfo().displayName"
-            [src]="this.cardIcon()"/>
-        }
-        
-      } @placeholder {
-        <div class="h-full grow overflow-hidden rounded-3xl object-contain" >
-          <skeleton-loader class="block aspect-square size-full" [class]="[this.bg900()]" />
-        </div>
-      }
-    <!-- END ICON -->
-    </div>
-    
-    <!-- START TEXT CONTENT -->
-    <div class="flex size-fit flex-col items-center justify-center pb-4">
-      @defer (when this.cardInfo().displayName !== undefined) {
+	<div
+		#themeinfo
+		class="z-30 flex size-full flex-col items-center justify-center overflow-hidden rounded-3xl transition-colors"
+	>
+		<div
+			class="flex aspect-square h-full max-w-[40vw] items-center justify-center overflow-hidden p-4"
+		>
+			<!-- BEGIN ICON -->
+			@defer (when this.cardIcon() !== undefined) {
+				<!-- If extensionIcon is not yet loaded: -->
+				@if (!this.cardIcon()) {
+					<!-- If extensionIcon is false (therefore the icon doesn't exist): -->
+					<div
+						class="flex aspect-square h-full w-fit items-center justify-center rounded-3xl bg-system-200 text-2xl font-extrabold text-black [&_svg]:stroke-white"
+					>
+						<icon-missing-icon
+							class="aspect-square w-12 fill-black stroke-black"
+						></icon-missing-icon>
+					</div>
+				} @else {
+					<!-- If extensionIcon is not false (and is therefore a string per the type definition): -->
+					<img
+						id="theme_icon"
+						draggable="false"
+						class="block aspect-square h-full w-fit select-none overflow-hidden rounded-3xl object-cover"
+						[alt]="'Icon for ' + this.cardInfo().displayName"
+						[src]="this.cardIcon()"
+					/>
+				}
+			} @placeholder {
+				<div class="h-full grow overflow-hidden rounded-3xl object-contain">
+					<skeleton-loader
+						class="block aspect-square size-full"
+						[class]="[this.bg900()]"
+					/>
+				</div>
+			}
+			<!-- END ICON -->
+		</div>
 
-        <span class="text-ellipsis text-nowrap transition-colors" [class]="this.fgText()">{{
-          this.cardInfo().displayName
-        }}</span>
-        <a
-          target="_blank"
-          href="{{ this.cardInfo().publisher.publisherName === 'efeenesc' ? 'https://github.com/efeenesc' : 'https://marketplace.visualstudio.com/publishers/' + this.cardInfo().publisher.publisherName }}"
-          [class]="this.fgAccent()"
-          class="relative flex w-fit flex-nowrap items-center text-clip text-nowrap border-b border-accent1 leading-[1.2] 
-                  transition-colors hover:border-contrast hover:text-contrast [&_svg]:stroke-accent1 [&_svg]:transition-colors [&_svg]:hover:stroke-contrast"
-          ><span>{{ this.cardInfo().publisher.displayName }}</span><icon-arrow-up-right class="aspect-square w-4" />
-        </a>
-
-    } @placeholder {
-      <!-- Skeleton loader start -->
-      <skeleton-loader class="transition-color h-8 w-full overflow-hidden rounded-3xl text-foreground" />
-      <skeleton-loader class="transition-color mt-2 h-8 w-full overflow-hidden rounded-3xl text-accent1" />
-      <!-- Skeleton loader end -->
-    }
-    <!-- END TEXT CONTENT -->
-    </div>
-  </div>
-  <div #background class="w-full h-full absolute z-20 top-0 left-0 transition-colors {{this.bg300() + ' ' + this.hover()}}"></div>
-  <div #loadingcontainer class="absolute bottom-0 left-0 z-10 size-full overflow-hidden rounded-3xl bg-system-300 opacity-0">
-    <div
-      #loadingdiv
-      id="loading-div"
-      class="size-full blur-xl"
-    ></div>
-  </div>
-  <div #shadowcontainer class="pointer-events-none absolute left-0 top-0 z-40 size-full rounded-3xl shadow-light group-active:shadow-dark-inset">
-
-  </div>
+		<!-- START TEXT CONTENT -->
+		<div class="flex size-fit flex-col items-center justify-center pb-4">
+			@defer (when this.cardInfo().displayName !== undefined) {
+				<span
+					class="text-ellipsis text-nowrap transition-colors"
+					[class]="this.fgText()"
+					>{{ this.cardInfo().displayName }}</span
+				>
+				<a
+					target="_blank"
+					href="{{
+						this.cardInfo().publisher.publisherName === 'efeenesc'
+							? 'https://github.com/efeenesc'
+							: 'https://marketplace.visualstudio.com/publishers/' +
+								this.cardInfo().publisher.publisherName
+					}}"
+					[class]="this.fgAccent()"
+					class="relative flex w-fit flex-nowrap items-center text-clip text-nowrap border-b border-accent1 leading-[1.2] transition-colors hover:border-contrast hover:text-contrast [&_svg]:stroke-accent1 [&_svg]:transition-colors [&_svg]:hover:stroke-contrast"
+					><span>{{ this.cardInfo().publisher.displayName }}</span
+					><icon-arrow-up-right class="aspect-square w-4" />
+				</a>
+			} @placeholder {
+				<!-- Skeleton loader start -->
+				<skeleton-loader
+					class="transition-color h-8 w-full overflow-hidden rounded-3xl text-foreground"
+				/>
+				<skeleton-loader
+					class="transition-color mt-2 h-8 w-full overflow-hidden rounded-3xl text-accent1"
+				/>
+				<!-- Skeleton loader end -->
+			}
+			<!-- END TEXT CONTENT -->
+		</div>
+	</div>
+	<div
+		#background
+		class="w-full h-full absolute z-20 top-0 left-0 transition-colors {{
+			this.bg300() + ' ' + this.hover()
+		}}"
+	></div>
+	<div
+		#loadingcontainer
+		class="absolute bottom-0 left-0 z-10 size-full overflow-hidden rounded-3xl bg-system-300 opacity-0"
+	>
+		<div #loadingdiv id="loading-div" class="size-full blur-xl"></div>
+	</div>
+	<div
+		#shadowcontainer
+		class="pointer-events-none absolute left-0 top-0 z-40 size-full rounded-3xl shadow-light group-active:shadow-dark-inset"
+	></div>
 </div>

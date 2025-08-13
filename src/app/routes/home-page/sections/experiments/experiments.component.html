@@ -1,48 +1,48 @@
 <div class="flex w-full flex-col">
-  <h1
-    class="mb-4 self-start text-2xl font-extrabold text-accent1 antialiased md:text-3xl lg:text-4xl"
-  >
-    Experiments
-  </h1>
+	<h1
+		class="mb-4 self-start text-2xl font-extrabold text-accent1 antialiased md:text-3xl lg:text-4xl"
+	>
+		Experiments
+	</h1>
 
-  <div
-    class="flex w-full flex-col items-center justify-center gap-2 self-center"
-  >
-    <span class="self-start lg:text-lg">
-      A few things from my vault of unfinished projects I thought were cool (and barely finished)
-      enough to put on here:
-    </span>
-    @for (exp of expCards; track exp.name) {
-    <a
-      [href]="exp.source_url"
-      target="_blank"
-      class="relative flex w-full flex-col gap-3 rounded-3xl bg-theme-600 p-4 shadow-light transition-all hover:bg-highlight-solid active:translate-y-1 active:shadow-dark-inset lg:flex-row"
-    >
-      <div
-        class="relative block aspect-square w-24 shrink-0 items-center justify-center justify-self-center overflow-hidden rounded-2xl bg-theme-900"
-      >
-        @if (!exp.loaded) {
-        <skeleton-loader class="block aspect-square" />
-        }
-        <img
-          loading="lazy"
-          (load)="this.setLoaded(exp.id)"
-          [src]="exp.icon_url"
-          [alt]="exp.name + 'icon'"
-          class="pointer-events-none scale-110"
-          onerror="this.style.display='none'"
-        />
-      </div>
+	<div
+		class="flex w-full flex-col items-center justify-center gap-2 self-center"
+	>
+		<span class="self-start lg:text-lg">
+			A few things from my vault of unfinished projects I thought were cool (and
+			barely finished) enough to put on here:
+		</span>
+		@for (exp of expCards; track exp.name) {
+			<a
+				[href]="exp.source_url"
+				target="_blank"
+				class="relative flex w-full flex-col gap-3 rounded-3xl bg-theme-600 p-4 shadow-light transition-all hover:bg-highlight-solid active:translate-y-1 active:shadow-dark-inset lg:flex-row"
+			>
+				<div
+					class="relative block aspect-square w-24 shrink-0 items-center justify-center justify-self-center overflow-hidden rounded-2xl bg-theme-900"
+				>
+					@if (!exp.loaded) {
+						<skeleton-loader class="block aspect-square" />
+					}
+					<img
+						loading="lazy"
+						(load)="this.setLoaded(exp.id)"
+						[src]="exp.icon_url"
+						[alt]="exp.name + 'icon'"
+						class="pointer-events-none scale-110"
+						onerror="this.style.display='none'"
+					/>
+				</div>
 
-      <div class="flex flex-col">
-        <h2 class="text-xl font-semibold text-foreground lg:text-xl">
-          {{ exp.name }}
-        </h2>
-        <p class="text-contrast lg:text-lg">
-          {{ exp.desc }}
-        </p>
-      </div>
-    </a>
-    }
-  </div>
+				<div class="flex flex-col">
+					<h2 class="text-xl font-semibold text-foreground lg:text-xl">
+						{{ exp.name }}
+					</h2>
+					<p class="text-contrast lg:text-lg">
+						{{ exp.desc }}
+					</p>
+				</div>
+			</a>
+		}
+	</div>
 </div>

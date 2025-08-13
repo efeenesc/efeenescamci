@@ -1,53 +1,60 @@
 <div
-  class="blog-page mx-auto flex h-max min-h-screen flex-col gap-12 lg:w-4/5 xl:w-3/5 [&>section]:rounded-2xl lg:[&>section]:rounded-[2rem] [&_section]:bg-theme-900"
+	class="blog-page mx-auto flex h-max min-h-screen flex-col gap-12 lg:w-4/5 xl:w-3/5 [&>section]:rounded-2xl lg:[&>section]:rounded-[2rem] [&_section]:bg-theme-900"
 >
-  <section
-    class="flex h-full min-h-[80vh] shrink-0 flex-col gap-y-4 p-2 transition-colors lg:p-10"
-  >
-    <p>My unorganized thoughts about life, and programming (mostly programming).</p>
-    @if (this.pages) {
-    <div class="flex justify-end gap-x-2 self-end text-xl">
-      Pages
-      <div class="flex gap-x-4 overflow-x-auto">
-        @for (page of this.pages; track page.pageNumber) {
-        <div
-          class="aspect-square cursor-pointer rounded-md px-2 text-xl transition-all hover:brightness-105"
-          [class]="page.current ? 'bg-accent1' : 'bg-theme-300'"
-          tabindex="0"
-          (keydown)="this.pageNumberClicked(page)"
-          (click)="this.pageNumberClicked(page)"
-        >
-          {{ page.pageNumber + 1 }}
-        </div>
-        }
-      </div>
-    </div>
+	<section
+		class="flex h-full min-h-[80vh] shrink-0 flex-col gap-y-4 p-2 transition-colors lg:p-10"
+	>
+		<p>
+			My unorganized thoughts about life, and programming (mostly programming).
+		</p>
+		@if (this.pages) {
+			<div class="flex justify-end gap-x-2 self-end text-xl">
+				Pages
+				<div class="flex gap-x-4 overflow-x-auto">
+					@for (page of this.pages; track page.pageNumber) {
+						<div
+							class="aspect-square cursor-pointer rounded-md px-2 text-xl transition-all hover:brightness-105"
+							[class]="page.current ? 'bg-accent1' : 'bg-theme-300'"
+							tabindex="0"
+							(keydown)="this.pageNumberClicked(page)"
+							(click)="this.pageNumberClicked(page)"
+						>
+							{{ page.pageNumber + 1 }}
+						</div>
+					}
+				</div>
+			</div>
 
-    @if (this.blogs) { @for (b of this.blogs; track b.id) {
-    <div
-      class="flex w-full cursor-pointer flex-col gap-2 rounded-2xl bg-theme-300 p-2 shadow-lg outline outline-1 outline-border1 lg:p-6"
-      tabindex="0"
-      (keydown)="this.blogCardClicked(b)"
-      (click)="this.blogCardClicked(b)"
-    >
-      <div class="text-lg font-bold text-foreground lg:text-2xl">
-        {{ b.title }}
-      </div>
-      <div class="flex flex-wrap gap-4">
-        <div class="text-base text-contrast lg:text-lg">
-          <span>Created </span
-          ><span class="font-bold text-accent1">{{ b.created_at }}</span>
-        </div>
-        <div class="text-base text-contrast lg:text-lg">
-          <span>Edited </span
-          ><span class="font-bold text-accent1">{{ b.last_updated }}</span>
-        </div>
-      </div>
-    </div>
-    } } }
-  </section>
+			@if (this.blogs) {
+				@for (b of this.blogs; track b.id) {
+					<div
+						class="flex w-full cursor-pointer flex-col gap-2 rounded-2xl bg-theme-300 p-2 shadow-lg outline outline-1 outline-border1 lg:p-6"
+						tabindex="0"
+						(keydown)="this.blogCardClicked(b)"
+						(click)="this.blogCardClicked(b)"
+					>
+						<div class="text-lg font-bold text-foreground lg:text-2xl">
+							{{ b.title }}
+						</div>
+						<div class="flex flex-wrap gap-4">
+							<div class="text-base text-contrast lg:text-lg">
+								<span>Created </span
+								><span class="font-bold text-accent1">{{ b.created_at }}</span>
+							</div>
+							<div class="text-base text-contrast lg:text-lg">
+								<span>Edited </span
+								><span class="font-bold text-accent1">{{
+									b.last_updated
+								}}</span>
+							</div>
+						</div>
+					</div>
+				}
+			}
+		}
+	</section>
 
-  <div
-    class="view-blog-page fixed bottom-0 left-0 w-full lg:left-1/2 lg:w-4/5 lg:-translate-x-1/2 xl:w-3/5"
-  ></div>
+	<div
+		class="view-blog-page fixed bottom-0 left-0 w-full lg:left-1/2 lg:w-4/5 lg:-translate-x-1/2 xl:w-3/5"
+	></div>
 </div>

@@ -1,15 +1,15 @@
 <div class="h-[10vh] w-full"></div>
 <div
-  id="topbar"
-  #topbar
-  correct-overflow
-  [padBy]="14"
-  class="fixed left-1/2 top-0 z-20 my-1 ml-[-50%] mt-2 flex h-[10vh] w-full justify-center px-1 text-inverse"
+	id="topbar"
+	#topbar
+	correct-overflow
+	[padBy]="14"
+	class="fixed left-1/2 top-0 z-20 my-1 ml-[-50%] mt-2 flex h-[10vh] w-full justify-center px-1 text-inverse"
 >
-  <div class="flex size-full xs:w-4/5 md:w-3/5 lg:w-1/2 xl:w-2/5">
-    <site-logo></site-logo>
-    <div class="pointer-events-none flex-1"></div>
-    <!-- @if (this.mobileMode) {
+	<div class="flex size-full xs:w-4/5 md:w-3/5 lg:w-1/2 xl:w-2/5">
+		<site-logo></site-logo>
+		<div class="pointer-events-none flex-1"></div>
+		<!-- @if (this.mobileMode) {
   <div
     id="hamburger-menu"
     class="rounded-full flex items-center bg-theme-900 justify-center px-8 py-3 will-change-transform"
@@ -43,11 +43,11 @@
   </nav>
   } -->
 
-    <vs-search
-      class="search flex h-full w-fit flex-row justify-self-end drop-shadow-xl transition-all duration-75 active:translate-y-1"
-      [internalStyle]="this.themeBarStyle()"
-      [animationSeekAt]="this.topbarScrollProgress()"
-      (clicked)="this.emitThemeBarClickedEvent()"
-    />
-  </div>
+		<vs-search
+			class="search flex h-full w-fit flex-row justify-self-end drop-shadow-xl transition-all duration-75 active:translate-y-1"
+			[internalStyle]="this.themeBarStyle()"
+			[animationSeekAt]="this.topbarScrollProgress()"
+			(clicked)="this.emitThemeBarClickedEvent()"
+		/>
+	</div>
 </div>

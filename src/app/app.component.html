@@ -1,32 +1,32 @@
 @if (this.drawerOpened()) {
-<drawer-component (closed)="this.drawerClosed()">
-  <vs-menu></vs-menu>
-</drawer-component>
+	<drawer-component (closed)="this.drawerClosed()">
+		<vs-menu></vs-menu>
+	</drawer-component>
 }
 
 <div
-  id="massive-container"
-  class="relative min-h-screen overflow-x-hidden bg-theme-900 font-inter dark:bg-noise dark:bg-blend-soft-light"
-  correct-overflow
+	id="massive-container"
+	class="relative min-h-screen overflow-x-hidden bg-theme-900 font-inter dark:bg-noise dark:bg-blend-soft-light"
+	correct-overflow
 >
-  @if (showUI()) {
-  <top-bar
-    [themeBarStyle]="this.themeBarStyle"
-    (themeButtonClicked)="this.themeButtonClicked()"
-  ></top-bar>
-  }
+	@if (showUI()) {
+		<top-bar
+			[themeBarStyle]="this.themeBarStyle"
+			(themeButtonClicked)="this.themeButtonClicked()"
+		></top-bar>
+	}
 
-  <fake-loading-bar></fake-loading-bar>
-  <div
-    id="contentarea"
-    #contentarea
-    class="bottom-0 flex h-min w-full justify-center pt-4"
-  >
-    <div
-      class="absolute top-0 hidden h-full select-none sm:left-0 sm:flex sm:w-[49px] lg:left-[12vw] xl:left-[25vw]"
-      style="background: var(--rainbow-bg)"
-    >
-      <!-- <div
+	<fake-loading-bar></fake-loading-bar>
+	<div
+		id="contentarea"
+		#contentarea
+		class="bottom-0 flex h-min w-full justify-center pt-4"
+	>
+		<div
+			class="absolute top-0 hidden h-full select-none sm:left-0 sm:flex sm:w-[49px] lg:left-[12vw] xl:left-[25vw]"
+			style="background: var(--rainbow-bg)"
+		>
+			<!-- <div
         class="absolute w-full h-full bg-noise opacity-20 dark:opacity-50"
       ></div>
       <div class="w-full h-full block bg-accent1"></div>
@@ -36,17 +36,17 @@
       <div class="w-full h-full block bg-theme-900"></div>
       <div class="w-full h-full block bg-system"></div>
       <div class="w-full h-full block bg-foreground"></div> -->
-    </div>
+		</div>
 
-    <main
-      class="size-full px-3 text-contrast antialiased transition-colors xs:w-4/5 md:w-3/5 lg:w-1/2 lg:px-0 xl:w-2/5"
-      id="main"
-      #main
-    >
-      <router-outlet (activate)="this.routerActivated()"></router-outlet>
-      @if (this.showUI()) {
-      <footer class="w-full font-inter"></footer>
-      }
-    </main>
-  </div>
+		<main
+			class="size-full px-3 text-contrast antialiased transition-colors xs:w-4/5 md:w-3/5 lg:w-1/2 lg:px-0 xl:w-2/5"
+			id="main"
+			#main
+		>
+			<router-outlet (activate)="this.routerActivated()"></router-outlet>
+			@if (this.showUI()) {
+				<footer class="w-full font-inter"></footer>
+			}
+		</main>
+	</div>
 </div>
