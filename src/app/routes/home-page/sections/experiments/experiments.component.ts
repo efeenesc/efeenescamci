@@ -15,7 +15,7 @@ import { SkeletonLoaderComponent } from '../../../../components/skeleton-loader/
 export class ExperimentsComponent {
 	expCards = [
 		{
-			id: 0,
+			id: 2,
 			icon_url:
 				'https://github.com/efeenesc/recap/raw/master/assets/appicon.png',
 			name: 'Recap',
@@ -35,7 +35,7 @@ export class ExperimentsComponent {
 			loaded: false,
 		},
 		{
-			id: 2,
+			id: 0,
 			icon_url: 'assets/efeenescamci-logo.png',
 			name: 'efeenescamci',
 			desc: 'This website. Built using Angular.',
