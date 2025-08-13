@@ -1,18 +1,16 @@
 <!-- Setting min height at all is extremely far from ideal but it's the easiest way to make footer look OK in this short page -->
 <div
-  class="relative mx-auto flex h-max min-h-[65vh] flex-col gap-12 overflow-hidden"
+	class="relative mx-auto flex h-max min-h-[65vh] flex-col gap-12 overflow-hidden"
 >
-  <div
-    class="grid size-full"
-  >
-    <div class="flex flex-col items-center justify-center p-8 text-center">
-      <h1 class="mb-4 text-6xl font-bold text-foreground">404</h1>
-      <p class="mb-4 text-xl text-foreground">
-        Could not find the page you were looking for.
-      </p>
-      <a [routerLink]="'/'" class="text-lg text-accent1 underline">
-        Go back to the homepage
-      </a>
-    </div>
-  </div>
+	<div class="grid size-full">
+		<div class="flex flex-col items-center justify-center p-8 text-center">
+			<h1 class="mb-4 text-6xl font-bold text-foreground">404</h1>
+			<p class="mb-4 text-xl text-foreground">
+				Could not find the page you were looking for.
+			</p>
+			<a [routerLink]="'/'" class="text-lg text-accent1 underline">
+				Go back to the homepage
+			</a>
+		</div>
+	</div>
 </div>

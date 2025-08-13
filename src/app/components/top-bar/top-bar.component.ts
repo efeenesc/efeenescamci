@@ -1,77 +1,90 @@
-import { Component, ElementRef, input, signal, ViewChild, OnInit, output } from '@angular/core';
+import {
+	Component,
+	ElementRef,
+	input,
+	signal,
+	ViewChild,
+	OnInit,
+	output,
+} from '@angular/core';
 import { VsSearchComponent } from '../vs-search/vs-search.component';
-import { WindowObserverService, WindowSize } from '../../services/window-observer.service';
-import { SiteLogoComponent } from "../../icons/site-logo/site-logo.component";
+import {
+	WindowObserverService,
+	WindowSize,
+} from '../../services/window-observer.service';
+import { SiteLogoComponent } from '../../icons/site-logo/site-logo.component';
 import { OverflowDirective } from '../../directives/overflow.directive';
 import gsap from 'gsap';
 
 @Component({
-    selector: 'top-bar',
-    imports: [VsSearchComponent, SiteLogoComponent, OverflowDirective],
-    templateUrl: './top-bar.component.html'
+	selector: 'top-bar',
+	imports: [VsSearchComponent, SiteLogoComponent, OverflowDirective],
+	templateUrl: './top-bar.component.html',
 })
 export class TopBarComponent implements OnInit {
-  @ViewChild('topbar') set _tb(content: ElementRef) {
-    this.topbar = content.nativeElement as HTMLDivElement;
-  }
-  topbar!: HTMLDivElement;
-  themeBarStyle = input.required<string>();
-  themeButtonClicked = output<void>();
-  
-  topbarScrollProgress = signal<number>(1);
-  topbarExtended = signal<boolean>(true);
-  mobileMode = signal<boolean>(false);
-  minScrollY = 0;
-  maxScrollY = 200;
-  private topBarTween!: gsap.core.Tween;
+	@ViewChild('topbar') set _tb(content: ElementRef) {
+		this.topbar = content.nativeElement as HTMLDivElement;
+	}
+	topbar!: HTMLDivElement;
+	themeBarStyle = input.required<string>();
+	themeButtonClicked = output<void>();
 
-  constructor(private woSvc: WindowObserverService) { }
+	topbarScrollProgress = signal<number>(1);
+	topbarExtended = signal<boolean>(true);
+	mobileMode = signal<boolean>(false);
+	minScrollY = 0;
+	maxScrollY = 200;
+	private topBarTween!: gsap.core.Tween;
 
-  ngOnInit() {
-    this.woSvc.scrollObservable.subscribe((newYval) => this.trackScroll(newYval));
-    this.woSvc.sizeObservable.subscribe((newWndSize) => this.setTopBarMode(newWndSize));
+	constructor(private woSvc: WindowObserverService) {}
 
-    this.setTopBarMode(this.woSvc.getWindowSize());
-  }
+	ngOnInit() {
+		this.woSvc.scrollObservable.subscribe((newYval) =>
+			this.trackScroll(newYval),
+		);
+		this.woSvc.sizeObservable.subscribe((newWndSize) =>
+			this.setTopBarMode(newWndSize),
+		);
 
-  emitThemeBarClickedEvent() {
-    this.themeButtonClicked.emit();
-  }
+		this.setTopBarMode(this.woSvc.getWindowSize());
+	}
 
-  trackScroll(newYval: number) {
-    if (newYval < this.minScrollY) {
-      return;
-    }
+	emitThemeBarClickedEvent() {
+		this.themeButtonClicked.emit();
+	}
 
-    if (newYval > this.maxScrollY) {
-      this.topbarScrollProgress.set(0);
-    } else {
-      this.topbarScrollProgress.set(1 - (newYval / this.maxScrollY));
-    }
+	trackScroll(newYval: number) {
+		if (newYval < this.minScrollY) {
+			return;
+		}
 
-    this.playNewTopBarAnimation(this.topbarScrollProgress());
-  }
+		if (newYval > this.maxScrollY) {
+			this.topbarScrollProgress.set(0);
+		} else {
+			this.topbarScrollProgress.set(1 - newYval / this.maxScrollY);
+		}
 
-  // This relies on the window size to determine whether the user is on mobile or not.
-  // If on mobile, a different top bar will be shown.
-  setTopBarMode(newWndSize: WindowSize) {
-    this.mobileMode.set(newWndSize.x < 768 ? true : false);
-  }
+		this.playNewTopBarAnimation(this.topbarScrollProgress());
+	}
 
-  playNewTopBarAnimation(progress: number) {
-    const baseHeight = 5; // Height in vh (viewport height)
-    const extraHeight = progress * 5;
+	// This relies on the window size to determine whether the user is on mobile or not.
+	// If on mobile, a different top bar will be shown.
+	setTopBarMode(newWndSize: WindowSize) {
+		this.mobileMode.set(newWndSize.x < 768 ? true : false);
+	}
 
-    const finalHeight = baseHeight + extraHeight;
-    const newHeight = finalHeight + 'vh';
+	playNewTopBarAnimation(progress: number) {
+		const baseHeight = 5; // Height in vh (viewport height)
+		const extraHeight = progress * 5;
 
-    if (this.topBarTween)
-      this.topBarTween.kill();
+		const finalHeight = baseHeight + extraHeight;
+		const newHeight = finalHeight + 'vh';
 
-    
-      this.topBarTween = gsap.to(['#topbar', '#website-logo-svg'], {
-        height: newHeight,
-        ease: 'elastic.out(1.2, 1)'
-      });
-    }
+		if (this.topBarTween) this.topBarTween.kill();
+
+		this.topBarTween = gsap.to(['#topbar', '#website-logo-svg'], {
+			height: newHeight,
+			ease: 'elastic.out(1.2, 1)',
+		});
+	}
 }

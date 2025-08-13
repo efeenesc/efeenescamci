@@ -1,32 +1,32 @@
 <div
-  id="vs-search-main"
-  class="card-bg flex cursor-pointer select-none flex-row gap-2 rounded-full bg-highlight-solid bg-gradient-to-tl from-theme-300 to-theme-900 py-2 pl-2 pr-6 shadow-light transition-[transform,box-shadow] will-change-transform hover:scale-105 hover:bg-none active:scale-100 active:shadow-dark-inset"
-  tabindex="0"
-  (keydown)="this.keyPressed($event)"
-  (click)="this.cardClicked()"
-  [style]="this.internalStyle()"
+	id="vs-search-main"
+	class="card-bg flex cursor-pointer select-none flex-row gap-2 rounded-full bg-highlight-solid bg-gradient-to-tl from-theme-300 to-theme-900 py-2 pl-2 pr-6 shadow-light transition-[transform,box-shadow] will-change-transform hover:scale-105 hover:bg-none active:scale-100 active:shadow-dark-inset"
+	tabindex="0"
+	(keydown)="this.keyPressed($event)"
+	(click)="this.cardClicked()"
+	[style]="this.internalStyle()"
 >
-  <!-- Safari fix - need div to enforce aspect-square on img -->
-  <div class="aspect-square h-full object-contain">
-    <img
-      id="theme_icon"
-      [alt]="'Icon for ' + this.themeName()"
-      class="pointer-events-none aspect-square h-full select-none rounded-full bg-none object-contain p-1"
-      [src]="this.themeIcon()"
-    />
-  </div>
-  <div
-    class="flex h-full flex-col justify-center overflow-visible text-contrast"
-  >
-    <span
-      id="theme-name"
-      class="transition-color text-ellipsis relative text-nowrap font-extrabold {{
-        this.internalStyle() === '' ? '' : 'font-normal'
-      }}"
-      >{{ this.themeName() }}</span
-    >
-    <span id="theme-author" class="transition-color opacity-100">{{
-      this.themeAuthor()
-    }}</span>
-  </div>
+	<!-- Safari fix - need div to enforce aspect-square on img -->
+	<div class="aspect-square h-full object-contain">
+		<img
+			id="theme_icon"
+			[alt]="'Icon for ' + this.themeName()"
+			class="pointer-events-none aspect-square h-full select-none rounded-full bg-none object-contain p-1"
+			[src]="this.themeIcon()"
+		/>
+	</div>
+	<div
+		class="flex h-full flex-col justify-center overflow-visible text-contrast"
+	>
+		<span
+			id="theme-name"
+			class="transition-color text-ellipsis relative text-nowrap font-extrabold {{
+				this.internalStyle() === '' ? '' : 'font-normal'
+			}}"
+			>{{ this.themeName() }}</span
+		>
+		<span id="theme-author" class="transition-color opacity-100">{{
+			this.themeAuthor()
+		}}</span>
+	</div>
 </div>

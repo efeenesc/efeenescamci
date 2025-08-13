@@ -1,130 +1,144 @@
 <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
 <div
-  id="inner-fullscreen"
-  class="relative flex size-full flex-col gap-2 font-inter lg:p-4"
+	id="inner-fullscreen"
+	class="relative flex size-full flex-col gap-2 font-inter lg:p-4"
 >
-  <div class="flex flex-row flex-wrap items-center justify-between gap-2">
-    <div
-      (click)="this.inputContainerDivClicked()"
-      (keydown)="this.inputContainerDivClicked()"
-      (focus)="this.inputContainerDivClicked()"
-      class="flex h-12 w-full gap-2 rounded-lg bg-system-700 p-2 shadow-light-inset transition-all focus-within:bg-system-600 focus-within:shadow-none active:translate-y-1 active:shadow-dark-inset lg:w-1/2"
-    >
-      <magnifying-glass
-        class="aspect-square h-full p-2 outline-none [&_svg]:fill-system-200"
-      />
-      <input
-        #searchbar
-        (click)="this.hideVariantPanel()"
-        class="group w-full bg-transparent text-sm font-bold text-contrast placeholder:text-system-200 focus:outline-none lg:text-base"
-        [formControl]="searchControl"
-        placeholder="Search themes in VS marketplace"
-      />
-    </div>
-    <button
-      (click)="this.viewingVariants() ? this.hideVariantPanel() : this.showVariantPanel()"
-      class="transition-color flex h-12 grow items-center justify-center gap-2 rounded-lg text-sm font-bold shadow-light-inset transition-all active:translate-y-1 active:shadow-dark-inset lg:text-base"
-      [class]="
-        this.viewingVariants()
-          ? 'bg-system-700 text-contrast'
-          : 'bg-theme-300 text-foreground'
-      "
-    >
-      @if (!this.viewingVariants()) { Change variant of current theme
-      <div class="rounded-lg bg-theme-600 p-1 text-accent1">
-        {{ this.variants().length }} total
-      </div>
-      } @else { Go back to marketplace }
-    </button>
-  </div>
+	<div class="flex flex-row flex-wrap items-center justify-between gap-2">
+		<div
+			(click)="this.inputContainerDivClicked()"
+			(keydown)="this.inputContainerDivClicked()"
+			(focus)="this.inputContainerDivClicked()"
+			class="flex h-12 w-full gap-2 rounded-lg bg-system-700 p-2 shadow-light-inset transition-all focus-within:bg-system-600 focus-within:shadow-none active:translate-y-1 active:shadow-dark-inset lg:w-1/2"
+		>
+			<magnifying-glass
+				class="aspect-square h-full p-2 outline-none [&_svg]:fill-system-200"
+			/>
+			<input
+				#searchbar
+				(click)="this.hideVariantPanel()"
+				class="group w-full bg-transparent text-sm font-bold text-contrast placeholder:text-system-200 focus:outline-none lg:text-base"
+				[formControl]="searchControl"
+				placeholder="Search themes in VS marketplace"
+			/>
+		</div>
+		<button
+			(click)="
+				this.viewingVariants()
+					? this.hideVariantPanel()
+					: this.showVariantPanel()
+			"
+			class="transition-color flex h-12 grow items-center justify-center gap-2 rounded-lg text-sm font-bold shadow-light-inset transition-all active:translate-y-1 active:shadow-dark-inset lg:text-base"
+			[class]="
+				this.viewingVariants()
+					? 'bg-system-700 text-contrast'
+					: 'bg-theme-300 text-foreground'
+			"
+		>
+			@if (!this.viewingVariants()) {
+				Change variant of current theme
+				<div class="rounded-lg bg-theme-600 p-1 text-accent1">
+					{{ this.variants().length }} total
+				</div>
+			} @else {
+				Go back to marketplace
+			}
+		</button>
+	</div>
 
-  <div
-    id="content"
-    class="transition-color relative mb-3 flex size-full grow justify-center overflow-y-scroll pb-4 lg:pr-3 lg:pt-3"
-  >
-    @if (this.viewingVariants()) {
-    <div class="flex h-fit w-full flex-col gap-2">
-      @for (ext of this.variants(); track ext.name) {
-      <button
-        class="grid w-full cursor-pointer grid-cols-[55%_45%] flex-wrap gap-2 rounded-xl px-4 py-2 text-start shadow-light-inset transition-all active:translate-y-1 active:shadow-dark-inset md:grid-cols-[50%_50%] lg:grid-cols-[45%_55%] xl:grid-cols-[40%_60%]"
-        [class]="
-          ext.name === this.currentVariantName()
-            ? 'bg-accent1 hover:brightness-105 active:brightness-110 text-theme-900'
-            : 'bg-system-700 hover:bg-system-600'
-        "
-        (click)="this.changeVariant(ext.name)"
-      >
-        <div class="flex size-full flex-col">
-          <span class="font-semibold">{{ ext.name }}</span>
+	<div
+		id="content"
+		class="transition-color relative mb-3 flex size-full grow justify-center overflow-y-scroll pb-4 lg:pr-3 lg:pt-3"
+	>
+		@if (this.viewingVariants()) {
+			<div class="flex h-fit w-full flex-col gap-2">
+				@for (ext of this.variants(); track ext.name) {
+					<button
+						class="grid w-full cursor-pointer grid-cols-[55%_45%] flex-wrap gap-2 rounded-xl px-4 py-2 text-start shadow-light-inset transition-all active:translate-y-1 active:shadow-dark-inset md:grid-cols-[50%_50%] lg:grid-cols-[45%_55%] xl:grid-cols-[40%_60%]"
+						[class]="
+							ext.name === this.currentVariantName()
+								? 'bg-accent1 text-theme-900 hover:brightness-105 active:brightness-110'
+								: 'bg-system-700 hover:bg-system-600'
+						"
+						(click)="this.changeVariant(ext.name)"
+					>
+						<div class="flex size-full flex-col">
+							<span class="font-semibold">{{ ext.name }}</span>
 
-          <span
-            class="mt-1 w-fit rounded-lg px-4 py-1"
-            [class]="
-              ext.name === this.currentVariantName()
-                ? 'bg-theme-900 text-contrast'
-                : 'bg-accent1 text-theme-900'
-            "
-            >{{ ext.theme === "dark" ? "Dark" : "Light" }}</span
-          >
-        </div>
+							<span
+								class="mt-1 w-fit rounded-lg px-4 py-1"
+								[class]="
+									ext.name === this.currentVariantName()
+										? 'bg-theme-900 text-contrast'
+										: 'bg-accent1 text-theme-900'
+								"
+								>{{ ext.theme === "dark" ? "Dark" : "Light" }}</span
+							>
+						</div>
 
-        <div class="flex h-24 overflow-hidden rounded-lg outline outline-1 outline-system-300">
-          <div
-            class="block size-full"
-            [style.background]="ext.accent1"
-          ></div>
-          <div
-            class="block size-full"
-            [style.background]="ext.accent2"
-          ></div>
-          <div
-            class="block size-full"
-            [style.background]="ext.theme300"
-          ></div>
-          <div
-            class="block size-full"
-            [style.background]="ext.theme600"
-          ></div>
-          <div
-            class="block size-full"
-            [style.background]="ext.theme900"
-          ></div>
-          <div
-            class="block size-full"
-            [style.background]="ext.system"
-          ></div>
-          <div
-            class="block size-full"
-            [style.background]="ext.text"
-          ></div>
-        </div>
-        <!-- @if (ext.name === this.currentVariantName) {
+						<div
+							class="flex h-24 overflow-hidden rounded-lg outline outline-1 outline-system-300"
+						>
+							<div
+								class="block size-full"
+								[style.background]="ext.accent1"
+							></div>
+							<div
+								class="block size-full"
+								[style.background]="ext.accent2"
+							></div>
+							<div
+								class="block size-full"
+								[style.background]="ext.theme300"
+							></div>
+							<div
+								class="block size-full"
+								[style.background]="ext.theme600"
+							></div>
+							<div
+								class="block size-full"
+								[style.background]="ext.theme900"
+							></div>
+							<div
+								class="block size-full"
+								[style.background]="ext.system"
+							></div>
+							<div class="block size-full" [style.background]="ext.text"></div>
+						</div>
+						<!-- @if (ext.name === this.currentVariantName) {
             <span class="bg-accent1 text-theme-900 rounded-lg px-4">Selected</span>
           } -->
-      </button>
-      }
-    </div>
-    } @else {
-    <div
-      id="contentbody"
-      class="grid h-fit grow grid-flow-row-dense grid-cols-2 justify-between gap-2 rounded-lg sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5"
-    >
-      @if (this.searching() || this.searchResults() === null) { @for (i of
-      [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]; track i) {
-      <div
-        class="size-full overflow-hidden rounded-3xl bg-system-700"
-      >
-        <skeleton-loader class="aspect-square size-full"></skeleton-loader>
-      </div>
-      } } @else { @for (ext of searchResults()!.results[0].extensions; track
-      ext.extensionId) {
-      <vs-card
-        class="aspect-square h-fit w-full lg:w-full"
-        [cardInfo]="ext"
-        [cardType]="'small'"
-      ></vs-card>
-      } }
-    </div>
-    }
-  </div>
+					</button>
+				}
+			</div>
+		} @else {
+			<div
+				id="contentbody"
+				class="grid h-fit grow grid-flow-row-dense grid-cols-2 justify-between gap-2 rounded-lg sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5"
+			>
+				@if (this.searching() || this.searchResults() === null) {
+					@for (
+						i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+						track i
+					) {
+						<div class="size-full overflow-hidden rounded-3xl bg-system-700">
+							<skeleton-loader
+								class="aspect-square size-full"
+							></skeleton-loader>
+						</div>
+					}
+				} @else {
+					@for (
+						ext of searchResults()!.results[0].extensions;
+						track ext.extensionId
+					) {
+						<vs-card
+							class="aspect-square h-fit w-full lg:w-full"
+							[cardInfo]="ext"
+							[cardType]="'small'"
+						></vs-card>
+					}
+				}
+			</div>
+		}
+	</div>
 </div>

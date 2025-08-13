@@ -3,110 +3,110 @@
 @tailwind utilities;
 
 :root {
-  --theme-900: #737163;
-  --theme-600: #c7c4a8;
-  --theme-300: #c7c4a8;
-  --foreground: #3d3929;
-  --accent1: #c8915e;
-  --accent2: #4b4848;
-  --border1: #747474;
-  --contrast: #000000;
-  --highlight: #f3c092;
+	--theme-900: #737163;
+	--theme-600: #c7c4a8;
+	--theme-300: #c7c4a8;
+	--foreground: #3d3929;
+	--accent1: #c8915e;
+	--accent2: #4b4848;
+	--border1: #747474;
+	--contrast: #000000;
+	--highlight: #f3c092;
 
-  --light-system-900: #fafafa;
-  --light-system-700: #ebebeb;
-  --light-system-600: #d3d3d3;
-  --light-system-300: #808082;
-  --light-system-200: #89888a;
+	--light-system-900: #fafafa;
+	--light-system-700: #ebebeb;
+	--light-system-600: #d3d3d3;
+	--light-system-300: #808082;
+	--light-system-200: #89888a;
 
-  --dark-system-900: #1c1c1e;
-  --dark-system-700: #262628;
-  --dark-system-600: #2c2c2e;
-  --dark-system-300: #616368;
-  --dark-system-200: #787b81;
+	--dark-system-900: #1c1c1e;
+	--dark-system-700: #262628;
+	--dark-system-600: #2c2c2e;
+	--dark-system-300: #616368;
+	--dark-system-200: #787b81;
 
-  --rainbow-bg: linear-gradient(
-    to right,
-    var(--accent1) 0%,
-    var(--accent1) 14.28%,
-    var(--accent2) 14.28%,
-    var(--accent2) 28.57%,
-    var(--theme-300) 28.57%,
-    var(--theme-300) 42.85%,
-    var(--theme-600) 42.85%,
-    var(--theme-600) 57.14%,
-    var(--theme-900) 57.14%,
-    var(--theme-900) 71.42%,
-    var(--system) 71.42%,
-    var(--system) 85.71%,
-    var(--foreground) 85.71%,
-    var(--foreground) 100%
-  );
+	--rainbow-bg: linear-gradient(
+		to right,
+		var(--accent1) 0%,
+		var(--accent1) 14.28%,
+		var(--accent2) 14.28%,
+		var(--accent2) 28.57%,
+		var(--theme-300) 28.57%,
+		var(--theme-300) 42.85%,
+		var(--theme-600) 42.85%,
+		var(--theme-600) 57.14%,
+		var(--theme-900) 57.14%,
+		var(--theme-900) 71.42%,
+		var(--system) 71.42%,
+		var(--system) 85.71%,
+		var(--foreground) 85.71%,
+		var(--foreground) 100%
+	);
 }
 
 [data-theme="light"] {
-  --system-900: var(--light-system-900);
-  --system-700: var(--light-system-700);
-  --system-600: var(--light-system-600);
-  --system-300: var(--light-system-300);
-  --system-200: var(--light-system-200);
+	--system-900: var(--light-system-900);
+	--system-700: var(--light-system-700);
+	--system-600: var(--light-system-600);
+	--system-300: var(--light-system-300);
+	--system-200: var(--light-system-200);
 }
 
 [data-theme="dark"] {
-  --system-900: var(--dark-system-900);
-  --system-700: var(--dark-system-700);
-  --system-600: var(--dark-system-600);
-  --system-300: var(--dark-system-300);
-  --system-200: var(--dark-system-200);
+	--system-900: var(--dark-system-900);
+	--system-700: var(--dark-system-700);
+	--system-600: var(--dark-system-600);
+	--system-300: var(--dark-system-300);
+	--system-200: var(--dark-system-200);
 }
 
 #topbar {
-  view-transition-name: topbar;
+	view-transition-name: topbar;
 }
 
 .blog-page {
-  view-transition-name: blog-page;
+	view-transition-name: blog-page;
 }
 
 .view-blog-page {
-  view-transition-name: view-blog-page;
+	view-transition-name: view-blog-page;
 }
 
 ::view-transition-old(topbar) {
-  display: none;
+	display: none;
 }
 ::view-transition-new(topbar) {
-  animation: none;
+	animation: none;
 }
 
 html,
 body {
-  height: 100%;
-  background-color: var(--system-900);
+	height: 100%;
+	background-color: var(--system-900);
 }
 
 ::-webkit-scrollbar {
-  background-color: var(--system);
-  width: 10px;
-  height: 10px;
+	background-color: var(--system);
+	width: 10px;
+	height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: var(--system);
+	background-color: var(--system);
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #babac0;
-  border-radius: 10px;
+	background-color: #babac0;
+	border-radius: 10px;
 }
 
 ::-webkit-scrollbar-button {
-  display: none;
+	display: none;
 }
 
 ::-moz-selection {
-  background: var(--highlight);
+	background: var(--highlight);
 }
 ::selection {
-  background: var(--highlight);
+	background: var(--highlight);
 }

@@ -1,46 +1,53 @@
 <div class="flex w-full flex-col">
-  <h1 class="mb-4 self-start text-2xl font-extrabold text-accent1 md:text-3xl lg:text-4xl">Shorts</h1>
+	<h1
+		class="mb-4 self-start text-2xl font-extrabold text-accent1 md:text-3xl lg:text-4xl"
+	>
+		Shorts
+	</h1>
 
-  <div
-    class="flex w-full flex-col items-center justify-center gap-2 self-center rounded-xl"
-  >
-    <span class="self-start lg:text-lg">
-      Streams of consciousness too short to be blog posts, and too large not to share:
-    </span>
-    
-    @if (this.blogs().length > 1) { @for (b of this.blogs(); track b.id) {
-    <div
-      class="flex w-full cursor-pointer flex-col rounded-3xl bg-theme-600 p-4 shadow-light transition-all hover:bg-highlight-solid active:translate-y-1 active:shadow-dark-inset"
-      tabindex="0"
-      (keydown)="this.keyPressed($event, b)"
-      (click)="this.blogCardClicked(b)"
-    >
-      
-      <div class="text-lg font-bold text-foreground lg:text-2xl">
-        {{ b.title }}
-      </div>
-      <span class="text-base">{{ b.created_at }}</span>
-      <div class="flex flex-wrap gap-4">
-        <div class="text-base text-contrast lg:text-lg">
-          <!-- <span>Created </span> -->
-          
-        </div>
-        <!-- <div class="text-contrast text-base lg:text-lg">
+	<div
+		class="flex w-full flex-col items-center justify-center gap-2 self-center rounded-xl"
+	>
+		<span class="self-start lg:text-lg">
+			Streams of consciousness too short to be blog posts, and too large not to
+			share:
+		</span>
+
+		@if (this.blogs().length > 1) {
+			@for (b of this.blogs(); track b.id) {
+				<div
+					class="flex w-full cursor-pointer flex-col rounded-3xl bg-theme-600 p-4 shadow-light transition-all hover:bg-highlight-solid active:translate-y-1 active:shadow-dark-inset"
+					tabindex="0"
+					(keydown)="this.keyPressed($event, b)"
+					(click)="this.blogCardClicked(b)"
+				>
+					<div class="text-lg font-bold text-foreground lg:text-2xl">
+						{{ b.title }}
+					</div>
+					<span class="text-base">{{ b.created_at }}</span>
+					<div class="flex flex-wrap gap-4">
+						<div class="text-base text-contrast lg:text-lg">
+							<!-- <span>Created </span> -->
+						</div>
+						<!-- <div class="text-contrast text-base lg:text-lg">
           <span>Edited {{ b.last_updated }}</span>
         </div> -->
-      </div>
-    </div>
-    } } @else { @for (num of [0,1,2]; track num) {
-    <div
-      class="flex w-full cursor-pointer flex-col gap-2 rounded-3xl px-2 py-4 transition-all duration-300"
-    >
-      <div class="flex h-7 w-full lg:h-8">
-        <skeleton-loader class="block w-full bg-theme-900" />
-      </div>
-      <div class="flex h-6 w-full lg:h-7">
-        <skeleton-loader class="block w-full bg-theme-900" />
-      </div>
-    </div>
-    } }
-  </div>
+					</div>
+				</div>
+			}
+		} @else {
+			@for (num of [0, 1, 2]; track num) {
+				<div
+					class="flex w-full cursor-pointer flex-col gap-2 rounded-3xl px-2 py-4 transition-all duration-300"
+				>
+					<div class="flex h-7 w-full lg:h-8">
+						<skeleton-loader class="block w-full bg-theme-900" />
+					</div>
+					<div class="flex h-6 w-full lg:h-7">
+						<skeleton-loader class="block w-full bg-theme-900" />
+					</div>
+				</div>
+			}
+		}
+	</div>
 </div>

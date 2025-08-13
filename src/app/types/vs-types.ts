@@ -1,42 +1,45 @@
 export class VSFilterBody {
-  constructor() {
-    const themeFilter: VSCriteria = { filterType: 5, value: "themes" };
-    const vscodeFilter: VSCriteria = { filterType: 8, value: "Microsoft.VisualStudio.Code" }
-    const defaultFilter: VSCriteria = { filterType: 12, value: "4096" }
+	constructor() {
+		const themeFilter: VSCriteria = { filterType: 5, value: 'themes' };
+		const vscodeFilter: VSCriteria = {
+			filterType: 8,
+			value: 'Microsoft.VisualStudio.Code',
+		};
+		const defaultFilter: VSCriteria = { filterType: 12, value: '4096' };
 
-    const empty = new VSFilters;
-    this.filters.push(empty);
-    this.filters[0].criteria.push(themeFilter, vscodeFilter, defaultFilter);
-    this.flags = 950;
-  }
+		const empty = new VSFilters();
+		this.filters.push(empty);
+		this.filters[0].criteria.push(themeFilter, vscodeFilter, defaultFilter);
+		this.flags = 950;
+	}
 
-  addFilter(filter: VSCriteria) {
-    for (const c of this.filters[0].criteria) {
-      if (c.filterType === filter.filterType) {
-        c.value = filter.value;
-        return;
-      }
-    }
+	addFilter(filter: VSCriteria) {
+		for (const c of this.filters[0].criteria) {
+			if (c.filterType === filter.filterType) {
+				c.value = filter.value;
+				return;
+			}
+		}
 
-    this.filters[0].criteria.push(filter);
-  }
+		this.filters[0].criteria.push(filter);
+	}
 
-  addSearchFilter(filterFor: string) {
-    const newFilter: VSCriteria = { filterType: 10, value: filterFor };
-    this.addFilter(newFilter);
-  }
+	addSearchFilter(filterFor: string) {
+		const newFilter: VSCriteria = { filterType: 10, value: filterFor };
+		this.addFilter(newFilter);
+	}
 
-  filters: VSFilters[] = [];
-  assetTypes: unknown[] = [];
-  flags?: number;
+	filters: VSFilters[] = [];
+	assetTypes: unknown[] = [];
+	flags?: number;
 }
 
 export class VSFilters {
-  criteria: VSCriteria[] = [];
-  pageNumber = 1;
-  pageSize = 20;
-  sortBy = 0;
-  sortOrder = 0;
+	criteria: VSCriteria[] = [];
+	pageNumber = 1;
+	pageSize = 20;
+	sortBy = 0;
+	sortOrder = 0;
 }
 
 /*
@@ -49,81 +52,81 @@ FilterType is not documented. Known filter types are:
 
 */
 export interface VSCriteria {
-  filterType: number;
-  value: string;
-};
+	filterType: number;
+	value: string;
+}
 
 export interface VSResultBody {
-  results: VSResult[];
+	results: VSResult[];
 }
 
 export interface VSResult {
-  extensions: VSExtension[];
-  pagingToken: unknown;
-  resultMetadata: VSExtensionMetadataBody[];
+	extensions: VSExtension[];
+	pagingToken: unknown;
+	resultMetadata: VSExtensionMetadataBody[];
 }
 
 export interface VSExtension {
-  publisher: VSExtensionPublisherInfo;
-  extensionId: string;
-  extensionName: string;
-  displayName: string;
-  flags: string;
-  lastUpdated: string;
-  publishedDate: string;
-  releaseDate: string;
-  shortDescription: string;
-  versions: VSExtensionVersions[];
-  categories: string[];
-  tags: string[];
-  statistics: VSExtensionStat[];
-  deploymentType: number;
+	publisher: VSExtensionPublisherInfo;
+	extensionId: string;
+	extensionName: string;
+	displayName: string;
+	flags: string;
+	lastUpdated: string;
+	publishedDate: string;
+	releaseDate: string;
+	shortDescription: string;
+	versions: VSExtensionVersions[];
+	categories: string[];
+	tags: string[];
+	statistics: VSExtensionStat[];
+	deploymentType: number;
 
-  // extensionIcon is not included in the response from VS. The icon is downloaded via a GET and the Base64 string is saved here.
-  // extensionIcon may be set to null to indicate that there is no extensionIcon
-  extensionIcon?: string | null;
+	// extensionIcon is not included in the response from VS. The icon is downloaded via a GET and the Base64 string is saved here.
+	// extensionIcon may be set to null to indicate that there is no extensionIcon
+	extensionIcon?: string | null;
 }
 
 export interface VSExtensionPublisherInfo {
-  publisherId: string;
-  publisherName: string;
-  displayName: string;
-  flags: string;
-  domain: unknown;
-  isDomainVerified: boolean
+	publisherId: string;
+	publisherName: string;
+	displayName: string;
+	flags: string;
+	domain: unknown;
+	isDomainVerified: boolean;
 }
 
 export interface VSExtensionVersions {
-  version: string;
-  flags: string;
-  lastUpdated: string;
-  files: VSExtensionVersionFiles[];
-  properties?: VSExtensionVersionProps[];
-  assetUri?: string;
-  fallbackAssetUri?: string;
+	version: string;
+	flags: string;
+	lastUpdated: string;
+	files: VSExtensionVersionFiles[];
+	properties?: VSExtensionVersionProps[];
+	assetUri?: string;
+	fallbackAssetUri?: string;
 }
 
 export interface VSExtensionVersionFiles {
-  assetType: string;
-  source: string;
+	assetType: string;
+	source: string;
 }
 
 export interface VSExtensionVersionProps {
-  key: string;
-  value: string;
+	key: string;
+	value: string;
 }
 
 export interface VSExtensionStat {
-  statisticName: string;
-  value: number;
+	statisticName: string;
+	value: number;
 }
 
 export interface VSExtensionMetadataBody {
-  metadataType: string;
-  metadataItems: VSExtensionMetadataItem[];
+	metadataType: string;
+	metadataItems: VSExtensionMetadataItem[];
 }
 
 export interface VSExtensionMetadataItem {
-  name: string;
-  count: number;
+	name: string;
+	count: number;
 }
