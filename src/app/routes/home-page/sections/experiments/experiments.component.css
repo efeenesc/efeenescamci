@@ -29,6 +29,15 @@
 	transform: translateY(var(--yPos, -120px)) scale(var(--scale, 1));
 }
 
+@media (max-width: 450px) {
+	.card-container.collapsed .card {
+		max-height: 100px;
+		overflow: hidden;
+		transform: translateY(calc(var(--yPos, -120px) + 20px))
+			scale(var(--scale, 1));
+	}
+}
+
 .card-container.expanded .card {
 	transform: translateY(0) scale(1);
 }
