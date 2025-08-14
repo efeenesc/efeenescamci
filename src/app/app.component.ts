@@ -34,7 +34,6 @@ import { FakeLoadingBarComponent } from './components/fake-loading-bar/fake-load
 		FakeLoadingBarComponent,
 	],
 	templateUrl: './app.component.html',
-	styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
 	@ViewChild('main') set _m(content: ElementRef) {
