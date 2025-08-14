@@ -36,7 +36,9 @@
 					<normal-card [info]="exp" />
 				</div>
 			}
-			<div class="sticky bottom-0 right-0 z-50 self-end pb-4 transition-all">
+			<div
+				class="sticky bottom-0 right-0 z-50 max-h-0 self-end overflow-visible pb-16 transition-all"
+			>
 				<button
 					(click)="this.toggleShowMore()"
 					class="bg-accent1/20 flex flex-row gap-3 self-end rounded-full p-4 shadow-light backdrop-blur-md transition-all hover:bg-highlight-solid active:translate-y-1 active:shadow-dark-inset"
