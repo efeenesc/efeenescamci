@@ -24,7 +24,7 @@ export class BlogSectionComponent implements OnInit {
 	showingMore = signal<boolean>(false);
 	blogs = signal<NormalCardInfo[]>([]);
 	errorMessage?: string;
-	showCount = 2;
+	showCount = 3;
 
 	constructor(
 		private backend: BackendService,
@@ -40,7 +40,7 @@ export class BlogSectionComponent implements OnInit {
 							id: d.id,
 							name: d.title,
 							desc: d.created_at,
-							source_url: d.route,
+							source_url: '/blog/' + d.route,
 						};
 					}),
 				);

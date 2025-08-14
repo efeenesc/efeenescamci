@@ -22,40 +22,44 @@
 						<normal-card [info]="b" />
 					</div>
 				}
-				@for (
-					exp of this.blogs().slice(showCount);
-					track exp.name;
-					let i = $index, c = $count
-				) {
+				@if (this.blogs().length > showCount) {
+					@for (
+						exp of this.blogs().slice(showCount);
+						track exp.name;
+						let i = $index, c = $count
+					) {
+						<div
+							class="card-container w-full"
+							[class.collapsed]="!showingMore()"
+							[class.expanded]="showingMore()"
+							[style.--delay]="i * 100 + 'ms'"
+							[style.--duration]="300 + i * 100 + 'ms'"
+							[style.--yPos]="-80 + i * 5 + 'px'"
+							[style.--scale]="1 - (i + 1) * 0.05"
+							[style.--z-index]="40 - i"
+						>
+							<normal-card [info]="exp" />
+						</div>
+					}
 					<div
-						class="card-container w-full"
-						[class.collapsed]="!showingMore()"
-						[class.expanded]="showingMore()"
-						[style.--delay]="i * 100 + 'ms'"
-						[style.--duration]="300 + i * 100 + 'ms'"
-						[style.--yPos]="-80 + i * 5 + 'px'"
-						[style.--scale]="1 - (i + 1) * 0.05"
-						[style.--z-index]="40 - i"
+						class="sticky bottom-0 right-0 z-50 self-end pb-4 transition-all"
 					>
-						<normal-card [info]="exp" />
+						<button
+							(click)="this.toggleShowMore()"
+							class="bg-accent1/20 flex flex-row gap-3 self-end rounded-full p-4 shadow-light backdrop-blur-md transition-all hover:bg-highlight-solid active:translate-y-1 active:shadow-dark-inset"
+						>
+							<icon-arrow-down
+								class="aspect-square w-6 stroke-contrast transition-[rotate] duration-300"
+								[style.rotate]="showingMore() ? '180deg' : '0deg'"
+							></icon-arrow-down>
+							@if (!showingMore()) {
+								Show {{ this.blogs().length - showCount }} more
+							} @else {
+								Collapse
+							}
+						</button>
 					</div>
 				}
-				<div class="sticky bottom-0 right-0 z-50 self-end pb-4 transition-all">
-					<button
-						(click)="this.toggleShowMore()"
-						class="bg-accent1/20 flex flex-col gap-3 self-end rounded-full p-4 shadow-light backdrop-blur-md transition-all hover:bg-highlight-solid active:translate-y-1 active:shadow-dark-inset lg:flex-row"
-					>
-						<icon-arrow-down
-							class="aspect-square w-6 stroke-contrast transition-[rotate] duration-300"
-							[style.rotate]="showingMore() ? '180deg' : '0deg'"
-						></icon-arrow-down>
-						@if (!showingMore()) {
-							Show {{ this.blogs().length - showCount }} more
-						} @else {
-							Collapse
-						}
-					</button>
-				</div>
 			} @else {
 				@for (num of [0, 1, 2]; track num) {
 					<div
@@ -71,21 +75,5 @@
 				}
 			}
 		</div>
-
-		<!-- @if (this.blogs().length > 1) {
-			@for (b of this.blogs(); track b.id) {
-				<div
-					class="flex w-full cursor-pointer flex-col rounded-3xl bg-theme-600 p-4 shadow-light transition-all hover:bg-highlight-solid active:translate-y-1 active:shadow-dark-inset"
-					tabindex="0"
-					(keydown)="this.keyPressed($event, b)"
-					(click)="this.blogCardClicked(b)"
-				>
-					<div class="text-lg font-bold text-foreground lg:text-2xl">
-						{{ b.title }}
-					</div>
-					<span class="text-base">{{ b.created_at }}</span>
-				</div>
-			}
-		} -->
 	</div>
 </div>

@@ -55,7 +55,7 @@ export class ExperimentsComponent {
 			icon_url:
 				'https://github.com/efeenesc/c-twig-server/raw/main/assets/icon.png',
 			name: 'c-twig-server',
-			desc: 'C server as durable as a twig found in the wild. Educational purposes only.',
+			desc: 'C server durable as a twig found in the wild. Educational purposes only.',
 			source_url: 'https://github.com/efeenesc/c-twig-server',
 			read_more: '',
 			loaded: signal(false),
@@ -64,7 +64,7 @@ export class ExperimentsComponent {
 			id: 0,
 			icon_url: 'assets/efeenescamci-logo.png',
 			name: 'efeenescamci',
-			desc: 'This website. Built using Angular.',
+			desc: 'This website. Built using Angular and Go.',
 			source_url: 'https://github.com/efeenesc/efeenescamci',
 			read_more: '',
 			loaded: signal(false),
