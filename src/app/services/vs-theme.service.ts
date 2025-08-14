@@ -437,6 +437,9 @@ export class VsThemeService {
 			'--system',
 			`color-mix(in srgb, ${cs.theme900} 50%, ${cs.system} 50%)`,
 		);
+		(
+			document.head.querySelector('meta[name="theme-color"]') as HTMLMetaElement
+		).content = cs.theme900;
 		document.documentElement.setAttribute('data-theme', cs.theme);
 
 		this.activeThemeVariantName.next(cs.name);
