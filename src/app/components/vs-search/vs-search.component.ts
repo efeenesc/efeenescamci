@@ -7,6 +7,7 @@ import {
 	OnInit,
 	effect,
 	output,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { LocalStorageService } from '../../services/local-storage.service';
 import gsap from 'gsap';
@@ -16,6 +17,7 @@ import { Subscription } from 'rxjs';
 	selector: 'vs-search',
 	imports: [],
 	templateUrl: './vs-search.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VsSearchComponent implements OnDestroy, OnInit {
 	@ViewChild('themebtn') themeBtn!: HTMLElement;

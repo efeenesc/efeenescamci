@@ -4,6 +4,7 @@ import {
 	ViewChild,
 	signal,
 	effect,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MarkdownEditorComponent } from '../../components/markdown-editor/markdown-editor.component';
@@ -22,6 +23,7 @@ import gsap from 'gsap';
 		SkeletonLoaderComponent,
 	],
 	templateUrl: './view-blog-page.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	styles: `
 		.test > h3:first-of-type {
 			margin-top: 0px;

@@ -5,6 +5,7 @@ import {
 	OnInit,
 	OnDestroy,
 	output,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { XMarkComponent } from '../../icons/xmark/xmark.component';
@@ -20,6 +21,7 @@ interface VerticalMousePosition {
 	selector: 'drawer-component',
 	imports: [XMarkComponent],
 	templateUrl: './drawer.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DrawerComponent implements OnInit, OnDestroy {
 	@ViewChild('drawerMain') set _dm(content: ElementRef) {

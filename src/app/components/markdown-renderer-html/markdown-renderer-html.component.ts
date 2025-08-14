@@ -1,4 +1,5 @@
 import {
+	ChangeDetectionStrategy,
 	Component,
 	ElementRef,
 	Input,
@@ -14,6 +15,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 	encapsulation: ViewEncapsulation.None,
 	template: ` <div class="md-renderer" [innerHTML]="this.parsedNode"></div> `,
 	styleUrl: './markdown-renderer-html.component.css',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 /**

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { VSExtension, VSFilterBody } from '../../../../types/vs-types';
 import { VsThemeService } from '../../../../services/vs-theme.service';
 import { LocalStorageService } from '../../../../services/local-storage.service';
@@ -14,6 +14,7 @@ import beigeIcon from '../../../../icons/beige-theme-icon/beigeiconb64';
 	standalone: true,
 	imports: [VsCardComponent, DeferLoadDirective],
 	templateUrl: './themes.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	styles: `
 		:host {
 			display: flex;

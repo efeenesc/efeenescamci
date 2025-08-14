@@ -1,4 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	Input,
+	OnInit,
+} from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import gsap from 'gsap';
 
@@ -12,6 +17,7 @@ import gsap from 'gsap';
 			<div id="progressbar" class="h-full w-0 bg-blue-500"></div>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoadingBarComponent implements OnInit {
 	@Input() set progress(v: number | undefined) {

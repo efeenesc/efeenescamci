@@ -7,6 +7,7 @@ import {
 	ViewChildren,
 	OnInit,
 	ElementRef,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -35,6 +36,7 @@ import { LocalStorageService } from '../../services/local-storage.service';
 		SkeletonLoaderComponent,
 	],
 	templateUrl: './vs-menu.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	styles: `
 		::-webkit-scrollbar {
 			background-color: var(--system);

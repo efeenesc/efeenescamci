@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
 	selector: 'icon-missing-icon',
@@ -30,6 +30,7 @@ import { Component, input } from '@angular/core';
 			/>
 		</svg>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MissingIconComponent {
 	applyClass = input<string | undefined>();

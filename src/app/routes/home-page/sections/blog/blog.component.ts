@@ -1,4 +1,9 @@
-import { Component, OnInit, signal } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	OnInit,
+	signal,
+} from '@angular/core';
 import { BackendService } from '../../../../services/backend.service';
 import { Router } from '@angular/router';
 import { SkeletonLoaderComponent } from '../../../../components/skeleton-loader/skeleton-loader.component';
@@ -12,6 +17,7 @@ import { ArrowDownComponent } from '../../../../icons/arrow-down/arrow-down.comp
 	selector: 'blog-section',
 	imports: [SkeletonLoaderComponent, NormalCardComponent, ArrowDownComponent],
 	templateUrl: './blog.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	styles: `
 		:host {
 			display: flex;

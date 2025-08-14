@@ -1,4 +1,5 @@
 import {
+	ChangeDetectionStrategy,
 	Component,
 	effect,
 	ElementRef,
@@ -50,6 +51,7 @@ export class VsCardStyle {
 		MissingIconComponent,
 	],
 	templateUrl: './vs-card.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VsCardComponent implements OnDestroy {
 	@ViewChild('themeinfo') set _dm(content: ElementRef) {

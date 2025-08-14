@@ -1,4 +1,9 @@
-import { Component, signal, ViewEncapsulation } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	signal,
+	ViewEncapsulation,
+} from '@angular/core';
 import { NormalCardComponent } from '../../../../components/normal-card/normal-card.component';
 import { ArrowDownComponent } from '../../../../icons/arrow-down/arrow-down.component';
 
@@ -6,6 +11,7 @@ import { ArrowDownComponent } from '../../../../icons/arrow-down/arrow-down.comp
 	selector: 'experiments-section',
 	imports: [NormalCardComponent, ArrowDownComponent],
 	templateUrl: './experiments.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	styles: `
 		:host {
 			display: flex;

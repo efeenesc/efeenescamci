@@ -6,6 +6,7 @@ import {
 	OnInit,
 	input,
 	output,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, Subject } from 'rxjs';
@@ -18,6 +19,7 @@ import { MarkdownRendererComponent } from '../markdown-renderer/markdown-rendere
 	encapsulation: ViewEncapsulation.None,
 	imports: [FormsModule, ReactiveFormsModule, MarkdownRendererComponent],
 	templateUrl: './markdown-editor.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	styleUrl: './markdown-editor.component.css',
 })
 export class MarkdownEditorComponent implements OnInit {

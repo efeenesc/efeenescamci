@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
 	selector: 'edit-icon',
@@ -28,5 +28,6 @@ import { Component } from '@angular/core';
 			</g>
 		</g>
 	</svg>`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditIconComponent {}
