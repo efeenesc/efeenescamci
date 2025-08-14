@@ -1,0 +1,34 @@
+.card-container {
+	transition-property: max-height;
+	transition-duration: var(--duration, 400ms);
+	transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+	transition-delay: var(--delay, 0ms);
+}
+
+.card-container.collapsed {
+	max-height: 0px;
+	overflow: visible;
+	pointer-events: none;
+	z-index: var(--z-index, 0);
+}
+
+.card-container.expanded {
+	max-height: 200px;
+	overflow: visible;
+	z-index: var(--z-index, 0);
+}
+
+.card {
+	transition-property: transform;
+	transition-duration: var(--duration, 400ms);
+	transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+	transition-delay: var(--delay, 0ms);
+}
+
+.card-container.collapsed .card {
+	transform: translateY(var(--yPos, -120px)) scale(var(--scale, 1));
+}
+
+.card-container.expanded .card {
+	transform: translateY(0) scale(1);
+}

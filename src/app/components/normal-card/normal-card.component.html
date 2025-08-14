@@ -1,0 +1,34 @@
+@if (this.info()) {
+	<a
+		[href]="this.info().source_url"
+		target="_blank"
+		class="card relative flex w-full gap-3 rounded-3xl bg-theme-600 p-4 shadow-light transition-all hover:bg-highlight-solid active:translate-y-1 active:shadow-dark-inset"
+	>
+		@if (this.info().icon_url) {
+			<div
+				class="relative block aspect-square h-fit w-24 shrink-0 items-center justify-center justify-self-center overflow-hidden rounded-2xl bg-theme-900"
+			>
+				@if (!this.info().loaded) {
+					<skeleton-loader class="block aspect-square" />
+				}
+				<img
+					loading="lazy"
+					(load)="this.setLoaded()"
+					[src]="this.info().icon_url"
+					[alt]="this.info().name + 'icon'"
+					class="pointer-events-none scale-110"
+					onerror="this.style.display='none'"
+				/>
+			</div>
+		}
+
+		<div class="flex flex-col">
+			<h2 class="text-xl font-semibold text-foreground lg:text-xl">
+				{{ this.info().name }}
+			</h2>
+			<p class="text-contrast lg:text-lg">
+				{{ this.info().desc }}
+			</p>
+		</div>
+	</a>
+}

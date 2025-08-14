@@ -5,44 +5,53 @@
 		Experiments
 	</h1>
 
-	<div
-		class="flex w-full flex-col items-center justify-center gap-2 self-center"
-	>
-		<span class="self-start lg:text-lg">
+	<div class="relative z-[1] w-full">
+		<span class="block self-start lg:text-lg">
 			A few things from my vault of unfinished projects I thought were cool (and
 			barely finished) enough to put on here:
 		</span>
-		@for (exp of expCards; track exp.name) {
-			<a
-				[href]="exp.source_url"
-				target="_blank"
-				class="relative flex w-full flex-col gap-3 rounded-3xl bg-theme-600 p-4 shadow-light transition-all hover:bg-highlight-solid active:translate-y-1 active:shadow-dark-inset lg:flex-row"
-			>
+		<div
+			class="mt-6 flex flex-col items-center justify-center gap-2 self-center"
+		>
+			@for (exp of expCards.slice(0, showCount); track exp.name) {
+				<div class="z-50 w-full">
+					<normal-card [info]="exp" />
+				</div>
+			}
+			@for (
+				exp of expCards.slice(showCount);
+				track exp.name;
+				let i = $index, c = $count
+			) {
 				<div
-					class="relative block aspect-square w-24 shrink-0 items-center justify-center justify-self-center overflow-hidden rounded-2xl bg-theme-900"
+					class="card-container w-full"
+					[class.collapsed]="!showingMore()"
+					[class.expanded]="showingMore()"
+					[style.--delay]="i * 100 + 'ms'"
+					[style.--duration]="300 + i * 100 + 'ms'"
+					[style.--yPos]="-120 + i * 5 + 'px'"
+					[style.--scale]="1 - (i + 1) * 0.05"
+					[style.--z-index]="40 - i"
 				>
-					@if (!exp.loaded) {
-						<skeleton-loader class="block aspect-square" />
+					<normal-card [info]="exp" />
+				</div>
+			}
+			<div class="sticky bottom-0 right-0 z-50 self-end pb-4 transition-all">
+				<button
+					(click)="this.toggleShowMore()"
+					class="bg-accent1/20 flex flex-col gap-3 self-end rounded-full p-4 shadow-light backdrop-blur-md transition-all hover:bg-highlight-solid active:translate-y-1 active:shadow-dark-inset lg:flex-row"
+				>
+					<icon-arrow-down
+						class="aspect-square w-6 stroke-contrast transition-[rotate] duration-300"
+						[style.rotate]="showingMore() ? '180deg' : '0deg'"
+					></icon-arrow-down>
+					@if (!showingMore()) {
+						Show {{ expCards.length - showCount }} more
+					} @else {
+						Collapse
 					}
-					<img
-						loading="lazy"
-						(load)="this.setLoaded(exp.id)"
-						[src]="exp.icon_url"
-						[alt]="exp.name + 'icon'"
-						class="pointer-events-none scale-110"
-						onerror="this.style.display='none'"
-					/>
-				</div>
-
-				<div class="flex flex-col">
-					<h2 class="text-xl font-semibold text-foreground lg:text-xl">
-						{{ exp.name }}
-					</h2>
-					<p class="text-contrast lg:text-lg">
-						{{ exp.desc }}
-					</p>
-				</div>
-			</a>
-		}
+				</button>
+			</div>
+		</div>
 	</div>
 </div>
