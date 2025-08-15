@@ -1,11 +1,13 @@
 import {
 	Component,
+	computed,
 	input,
 	signal,
 	ViewEncapsulation,
 	WritableSignal,
 } from '@angular/core';
 import { SkeletonLoaderComponent } from '../skeleton-loader/skeleton-loader.component';
+import { Router } from '@angular/router';
 
 export interface NormalCardInfo {
 	id: number | string;
@@ -33,10 +35,20 @@ export interface NormalCardInfo {
 })
 export class NormalCardComponent {
 	info = input.required<NormalCardInfo>();
+	isSameHost = computed(() => this.info().source_url.startsWith('/'));
+
+	constructor(private router: Router) {}
 
 	setLoaded() {
 		if (this.info().loaded === undefined) {
 			this.info().loaded = signal(true);
+		}
+	}
+
+	linkClicked(e: Event) {
+		if (this.isSameHost()) {
+			e.preventDefault();
+			this.router.navigateByUrl(this.info().source_url);
 		}
 	}
 }
