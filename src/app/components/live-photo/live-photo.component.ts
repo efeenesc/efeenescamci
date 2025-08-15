@@ -5,6 +5,7 @@ import {
 	ElementRef,
 	ViewChild,
 	OnDestroy,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { LivePhotoIconComponent } from '../../icons/live-photo/live-photo-icon.component';
 import gsap from 'gsap';
@@ -13,6 +14,7 @@ import gsap from 'gsap';
 	selector: 'live-photo',
 	imports: [LivePhotoIconComponent],
 	templateUrl: './live-photo.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LivePhotoComponent implements OnDestroy {
 	mainPhotoUrl = input.required<string>();
