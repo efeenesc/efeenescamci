@@ -4,8 +4,8 @@ import {
 	signal,
 	ViewEncapsulation,
 } from '@angular/core';
-import { NormalCardComponent } from '../../../../components/normal-card/normal-card.component';
-import { ArrowDownComponent } from '../../../../icons/arrow-down/arrow-down.component';
+import { NormalCardComponent } from '@components/normal-card/normal-card.component';
+import { ArrowDownComponent } from '@icons/arrow-down/arrow-down.component';
 
 @Component({
 	selector: 'experiments-section',

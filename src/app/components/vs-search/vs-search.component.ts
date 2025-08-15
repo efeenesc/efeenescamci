@@ -9,7 +9,7 @@ import {
 	output,
 	ChangeDetectionStrategy,
 } from '@angular/core';
-import { LocalStorageService } from '../../services/local-storage.service';
+import { LocalStorageService } from '@services/local-storage.service';
 import gsap from 'gsap';
 import { Subscription } from 'rxjs';
 

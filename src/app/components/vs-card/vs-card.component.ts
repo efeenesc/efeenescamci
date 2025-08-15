@@ -8,12 +8,12 @@ import {
 	signal,
 	ViewChild,
 } from '@angular/core';
-import { VSExtension } from '../../types/vs-types';
-import { SkeletonLoaderComponent } from '../skeleton-loader/skeleton-loader.component';
-import { ArrowUpRightComponent } from '../../icons/arrow-up-right/arrow-up-right.component';
-import { MissingIconComponent } from '../../icons/missing-icon/missing-icon.component';
-import { VsThemeService } from '../../services/vs-theme.service';
-import beigeIcon from '../../icons/beige-theme-icon/beigeiconb64';
+import { VSExtension } from '@apptypes/vs-types';
+import { SkeletonLoaderComponent } from '@components/skeleton-loader/skeleton-loader.component';
+import { ArrowUpRightComponent } from '@icons/arrow-up-right/arrow-up-right.component';
+import { MissingIconComponent } from '@icons/missing-icon/missing-icon.component';
+import { VsThemeService } from '@services/vs-theme.service';
+import beigeIcon from '@icons/beige-theme-icon/beigeiconb64';
 import gsap from 'gsap';
 
 export interface VsCardStyleProps {

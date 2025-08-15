@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { BackendService } from '../../services/backend.service';
+import { BackendService } from '@services/backend.service';
 import { Router } from '@angular/router';
 
 interface Page {

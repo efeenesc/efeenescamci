@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { MdNode } from '../../classes/markdown';
+import { MdNode } from '@classes/markdown';
 
 @Component({
 	selector: 'markdown-renderer',

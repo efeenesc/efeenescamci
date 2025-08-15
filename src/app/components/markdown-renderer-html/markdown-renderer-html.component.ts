@@ -6,7 +6,7 @@ import {
 	SecurityContext,
 	ViewEncapsulation,
 } from '@angular/core';
-import { MdNode } from '../../classes/markdown';
+import { MdNode } from '@classes/markdown';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({

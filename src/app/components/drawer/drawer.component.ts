@@ -8,10 +8,10 @@ import {
 	ChangeDetectionStrategy,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { XMarkComponent } from '../../icons/xmark/xmark.component';
-import { WindowObserverService } from '../../services/window-observer.service';
+import { XMarkComponent } from '@icons/xmark/xmark.component';
+import { WindowObserverService } from '@services/window-observer.service';
 import gsap from 'gsap';
-import { OverflowDirective } from '../../directives/overflow.directive';
+import { OverflowDirective } from '@directives/overflow.directive';
 
 interface VerticalMousePosition {
 	y: number;

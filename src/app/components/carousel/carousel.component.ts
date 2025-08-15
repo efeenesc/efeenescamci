@@ -6,7 +6,7 @@ import {
 	OnInit,
 	ChangeDetectionStrategy,
 } from '@angular/core';
-import { WindowObserverService } from '../../services/window-observer.service';
+import { WindowObserverService } from '@services/window-observer.service';
 import gsap from 'gsap';
 
 interface MousePosition {

@@ -9,7 +9,7 @@ import {
 import {
 	FakeLoadingBarService,
 	LoadingState,
-} from '../../services/fake-loading-bar.service';
+} from '@services/fake-loading-bar.service';
 import gsap from 'gsap';
 
 @Component({

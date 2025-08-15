@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import * as vst from '../types/vs-types';
+import * as vst from '@apptypes/vs-types';
 import stripJsonComments from 'strip-json-comments';
 import type JSZip from 'jszip';
-import { ScopeFinder } from '../classes/scopefinder';
-import { ColorScheme, ThemeColors, ThemeType } from '../classes/colorscheme';
+import { ScopeFinder } from '@classes/scopefinder';
+import { ColorScheme, ThemeColors, ThemeType } from '@classes/colorscheme';
 import { LocalStorageService } from './local-storage.service';
-import { ThemeMetadata, ThemePackage } from '../types/vs/manifest';
+import { ThemeMetadata, ThemePackage } from '@apptypes/vs/manifest';
 import { BehaviorSubject } from 'rxjs';
 
 export type iconDownloadConfig = 'none' | 'small' | 'large';

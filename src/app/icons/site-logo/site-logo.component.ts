@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import gsap from 'gsap';
-import { WindowObserverService } from '../../services/window-observer.service';
+import { WindowObserverService } from '@services/window-observer.service';
 
 @Component({
 	selector: 'site-logo',

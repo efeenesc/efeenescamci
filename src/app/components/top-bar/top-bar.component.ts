@@ -9,13 +9,13 @@ import {
 	output,
 	ChangeDetectionStrategy,
 } from '@angular/core';
-import { VsSearchComponent } from '../vs-search/vs-search.component';
+import { VsSearchComponent } from '@components/vs-search/vs-search.component';
 import {
 	WindowObserverService,
 	WindowSize,
-} from '../../services/window-observer.service';
-import { SiteLogoComponent } from '../../icons/site-logo/site-logo.component';
-import { OverflowDirective } from '../../directives/overflow.directive';
+} from '@services/window-observer.service';
+import { SiteLogoComponent } from '@icons/site-logo/site-logo.component';
+import { OverflowDirective } from '@directives/overflow.directive';
 import gsap from 'gsap';
 
 @Component({
