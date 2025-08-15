@@ -19,6 +19,7 @@ import { ArrowDownComponent } from '../../../../icons/arrow-down/arrow-down.comp
 			flex-basis: 100%;
 		}
 	`,
+	styleUrl: 'blog.component.css',
 })
 export class BlogSectionComponent implements OnInit {
 	showingMore = signal<boolean>(false);
