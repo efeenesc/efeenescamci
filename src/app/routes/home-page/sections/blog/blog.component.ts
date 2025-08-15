@@ -2,10 +2,15 @@ import { Component, OnInit, signal } from '@angular/core';
 import { BackendService } from '../../../../services/backend.service';
 import { Router } from '@angular/router';
 import { SkeletonLoaderComponent } from '../../../../components/skeleton-loader/skeleton-loader.component';
+import {
+	NormalCardComponent,
+	NormalCardInfo,
+} from '../../../../components/normal-card/normal-card.component';
+import { ArrowDownComponent } from '../../../../icons/arrow-down/arrow-down.component';
 
 @Component({
 	selector: 'blog-section',
-	imports: [SkeletonLoaderComponent],
+	imports: [SkeletonLoaderComponent, NormalCardComponent, ArrowDownComponent],
 	templateUrl: './blog.component.html',
 	styles: `
 		:host {
@@ -14,10 +19,13 @@ import { SkeletonLoaderComponent } from '../../../../components/skeleton-loader/
 			flex-basis: 100%;
 		}
 	`,
+	styleUrl: 'blog.component.css',
 })
 export class BlogSectionComponent implements OnInit {
-	blogs = signal<BlogRoute[]>([]);
+	showingMore = signal<boolean>(false);
+	blogs = signal<NormalCardInfo[]>([]);
 	errorMessage?: string;
+	showCount = 3;
 
 	constructor(
 		private backend: BackendService,
@@ -27,7 +35,16 @@ export class BlogSectionComponent implements OnInit {
 	ngOnInit() {
 		this.backend.getNewBlogPostBriefs().subscribe({
 			next: (data: BlogQueryResult) => {
-				this.blogs.set(data.briefs);
+				this.blogs.set(
+					data.briefs.map((d) => {
+						return {
+							id: d.id,
+							name: d.title,
+							desc: d.created_at,
+							source_url: '/blog/' + d.route,
+						};
+					}),
+				);
 			},
 			error: (error: unknown) => {
 				this.errorMessage = 'Error fetching new blog post briefs';
@@ -42,5 +59,9 @@ export class BlogSectionComponent implements OnInit {
 
 	keyPressed(event: KeyboardEvent, blog: BlogRoute) {
 		if (event.key === 'Enter') this.blogCardClicked(blog);
+	}
+
+	toggleShowMore() {
+		this.showingMore.set(!this.showingMore());
 	}
 }
