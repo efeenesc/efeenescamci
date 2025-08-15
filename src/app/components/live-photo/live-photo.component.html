@@ -14,8 +14,9 @@
 			[src]="shortVideoShownUrl()"
 			muted
 			autoplay
+			playsinline
 			oncanplay="this.play()"
-			onloadedmetadata="this.muted = true"
+			onloadedmetadata="this.muted = true; this.playsinline = true"
 			(ended)="videoEnded()"
 			(playing)="onVideoLoad()"
 			class="absolute inset-0 -z-10 size-full h-[101%] object-cover"

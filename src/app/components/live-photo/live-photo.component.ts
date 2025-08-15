@@ -17,6 +17,7 @@ import gsap from 'gsap';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LivePhotoComponent implements OnDestroy {
+	constructor(private elementRef: ElementRef) {}
 	mainPhotoUrl = input.required<string>();
 	shortVideoUrls = input<string[]>();
 	triggerMode = input<'hover' | 'press'>('hover');
@@ -31,6 +32,11 @@ export class LivePhotoComponent implements OnDestroy {
 	private progressInterval?: number;
 	private fadeInTween?: gsap.core.Tween;
 	private fadeOutTween?: gsap.core.Tween;
+	private clickOutsideListener(event: Event) {
+		if (!this.elementRef.nativeElement.contains(event.target as Node)) {
+			this.onMouseLeave();
+		}
+	}
 
 	triggerVideo() {
 		const urls = this.shortVideoUrls();
@@ -55,12 +61,14 @@ export class LivePhotoComponent implements OnDestroy {
 	onMouseEnter() {
 		if (this.triggerMode() === 'hover' && !this.shortVideoShownUrl()) {
 			this.startTimer();
+			this.addClickOutsideListener();
 		}
 	}
 
 	onMouseLeave() {
 		if (this.triggerMode() === 'hover' && !this.shortVideoShownUrl()) {
 			this.stopTimer();
+			this.removeClickOutsideListener();
 		}
 	}
 
@@ -130,8 +138,20 @@ export class LivePhotoComponent implements OnDestroy {
 		}
 	}
 
+	private addClickOutsideListener() {
+		this.removeClickOutsideListener();
+		document.addEventListener('click', this.clickOutsideListener, true);
+		document.addEventListener('touchstart', this.clickOutsideListener, true);
+	}
+
+	private removeClickOutsideListener() {
+		document.removeEventListener('click', this.clickOutsideListener, true);
+		document.removeEventListener('touchstart', this.clickOutsideListener, true);
+	}
+
 	ngOnDestroy() {
 		this.stopTimer();
+		this.removeClickOutsideListener();
 		if (this.fadeInTween) this.fadeInTween.kill();
 		if (this.fadeOutTween) this.fadeOutTween.kill();
 	}
