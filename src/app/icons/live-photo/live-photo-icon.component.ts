@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
 	selector: 'icon-live-photo',
@@ -29,5 +29,6 @@ import { Component } from '@angular/core';
 			</g>
 		</g>
 	</svg>`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LivePhotoIconComponent {}

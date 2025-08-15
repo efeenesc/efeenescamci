@@ -6,7 +6,7 @@ import {
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { BackendService } from '../services/backend.service';
+import { BackendService } from '@services/backend.service';
 
 @Injectable({
 	providedIn: 'root',

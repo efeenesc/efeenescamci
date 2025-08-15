@@ -1,4 +1,5 @@
 import {
+	ChangeDetectionStrategy,
 	Component,
 	computed,
 	input,
@@ -32,6 +33,7 @@ export interface NormalCardInfo {
 		}
 	`,
 	encapsulation: ViewEncapsulation.None,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NormalCardComponent {
 	info = input.required<NormalCardInfo>();

@@ -7,6 +7,7 @@ import {
 	ViewChildren,
 	OnInit,
 	ElementRef,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -17,13 +18,13 @@ import {
 	Subscription,
 	switchMap,
 } from 'rxjs';
-import { VsThemeService } from '../../services/vs-theme.service';
-import * as vst from '../../types/vs-types';
-import { VsCardComponent } from '../vs-card/vs-card.component';
-import { MagnifyingGlassComponent } from '../../icons/magnifying-glass/magnifying-glass.component';
-import { SkeletonLoaderComponent } from '../skeleton-loader/skeleton-loader.component';
-import { ColorScheme } from '../../classes/colorscheme';
-import { LocalStorageService } from '../../services/local-storage.service';
+import { VsThemeService } from '@services/vs-theme.service';
+import * as vst from '@apptypes/vs-types';
+import { VsCardComponent } from '@components/vs-card/vs-card.component';
+import { MagnifyingGlassComponent } from '@icons/magnifying-glass/magnifying-glass.component';
+import { SkeletonLoaderComponent } from '@components/skeleton-loader/skeleton-loader.component';
+import { ColorScheme } from '@classes/colorscheme';
+import { LocalStorageService } from '@services/local-storage.service';
 
 @Component({
 	selector: 'vs-menu',
@@ -35,6 +36,7 @@ import { LocalStorageService } from '../../services/local-storage.service';
 		SkeletonLoaderComponent,
 	],
 	templateUrl: './vs-menu.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	styles: `
 		::-webkit-scrollbar {
 			background-color: var(--system);

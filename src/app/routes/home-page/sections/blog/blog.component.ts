@@ -1,17 +1,23 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { BackendService } from '../../../../services/backend.service';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	OnInit,
+	signal,
+} from '@angular/core';
+import { BackendService } from '@services/backend.service';
 import { Router } from '@angular/router';
-import { SkeletonLoaderComponent } from '../../../../components/skeleton-loader/skeleton-loader.component';
+import { SkeletonLoaderComponent } from '@components/skeleton-loader/skeleton-loader.component';
 import {
 	NormalCardComponent,
 	NormalCardInfo,
-} from '../../../../components/normal-card/normal-card.component';
-import { ArrowDownComponent } from '../../../../icons/arrow-down/arrow-down.component';
+} from '@components/normal-card/normal-card.component';
+import { ArrowDownComponent } from '@icons/arrow-down/arrow-down.component';
 
 @Component({
 	selector: 'blog-section',
 	imports: [SkeletonLoaderComponent, NormalCardComponent, ArrowDownComponent],
 	templateUrl: './blog.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	styles: `
 		:host {
 			display: flex;

@@ -1,11 +1,12 @@
 import {
+	ChangeDetectionStrategy,
 	Component,
 	ElementRef,
 	Input,
 	SecurityContext,
 	ViewEncapsulation,
 } from '@angular/core';
-import { MdNode } from '../../classes/markdown';
+import { MdNode } from '@classes/markdown';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
@@ -14,6 +15,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 	encapsulation: ViewEncapsulation.None,
 	template: ` <div class="md-renderer" [innerHTML]="this.parsedNode"></div> `,
 	styleUrl: './markdown-renderer-html.component.css',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 /**

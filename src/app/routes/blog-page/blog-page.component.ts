@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { BackendService } from '../../services/backend.service';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { BackendService } from '@services/backend.service';
 import { Router } from '@angular/router';
 
 interface Page {
@@ -13,6 +13,7 @@ interface Page {
 	selector: 'blog-page',
 	imports: [],
 	templateUrl: './blog-page.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlogPageComponent {
 	limit = 10;

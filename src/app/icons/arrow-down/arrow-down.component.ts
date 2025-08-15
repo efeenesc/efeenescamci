@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
 	selector: 'icon-arrow-down',
@@ -23,6 +23,7 @@ import { Component, Input } from '@angular/core';
 			/>
 		</svg>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArrowDownComponent {
 	@Input() applyClass?: string;

@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
 	selector: 'footer',
 	templateUrl: './footer.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	styles: `
 		.test {
 			width: 100%;

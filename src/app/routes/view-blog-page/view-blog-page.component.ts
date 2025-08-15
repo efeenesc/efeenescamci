@@ -4,12 +4,13 @@ import {
 	ViewChild,
 	signal,
 	effect,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MarkdownEditorComponent } from '../../components/markdown-editor/markdown-editor.component';
-import { MdNode } from '../../classes/markdown';
-import { MarkdownRendererHtmlComponent } from '../../components/markdown-renderer-html/markdown-renderer-html.component';
-import { SkeletonLoaderComponent } from '../../components/skeleton-loader/skeleton-loader.component';
+import { MarkdownEditorComponent } from '@components/markdown-editor/markdown-editor.component';
+import { MdNode } from '@classes/markdown';
+import { MarkdownRendererHtmlComponent } from '@components/markdown-renderer-html/markdown-renderer-html.component';
+import { SkeletonLoaderComponent } from '@components/skeleton-loader/skeleton-loader.component';
 import { Meta } from '@angular/platform-browser';
 import gsap from 'gsap';
 
@@ -22,6 +23,7 @@ import gsap from 'gsap';
 		SkeletonLoaderComponent,
 	],
 	templateUrl: './view-blog-page.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	styles: `
 		.test > h3:first-of-type {
 			margin-top: 0px;

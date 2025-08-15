@@ -4,6 +4,7 @@ import {
 	signal,
 	ViewChild,
 	OnInit,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LocalStorageService } from './services/local-storage.service';
@@ -34,7 +35,7 @@ import { FakeLoadingBarComponent } from './components/fake-loading-bar/fake-load
 		FakeLoadingBarComponent,
 	],
 	templateUrl: './app.component.html',
-	styleUrl: './app.component.css',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
 	@ViewChild('main') set _m(content: ElementRef) {

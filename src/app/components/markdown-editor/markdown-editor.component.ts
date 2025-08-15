@@ -6,18 +6,20 @@ import {
 	OnInit,
 	input,
 	output,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, Subject } from 'rxjs';
-import * as vst from '../../types/vs-types';
-import { ConvertToHtmlTree, MdNode } from '../../classes/markdown';
-import { MarkdownRendererComponent } from '../markdown-renderer/markdown-renderer.component';
+import * as vst from '@apptypes/vs-types';
+import { ConvertToHtmlTree, MdNode } from '@classes/markdown';
+import { MarkdownRendererComponent } from '@components/markdown-renderer/markdown-renderer.component';
 
 @Component({
 	selector: 'markdown-editor',
 	encapsulation: ViewEncapsulation.None,
 	imports: [FormsModule, ReactiveFormsModule, MarkdownRendererComponent],
 	templateUrl: './markdown-editor.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	styleUrl: './markdown-editor.component.css',
 })
 export class MarkdownEditorComponent implements OnInit {

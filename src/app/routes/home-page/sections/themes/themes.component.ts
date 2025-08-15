@@ -1,19 +1,20 @@
-import { Component, signal } from '@angular/core';
-import { VSExtension, VSFilterBody } from '../../../../types/vs-types';
-import { VsThemeService } from '../../../../services/vs-theme.service';
-import { LocalStorageService } from '../../../../services/local-storage.service';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { VSExtension, VSFilterBody } from '@apptypes/vs-types';
+import { VsThemeService } from '@services/vs-theme.service';
+import { LocalStorageService } from '@services/local-storage.service';
 import {
 	VsCardComponent,
 	VsCardStyle,
-} from '../../../../components/vs-card/vs-card.component';
-import { DeferLoadDirective } from '../../../../classes/deferload';
-import beigeIcon from '../../../../icons/beige-theme-icon/beigeiconb64';
+} from '@components/vs-card/vs-card.component';
+import { DeferLoadDirective } from '@classes/deferload';
+import beigeIcon from '@icons/beige-theme-icon/beigeiconb64';
 
 @Component({
 	selector: 'themes-section',
 	standalone: true,
 	imports: [VsCardComponent, DeferLoadDirective],
 	templateUrl: './themes.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	styles: `
 		:host {
 			display: flex;

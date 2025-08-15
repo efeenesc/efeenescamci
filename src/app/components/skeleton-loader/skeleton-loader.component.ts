@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
 	selector: 'skeleton-loader',
@@ -32,5 +32,6 @@ import { Component } from '@angular/core';
 		}
 	`,
 	template: ` <div class="skeleton size-full"></div> `,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SkeletonLoaderComponent {}

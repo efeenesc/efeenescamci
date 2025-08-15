@@ -1,4 +1,4 @@
-import { MdNode } from '../../classes/markdown';
+import { MdNode } from '@classes/markdown';
 
 export const ParsedWelcomeMessage: MdNode = {
 	type: 'document',

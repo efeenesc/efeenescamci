@@ -5,12 +5,13 @@ import {
 	OnInit,
 	OnDestroy,
 	output,
+	ChangeDetectionStrategy,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { XMarkComponent } from '../../icons/xmark/xmark.component';
-import { WindowObserverService } from '../../services/window-observer.service';
+import { XMarkComponent } from '@icons/xmark/xmark.component';
+import { WindowObserverService } from '@services/window-observer.service';
 import gsap from 'gsap';
-import { OverflowDirective } from '../../directives/overflow.directive';
+import { OverflowDirective } from '@directives/overflow.directive';
 
 interface VerticalMousePosition {
 	y: number;
@@ -20,6 +21,7 @@ interface VerticalMousePosition {
 	selector: 'drawer-component',
 	imports: [XMarkComponent],
 	templateUrl: './drawer.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DrawerComponent implements OnInit, OnDestroy {
 	@ViewChild('drawerMain') set _dm(content: ElementRef) {

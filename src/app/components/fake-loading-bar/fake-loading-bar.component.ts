@@ -1,4 +1,5 @@
 import {
+	ChangeDetectionStrategy,
 	Component,
 	effect,
 	ElementRef,
@@ -8,13 +9,14 @@ import {
 import {
 	FakeLoadingBarService,
 	LoadingState,
-} from '../../services/fake-loading-bar.service';
+} from '@services/fake-loading-bar.service';
 import gsap from 'gsap';
 
 @Component({
 	selector: 'fake-loading-bar',
 	imports: [],
 	templateUrl: './fake-loading-bar.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FakeLoadingBarComponent {
 	@ViewChild('loadingbar') set _lb(content: ElementRef) {

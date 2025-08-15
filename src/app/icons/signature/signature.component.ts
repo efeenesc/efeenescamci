@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
 	selector: 'signature',
@@ -84,5 +84,6 @@ import { Component } from '@angular/core';
 	C36.5,187.7,37.6,189.2,39.7,188.5"
 		/>
 	</svg>`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignatureComponent {}

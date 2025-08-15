@@ -4,8 +4,9 @@ import {
 	ElementRef,
 	ViewChild,
 	OnInit,
+	ChangeDetectionStrategy,
 } from '@angular/core';
-import { WindowObserverService } from '../../services/window-observer.service';
+import { WindowObserverService } from '@services/window-observer.service';
 import gsap from 'gsap';
 
 interface MousePosition {
@@ -17,6 +18,7 @@ interface MousePosition {
 	selector: 'carousel',
 	imports: [],
 	templateUrl: './carousel.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CarouselComponent implements AfterViewInit, OnInit {
 	@ViewChild('carousel') set _carouselDiv(content: ElementRef) {

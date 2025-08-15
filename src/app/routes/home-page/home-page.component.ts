@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ThemesComponent } from './sections/themes/themes.component';
 import { ExperimentsComponent } from './sections/experiments/experiments.component';
 import { BlogSectionComponent } from './sections/blog/blog.component';
@@ -13,5 +13,6 @@ import { LivePhotoComponent } from '../../components/live-photo/live-photo.compo
 		LivePhotoComponent,
 	],
 	templateUrl: './home-page.component.html',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePageComponent {}
