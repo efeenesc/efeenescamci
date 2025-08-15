@@ -55,7 +55,7 @@ export class ExperimentsComponent {
 			icon_url:
 				'https://github.com/efeenesc/c-twig-server/raw/main/assets/icon.png',
 			name: 'c-twig-server',
-			desc: 'C server durable as a twig found in the wild. Educational purposes only.',
+			desc: 'C server that snaps like a twig. Educational purposes only.',
 			source_url: 'https://github.com/efeenesc/c-twig-server',
 			read_more: '',
 			loaded: signal(false),
