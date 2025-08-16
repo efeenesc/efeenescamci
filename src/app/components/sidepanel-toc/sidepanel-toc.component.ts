@@ -1,0 +1,99 @@
+import {
+	Component,
+	OnDestroy,
+	signal,
+	viewChild,
+	viewChildren,
+	ElementRef,
+	effect,
+} from '@angular/core';
+import { HeadingDirective } from '@directives/heading.directive';
+import { Subscription } from 'rxjs';
+
+interface HeadingElement {
+	el: HTMLElement;
+	type: 1 | 2 | 3 | 4 | 5 | 6;
+	isVisible?: boolean;
+}
+
+@Component({
+	selector: 'sidepanel-toc',
+	imports: [],
+	templateUrl: './sidepanel-toc.component.html',
+	styles: `
+		.toc-container {
+			-ms-overflow-style: none;
+			scrollbar-width: none;
+		}
+		.toc-container::-webkit-scrollbar {
+			display: none;
+		}
+		.toc-active-box {
+			animation: fade-in 1s forwards;
+		}
+		@keyframes fade-in {
+			100% {
+				opacity: 1;
+			}
+		}
+	`,
+})
+export class SidepanelTocComponent implements OnDestroy {
+	items = signal<HeadingElement[]>([]);
+	activeIndex = signal<number>(-1);
+	buttonCoords = signal<{
+		top: number;
+		left: number;
+		width: number;
+		height: number;
+	}>({ top: -1, left: -1, width: -1, height: -1 });
+	private subscription: Subscription;
+	readonly tocButtons = viewChildren<ElementRef<HTMLElement>>('tocButton');
+	readonly container = viewChild<ElementRef<HTMLElement>>('container');
+
+	constructor() {
+		this.subscription = HeadingDirective.tocState$.subscribe((state) => {
+			this.items.set(state.elements);
+			this.activeIndex.set(state.activeIndex);
+		});
+
+		effect(() => {
+			const idx = this.activeIndex();
+			if (idx !== -1) {
+				this.calculateActiveButtonCoords(idx);
+			}
+		});
+	}
+
+	ngOnDestroy() {
+		this.subscription.unsubscribe();
+	}
+
+	/**
+	 * Scrolls to the clicked heading element
+	 * @param item The heading element to scroll to
+	 */
+	scrollTo(item: HeadingElement) {
+		if (this.items().indexOf(item) === 0) {
+			scrollTo({ behavior: 'smooth', top: 0 });
+		} else {
+			const { top } = item.el.getBoundingClientRect();
+			scrollTo({ behavior: 'smooth', top: window.scrollY + top - 100 });
+		}
+	}
+
+	calculateActiveButtonCoords(idx: number) {
+		const activeButton = this.tocButtons()[idx].nativeElement;
+		if (!activeButton) {
+			this.buttonCoords.set({ top: 0, left: 0, width: 0, height: 0 });
+			return;
+		}
+
+		this.buttonCoords.set({
+			top: activeButton.offsetTop,
+			left: activeButton.offsetLeft,
+			width: activeButton.offsetWidth,
+			height: activeButton.offsetHeight,
+		});
+	}
+}

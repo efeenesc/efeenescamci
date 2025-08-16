@@ -1,0 +1,31 @@
+<div
+	#container
+	class="toc-container relative flex h-full w-52 flex-col gap-1 overflow-y-auto overflow-x-hidden px-2"
+	style="padding: max(1rem, 50vh - 50%) 0.5rem 1rem 0.5rem"
+>
+	@if (this.items() && this.items().length !== 0) {
+		@for (item of this.items(); track item.el.innerText; let i = $index) {
+			<button
+				class="w-full rounded-lg px-2 py-1 text-start text-contrast opacity-80 transition-colors duration-300"
+				[class.text-inverse]="i === activeIndex()"
+				[class.delay-50]="i === activeIndex()"
+				[style.paddingLeft]="(1 - item.type) * -10 + 'px'"
+				[class.font-semibold]="item.type === 1"
+				(click)="scrollTo(item)"
+			>
+				<div class="h-full w-fit pr-2" #tocButton>
+					{{ item.el.innerText.trim() }}
+				</div>
+			</button>
+		}
+	}
+	@if (activeIndex() !== -1) {
+		<div
+			class="toc-active-box duration-400 absolute left-0 -z-10 w-full rounded-2xl bg-accent1 text-inverse opacity-0 shadow-light transition-all"
+			[style.top.px]="buttonCoords().top"
+			[style.height.px]="buttonCoords().height"
+			[style.left.px]="buttonCoords().left - 8"
+			[style.width.px]="buttonCoords().width + 8"
+		></div>
+	}
+</div>
