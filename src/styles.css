@@ -60,29 +60,10 @@
 	--system-200: var(--dark-system-200);
 }
 
-#topbar {
-	view-transition-name: topbar;
-}
-
-.blog-page {
-	view-transition-name: blog-page;
-}
-
-.view-blog-page {
-	view-transition-name: view-blog-page;
-}
-
-::view-transition-old(topbar) {
-	display: none;
-}
-::view-transition-new(topbar) {
-	animation: none;
-}
-
 html,
 body {
 	height: 100%;
-	background-color: var(--system-900);
+	background-color: var(--theme-900);
 }
 
 ::-webkit-scrollbar {
@@ -109,4 +90,49 @@ body {
 }
 ::selection {
 	background: var(--highlight);
+}
+.hero-bg {
+	overflow: hidden;
+}
+
+.hero-bg::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 0;
+	/* Static radial gradient background */
+	background: radial-gradient(
+		99% 99% at 50% 50%,
+		var(--accent1) 0%,
+		var(--accent2) 100%
+	);
+}
+
+.hero-bg::after {
+	/* Animated repeating gradient overlay */
+	content: "";
+	position: absolute;
+	top: -50%;
+	left: -55%;
+	width: 175%;
+	height: 175%;
+	background: repeating-radial-gradient(
+		circle at 0% 0%,
+		theme("colors.theme-600 / 0.1") 95%,
+		theme("colors.theme-900 / 0.2") 100%
+	);
+	animation: drift 10s infinite steps(300);
+	z-index: 0;
+}
+
+@keyframes drift {
+	0% {
+		transform: translate(0, 0);
+	}
+	100% {
+		transform: translate(-10%, -10%);
+	}
 }
