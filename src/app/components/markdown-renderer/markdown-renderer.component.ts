@@ -1,15 +1,19 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MdNode } from '@classes/markdown';
+import { MarkdownRendererDirective } from '@directives/markdown-renderer.directive';
 
 @Component({
 	selector: 'markdown-renderer',
-	templateUrl: './markdown-renderer.component.html',
+	standalone: true,
+	imports: [MarkdownRendererDirective],
+	template: `
+		<ng-template id="md-renderer" *markdownRenderer="parsedNode"> </ng-template>
+	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	styleUrl: './markdown-renderer.component.css',
-	imports: [],
 })
 export class MarkdownRendererComponent {
-	parsedNode: MdNode[] | undefined;
+	parsedNode: MdNode[] | null = null;
 	@Input() set parsedContent(content: MdNode[] | string) {
 		if (typeof content === 'string') {
 			this.parsedNode = [new MdNode('text', content)];
