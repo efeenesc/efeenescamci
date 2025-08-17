@@ -12,13 +12,6 @@ export const routes: Routes = [
 		data: { animation: 'home' },
 	},
 	{
-		path: 'blog',
-		loadComponent: () =>
-			import('./routes/blog-page/blog-page.component').then(
-				(m) => m.BlogPageComponent,
-			),
-	},
-	{
 		path: 'blog/:route',
 		loadComponent: () =>
 			import('./routes/view-blog-page/view-blog-page.component').then(
