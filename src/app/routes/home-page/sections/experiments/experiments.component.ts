@@ -6,10 +6,11 @@ import {
 } from '@angular/core';
 import { NormalCardComponent } from '@components/normal-card/normal-card.component';
 import { ArrowDownComponent } from '@icons/arrow-down/arrow-down.component';
+import { HeadingDirective } from '@directives/heading.directive';
 
 @Component({
 	selector: 'experiments-section',
-	imports: [NormalCardComponent, ArrowDownComponent],
+	imports: [NormalCardComponent, ArrowDownComponent, HeadingDirective],
 	templateUrl: './experiments.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	styles: `

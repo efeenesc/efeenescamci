@@ -12,10 +12,16 @@ import {
 	NormalCardInfo,
 } from '@components/normal-card/normal-card.component';
 import { ArrowDownComponent } from '@icons/arrow-down/arrow-down.component';
+import { HeadingDirective } from '@directives/heading.directive';
 
 @Component({
 	selector: 'blog-section',
-	imports: [SkeletonLoaderComponent, NormalCardComponent, ArrowDownComponent],
+	imports: [
+		SkeletonLoaderComponent,
+		NormalCardComponent,
+		ArrowDownComponent,
+		HeadingDirective,
+	],
 	templateUrl: './blog.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	styles: `
