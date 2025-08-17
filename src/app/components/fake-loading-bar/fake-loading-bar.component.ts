@@ -6,10 +6,7 @@ import {
 	signal,
 	ViewChild,
 } from '@angular/core';
-import {
-	FakeLoadingBarService,
-	LoadingState,
-} from '@services/fake-loading-bar.service';
+import { FakeLoadingBarService } from '@services/fake-loading-bar.service';
 import gsap from 'gsap';
 
 @Component({
@@ -31,7 +28,7 @@ export class FakeLoadingBarComponent {
 
 	constructor(private fakeLoadingBarSvc: FakeLoadingBarService) {
 		fakeLoadingBarSvc.state.subscribe((state) => {
-			if (state === LoadingState.STARTED) {
+			if (state === 'started') {
 				this.showLoading.set(true);
 				if (this.stopLoadingTimeout) {
 					clearTimeout(this.stopLoadingTimeout);

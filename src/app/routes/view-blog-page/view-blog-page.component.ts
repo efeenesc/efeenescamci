@@ -13,6 +13,7 @@ import { MarkdownRendererHtmlComponent } from '@components/markdown-renderer-htm
 import { SkeletonLoaderComponent } from '@components/skeleton-loader/skeleton-loader.component';
 import { Meta } from '@angular/platform-browser';
 import gsap from 'gsap';
+import { FakeLoadingBarService } from '@services/fake-loading-bar.service';
 
 @Component({
 	selector: 'view-blog-page',
@@ -55,7 +56,8 @@ export class ViewBlogPageComponent {
 		private route: ActivatedRoute,
 		private router: Router,
 		private meta: Meta,
-	) {
+		private loadbarSvc: FakeLoadingBarService,
+		loadbarSvc.setStrategy('custom');
 		effect(() => {
 			this.route.data.subscribe((data) => {
 				const blogPost = data['blogPost'] as FullBlog | null;
@@ -64,6 +66,7 @@ export class ViewBlogPageComponent {
 					this.markdownText.set(blogPost.content ?? '');
 					this.updateMetaTags(blogPost);
 					this.isLoading.set(false);
+					this.loadbarSvc.complete('custom');
 				} else {
 					this.router.navigateByUrl('/404');
 				}
