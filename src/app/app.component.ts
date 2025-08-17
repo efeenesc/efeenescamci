@@ -19,6 +19,8 @@ import beigeIcon from './icons/beige-theme-icon/beigeiconb64';
 import { FakeLoadingBarService } from './services/fake-loading-bar.service';
 import gsap from 'gsap';
 import { FakeLoadingBarComponent } from './components/fake-loading-bar/fake-loading-bar.component';
+import { SidepanelTocComponent } from '@components/sidepanel-toc/sidepanel-toc.component';
+import { PortalOutletDirective } from '@directives/portal.directive';
 
 @Component({
 	selector: 'app-root',
@@ -30,6 +32,8 @@ import { FakeLoadingBarComponent } from './components/fake-loading-bar/fake-load
 		OverflowDirective,
 		FooterComponent,
 		FakeLoadingBarComponent,
+		SidepanelTocComponent,
+		PortalOutletDirective,
 	],
 	templateUrl: './app.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,

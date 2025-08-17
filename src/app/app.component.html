@@ -6,40 +6,31 @@
 
 <div
 	id="massive-container"
-	class="relative min-h-screen bg-theme-900 font-inter dark:bg-noise dark:bg-blend-soft-light"
+	class="relative min-h-screen font-inter-tight"
 	correct-overflow
 >
 	@if (showUI()) {
-		<top-bar
-			[themeBarStyle]="this.themeBarStyle"
-			(themeButtonClicked)="this.themeButtonClicked()"
-		></top-bar>
+		<top-bar (themeButtonClicked)="this.themeButtonClicked()"></top-bar>
 	}
 
 	<fake-loading-bar></fake-loading-bar>
+
+	<div portalOutlet="header"></div>
+
 	<div
 		id="contentarea"
 		#contentarea
-		class="bottom-0 flex h-min w-full justify-center pt-4"
+		class="bottom-0 grid h-min w-full pt-4 xs:grid-cols-[10%_80%_10%] md:grid-cols-[20%_60%_20%] lg:grid-cols-[25%_50%_25%] xl:grid-cols-[30%_40%_30%]"
 	>
+		<div class="h-full w-full md:hidden"></div>
 		<div
-			class="absolute top-0 hidden h-full select-none sm:left-0 sm:flex sm:w-[49px] lg:left-[12vw] xl:left-[25vw]"
-			style="background: var(--rainbow-bg)"
+			class="sticky top-[calc(50%-10vh)] hidden h-fit w-fit justify-self-end pt-4 md:block"
 		>
-			<!-- <div
-        class="absolute w-full h-full bg-noise opacity-20 dark:opacity-50"
-      ></div>
-      <div class="w-full h-full block bg-accent1"></div>
-      <div class="w-full h-full block bg-accent2"></div>
-      <div class="w-full h-full block bg-theme-300"></div>
-      <div class="w-full h-full block bg-theme-600"></div>
-      <div class="w-full h-full block bg-theme-900"></div>
-      <div class="w-full h-full block bg-system"></div>
-      <div class="w-full h-full block bg-foreground"></div> -->
+			<sidepanel-toc class="h-full w-full"></sidepanel-toc>
 		</div>
 
 		<main
-			class="size-full px-3 text-contrast antialiased transition-colors xs:w-4/5 md:w-3/5 lg:w-1/2 lg:px-0 xl:w-2/5"
+			class="size-full px-3 text-contrast antialiased transition-colors"
 			id="main"
 			#main
 		>
