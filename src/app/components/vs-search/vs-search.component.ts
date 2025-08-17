@@ -23,7 +23,6 @@ export class VsSearchComponent implements OnDestroy, OnInit {
 	@ViewChild('themebtn') themeBtn!: HTMLElement;
 	animationSeekAt = input(0);
 
-	internalStyle = input<string | undefined>();
 	clicked = output();
 
 	themeName = signal<string | null>(null);

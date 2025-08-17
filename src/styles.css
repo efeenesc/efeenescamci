@@ -91,19 +91,13 @@ body {
 ::selection {
 	background: var(--highlight);
 }
-.hero-bg {
-	overflow: hidden;
+
+.top-bar-scrolled-down {
+	@apply bg-accent1/10 shadow-light;
 }
 
-.hero-bg::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 0;
-	/* Static radial gradient background */
+.hero-bg {
+	overflow: hidden;
 	background: radial-gradient(
 		99% 99% at 50% 50%,
 		var(--accent1) 0%,

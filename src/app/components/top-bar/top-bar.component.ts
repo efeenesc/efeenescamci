@@ -13,6 +13,8 @@ import { WindowService, WindowSize } from '@services/window.service';
 import { SiteLogoComponent } from '@icons/site-logo/site-logo.component';
 import { OverflowDirective } from '@directives/overflow.directive';
 import gsap from 'gsap';
+import { PortalService } from '@services/portal.service';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'top-bar',
@@ -25,7 +27,6 @@ export class TopBarComponent implements OnInit, OnDestroy {
 		this.topbar = content.nativeElement as HTMLDivElement;
 	}
 	topbar!: HTMLDivElement;
-	themeBarStyle = input.required<string>();
 	themeButtonClicked = output<void>();
 
 	topbarScrollProgress = signal<number>(1);
@@ -33,6 +34,9 @@ export class TopBarComponent implements OnInit, OnDestroy {
 	mobileMode = signal<boolean>(false);
 	minScrollY = 0;
 	maxScrollY = 200;
+	backgroundApplyScrollYTarget = 400;
+	applyBackground = signal(false);
+	applyBackgroundBlur = signal(false);
 	private topBarTween!: gsap.core.Tween;
 	private lastProgress = -1;
 	private subscriptions: (() => void)[] = [];
@@ -93,6 +97,15 @@ export class TopBarComponent implements OnInit, OnDestroy {
 		this.subscriptions.push(sizeSub.unsubscribe);
 
 		this.setTopBarMode(this.wndSvc.getWindowSize());
+		this.portalSvc.portalChanges$.subscribe(() => {
+			const t = this.portalSvc.getPortalContent('header');
+			if (!t) return;
+			const n = t?.viewRef?.rootNodes.at(0) as HTMLElement;
+			if (!n) return;
+			const scrollTarget = n.clientHeight;
+			this.backgroundApplyScrollYTarget = scrollTarget;
+		});
+
 		// Initialize logo positioning
 		this.applyPlaceholderHeight();
 	}
