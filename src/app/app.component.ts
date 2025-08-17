@@ -16,12 +16,11 @@ import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { OverflowDirective } from './directives/overflow.directive';
 import { FooterComponent } from './components/footer/footer.component';
 import beigeIcon from './icons/beige-theme-icon/beigeiconb64';
-import {
-	FakeLoadingBarService,
-	LoadingState,
-} from './services/fake-loading-bar.service';
+import { FakeLoadingBarService } from './services/fake-loading-bar.service';
 import gsap from 'gsap';
 import { FakeLoadingBarComponent } from './components/fake-loading-bar/fake-loading-bar.component';
+import { SidepanelTocComponent } from '@components/sidepanel-toc/sidepanel-toc.component';
+import { PortalOutletDirective } from '@directives/portal.directive';
 
 @Component({
 	selector: 'app-root',
@@ -33,6 +32,8 @@ import { FakeLoadingBarComponent } from './components/fake-loading-bar/fake-load
 		OverflowDirective,
 		FooterComponent,
 		FakeLoadingBarComponent,
+		SidepanelTocComponent,
+		PortalOutletDirective,
 	],
 	templateUrl: './app.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -56,7 +57,6 @@ export class AppComponent implements OnInit {
 	themeBarStyle = '';
 	drawerOpened = signal<boolean>(false);
 	showUI = signal<boolean>(false);
-	showPageTween?: gsap.core.Tween;
 
 	constructor(
 		private lss: LocalStorageService,
@@ -64,37 +64,8 @@ export class AppComponent implements OnInit {
 		private fakeLoadingBarSvc: FakeLoadingBarService,
 	) {
 		this.restoreLastTheme();
-		fakeLoadingBarSvc.state.subscribe((state) => {
-			if (state === LoadingState.STARTED) {
-				this.hidePage();
-			} else {
-				setTimeout(() => {
-					this.showPage();
-				}, 100);
-			}
-		});
-	}
-
-	hidePage() {
-		if (this.main) {
-			if (this.showPageTween) {
-				this.showPageTween.kill();
-				this.showPageTween = undefined;
-			}
-
-			this.main.style.opacity = '0';
-		}
-	}
-
-	showPage() {
-		if (this.showPageTween) {
-			this.showPageTween.kill();
-			this.showPageTween = undefined;
-		}
-
-		this.showPageTween = gsap.to(this.main, {
-			opacity: 1,
-			duration: 0.5,
+		gsap.config({
+			nullTargetWarn: false,
 		});
 	}
 

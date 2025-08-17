@@ -10,11 +10,9 @@ export interface WindowSize {
 @Injectable({
 	providedIn: 'root',
 })
-export class WindowObserverService implements OnDestroy {
+export class WindowService implements OnDestroy {
 	scrollObservable!: Subject<number>;
 	sizeObservable!: Subject<WindowSize>;
-	mouseUpObservable!: Subject<void>;
-	mousePositionObservable!: Subject<MouseEvent | TouchEvent>;
 	firstOpenedPage = true;
 
 	throttle(fn: () => void, duration: number) {
@@ -35,21 +33,10 @@ export class WindowObserverService implements OnDestroy {
 	constructor(private router: Router) {
 		this.scrollObservable = new Subject();
 		this.sizeObservable = new Subject();
-		this.mouseUpObservable = new Subject();
-		this.mousePositionObservable = new Subject();
 		this.router.events.subscribe(
 			() =>
 				(this.firstOpenedPage = this.router.lastSuccessfulNavigation === null),
 		); // If lastSuccessfulNavigation is null, then it's the first opened page
-
-		window.addEventListener('mousemove', (event: MouseEvent | TouchEvent) =>
-			this.mousePositionObservable.next(event),
-		);
-		window.addEventListener('touchmove', (event: MouseEvent | TouchEvent) =>
-			this.mousePositionObservable.next(event),
-		);
-		window.addEventListener('touchend', () => this.mouseUpObservable.next());
-		window.addEventListener('mouseup', () => this.mouseUpObservable.next());
 
 		window.addEventListener('resize', this.onWindowResize);
 		window.addEventListener('scroll', this.throttle(this.onWindowScroll, 3));

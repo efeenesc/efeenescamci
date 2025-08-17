@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { XMarkComponent } from '@icons/xmark/xmark.component';
-import { WindowObserverService } from '@services/window-observer.service';
+import { WindowService } from '@services/window.service';
 import gsap from 'gsap';
 import { OverflowDirective } from '@directives/overflow.directive';
 
@@ -47,29 +47,35 @@ export class DrawerComponent implements OnInit, OnDestroy {
 	private mousePositionSub!: Subscription;
 	private mouseUpSub!: Subscription;
 
-	constructor(private woSvc: WindowObserverService) {}
+	constructor(private wndSvc: WindowService) {}
 
 	ngOnInit() {
-		if (!this.woSvc.isTouchDevice()) {
+		if (!this.wndSvc.isTouchDevice()) {
 			OverflowDirective.preOverflowHidden();
 		}
 
 		document.body.style.overflow = 'hidden';
-
 		this.slideUp();
-
 		window.addEventListener('touchstart', (event) => this.startDragging(event));
-		this.mousePositionSub = this.woSvc.mousePositionObservable.subscribe(
-			(event) => this.drag(event),
-		);
-		this.mouseUpSub = this.woSvc.mouseUpObservable.subscribe(() =>
-			this.stopDragging(),
-		);
 	}
 
 	ngOnDestroy() {
 		if (this.mousePositionSub) this.mousePositionSub.unsubscribe();
 		if (this.mouseUpSub) this.mouseUpSub.unsubscribe();
+	}
+
+	private bindOnMouseClickEvents() {
+		window.addEventListener('mousemove', this.drag, { passive: true });
+		window.addEventListener('touchmove', this.drag, { passive: true });
+		window.addEventListener('mouseup', this.stopDragging);
+		window.addEventListener('touchend', this.stopDragging);
+	}
+
+	private unbindOnMouseClickEvents() {
+		window.removeEventListener('mousemove', this.drag);
+		window.removeEventListener('touchmove', this.drag);
+		window.removeEventListener('mouseup', this.stopDragging);
+		window.removeEventListener('touchend', this.stopDragging);
 	}
 
 	resetMouseVariables() {
@@ -98,7 +104,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
 		if (document.body.style.overflow === 'hidden') {
 			document.body.style.removeProperty('overflow');
 
-			if (!this.woSvc.isTouchDevice()) {
+			if (!this.wndSvc.isTouchDevice()) {
 				OverflowDirective.postOverflowHidden();
 			}
 		}
@@ -144,6 +150,8 @@ export class DrawerComponent implements OnInit, OnDestroy {
 
 		if (this.isDragging) return;
 
+		this.bindOnMouseClickEvents();
+
 		const currentTime = performance.now();
 		this.resetMouseVariables();
 		this.dragStartPos = this.getDragPosition(e);
@@ -152,7 +160,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
 		this.isDragging = true;
 	}
 
-	drag(e: MouseEvent | TouchEvent): void {
+	drag = (e: MouseEvent | TouchEvent) => {
 		if (!this.isDragging) return;
 
 		const offsetY = this.getDragPosition(e);
@@ -170,13 +178,15 @@ export class DrawerComponent implements OnInit, OnDestroy {
 
 		this.updateDrawerPosition(150, closeAfter, '');
 		this.setPrevMousePosition(offsetY, e.timeStamp);
-	}
+	};
 
-	stopDragging(): void {
+	stopDragging = () => {
 		if (!this.isDragging) return;
 		this.isDragging = false;
 
 		if (this.prevMousePos === null || this.currentMousePos === null) return;
+
+		this.unbindOnMouseClickEvents();
 
 		const { y: curY, time: curTime } = this.currentMousePos;
 		const { y: prevY, time: prevTime } = this.prevMousePos;
@@ -194,7 +204,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
 
 		this.resetMouseVariables();
 		this.updateDrawerPosition(400, closeAfter, 'expo.out');
-	}
+	};
 
 	private updateDrawerPosition(
 		duration: number,

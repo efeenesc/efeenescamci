@@ -1,27 +1,48 @@
 <div class="mx-auto flex h-max flex-col gap-16">
-	<section class="flex h-full shrink-0 transition-colors">
-		<div class="grid w-full">
-			<div class="flex flex-1 flex-col text-nowrap transition-colors">
-				<div class="inline-block text-wrap">
-					<live-photo
-						mainPhotoUrl="https://avatars.githubusercontent.com/u/79850104?v=4"
-						[shortVideoUrls]="['assets/lisa1.mp4', 'assets/lisa2.mp4']"
-					/>
+	<section class="flex w-full justify-center">
+		<themes-section></themes-section>
+	</section>
 
-					<h1
-						class="my-0 text-4xl font-extrabold !text-foreground sm:text-5xl lg:text-6xl"
-					>
-						Efe Enes Çamcı
-					</h1>
-					<h2 class="mb-4 text-2xl !text-accent1 sm:text-3xl lg:text-4xl">
-						Full-Stack Developer
-					</h2>
-					<p class="text-base text-contrast lg:text-lg">
-						I develop websites, desktop programs, mobile apps; increase
-						organizational security, automate business-critical workflows,
-						manage cloud infrastructure; experiment with ideas, take on new
-						challenges, reinvent the wheel, and have fun.
-					</p>
+	<section class="flex w-full justify-center">
+		<experiments-section></experiments-section>
+	</section>
+
+	<section class="flex w-full justify-center">
+		<blog-section></blog-section>
+	</section>
+</div>
+
+<!-- Site header portal -->
+<ng-template portalContent="header">
+	<div
+		class="-mb-24 ml-2 flex w-[calc(100%-16px)] flex-1 -translate-y-[10vh] flex-col overflow-hidden text-nowrap pt-2 transition-colors"
+	>
+		<div
+			class="hero-bg flex h-fit w-full flex-col overflow-hidden rounded-2xl p-3 drop-shadow-2xl lg:mb-0 lg:rounded-3xl"
+		>
+			<div class="h-[10vh]"></div>
+			<div
+				class="flex flex-wrap gap-6 xs:pl-[10%] sm:flex-nowrap sm:items-center sm:justify-center sm:pl-0"
+			>
+				<live-photo
+					class="w-full max-w-[300px] shrink-0"
+					mainPhotoUrl="https://avatars.githubusercontent.com/u/79850104?v=4"
+					[shortVideoUrls]="['assets/lisa1.mp4', 'assets/lisa2.mp4']"
+				/>
+
+				<div class="relative z-20 flex w-fit flex-col self-stretch md:my-8">
+					<div>
+						<h1
+							is-heading
+							class="my-0 w-max text-4xl font-extrabold text-white lg:text-6xl"
+						>
+							Efe Enes Çamcı
+						</h1>
+						<h2 class="mb-4 text-2xl text-white lg:text-4xl">
+							Full-Stack Developer
+						</h2>
+					</div>
+
 					<div class="mt-4 flex gap-3">
 						<a
 							class="relative block aspect-square w-20 overflow-hidden rounded-3xl bg-gradient-to-tl from-neutral-800 to-neutral-900 object-contain p-3 shadow-light transition-all after:absolute after:left-0 after:top-0 after:block after:size-full after:rounded-3xl after:shadow-light after:transition-opacity hover:scale-105 hover:from-neutral-800 hover:via-neutral-900 hover:to-neutral-900 active:translate-y-1 active:scale-100 active:shadow-dark-inset active:after:opacity-0"
@@ -70,17 +91,5 @@
 				</div>
 			</div>
 		</div>
-	</section>
-
-	<section class="flex w-full justify-center">
-		<themes-section></themes-section>
-	</section>
-
-	<section class="flex w-full justify-center">
-		<experiments-section></experiments-section>
-	</section>
-
-	<section class="flex w-full justify-center">
-		<blog-section></blog-section>
-	</section>
-</div>
+	</div>
+</ng-template>

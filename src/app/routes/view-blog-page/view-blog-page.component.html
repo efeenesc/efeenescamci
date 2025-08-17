@@ -1,51 +1,47 @@
-<div class="flex min-h-screen flex-row justify-center gap-2">
-	<div class="view-blog-page relative flex size-full flex-col">
-		<div class="flex w-full flex-col gap-2 pb-4">
-			<div
-				class="text-3xl font-bold text-foreground md:text-4xl lg:text-5xl xl:text-6xl"
-			>
-				{{ blogPost()?.title }}
-			</div>
-			<div
-				class="flex flex-wrap gap-x-4 gap-y-0 font-semibold lg:text-lg xl:text-xl"
-			>
-				<span class="text-contrast">{{ blogPost()?.created_at }}</span>
-			</div>
-		</div>
-		@if (this.isLoading()) {
-			<skeleton-loader
-				class="size-full min-h-screen flex-1 bg-theme-900 [&_div]:h-screen"
-			/>
-		} @else {
-			<div class="relative size-full">
-				<div
-					class="flex flex-1 flex-col overflow-auto text-nowrap text-foreground transition-colors"
+<div class="flex min-h-screen flex-col justify-center gap-2">
+	@if (this.isLoading()) {
+		<skeleton-loader
+			class="size-full min-h-screen flex-1 bg-theme-900 [&_div]:h-screen"
+		/>
+	} @else {
+		<div
+			class="flex flex-1 flex-col overflow-auto text-nowrap text-foreground transition-colors"
+		>
+			@if (this.markdownNode()) {
+				<!-- '[&_div_*:first-of-type]:!mt-0' removes the first element's top margin -->
+				<markdown-renderer
+					class="inline-block text-wrap pt-4 !text-base md:!text-lg lg:!text-lg [&&_h3]:-mb-4 [&&_h3]:mt-10 [&_h3]:font-bold"
+					[parsedContent]="this.markdownNode()!.content"
 				>
-					<markdown-editor
-						class="md-editor absolute inset-0 z-10 hidden size-full overflow-hidden opacity-0"
-						(mdResult)="markdownChanged($event)"
-						[showRenderer]="false"
-					></markdown-editor>
-					@if (this.markdownNode()) {
-						<!-- '[&_div_*:first-of-type]:!mt-0' removes the first element's top margin -->
-						<markdown-renderer-html
-							class="inline-block text-wrap pt-4 [&&_h3]:mb-1 [&&_h3]:mt-6 [&_h3]:font-bold"
-							[parsedContent]="this.markdownNode()!.content"
-						>
-						</markdown-renderer-html>
-					}
+				</markdown-renderer>
+			}
+		</div>
+	}
+</div>
+
+<ng-template portalContent="header">
+	<div
+		class="-mb-24 ml-2 flex w-[calc(100%-16px)] flex-1 -translate-y-[10vh] flex-col overflow-hidden text-nowrap pt-2"
+	>
+		<div
+			class="hero-bg flex h-fit w-full flex-col overflow-hidden rounded-2xl p-3 drop-shadow-2xl lg:mb-0 lg:rounded-3xl"
+		>
+			<div class="h-[10vh] w-full"></div>
+			<div
+				class="relative z-10 flex h-[300px] flex-col justify-center gap-2 self-center text-wrap pb-4 pt-2 xl:w-2/5"
+			>
+				<h1
+					is-heading
+					class="text-3xl font-bold text-white md:text-4xl lg:text-5xl xl:text-6xl"
+				>
+					{{ blogPost()?.title }}
+				</h1>
+				<div
+					class="flex flex-wrap gap-x-4 gap-y-0 font-semibold lg:text-lg xl:text-xl"
+				>
+					<span class="text-white">{{ blogPost()?.created_at }}</span>
 				</div>
 			</div>
-		}
-		<!-- <div class="absolute bottom-0 self-end place-self-end mb-4 mr-32">
-      You can edit this post and submit your corrections ➡️
-    </div>
-
-    <div
-      class="aspect-square w-24 overflow-hidden m-4 p-4 z-20 rounded-2xl bg-accent1 transition-all hover:brightness-105 hover:scale-[98%] active:scale-[90%] cursor-pointer sticky bottom-2 self-end shadow-xl-alt [&_*]:stroke-theme-300"
-      (click)="this.editButtonClicked()"
-    >
-      <edit-icon></edit-icon>
-    </div> -->
+		</div>
 	</div>
-</div>
+</ng-template>

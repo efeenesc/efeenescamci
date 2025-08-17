@@ -27,8 +27,6 @@ module.exports = {
 				"system-200": "var(--system-200)",
 			},
 			fontFamily: {
-				fantasque: "Fantasque Sans Mono, monospace",
-				inter: "Inter Tight, monospace",
 				"inter-tight": "Inter Tight, monospace",
 			},
 			backgroundImage: {

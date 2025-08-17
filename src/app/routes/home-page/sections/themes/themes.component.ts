@@ -8,11 +8,12 @@ import {
 } from '@components/vs-card/vs-card.component';
 import { DeferLoadDirective } from '@classes/deferload';
 import beigeIcon from '@icons/beige-theme-icon/beigeiconb64';
+import { HeadingDirective } from '@directives/heading.directive';
 
 @Component({
 	selector: 'themes-section',
 	standalone: true,
-	imports: [VsCardComponent, DeferLoadDirective],
+	imports: [VsCardComponent, DeferLoadDirective, HeadingDirective],
 	templateUrl: './themes.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	styles: `

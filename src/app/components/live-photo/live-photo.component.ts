@@ -7,7 +7,7 @@ import {
 	OnDestroy,
 	ChangeDetectionStrategy,
 } from '@angular/core';
-import { LivePhotoIconComponent } from '../../icons/live-photo/live-photo-icon.component';
+import { LivePhotoIconComponent } from '@icons/live-photo/live-photo-icon.component';
 import gsap from 'gsap';
 
 @Component({
@@ -15,6 +15,12 @@ import gsap from 'gsap';
 	imports: [LivePhotoIconComponent],
 	templateUrl: './live-photo.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	styles: `
+		:host {
+			width: 100%;
+			height: 100%;
+		}
+	`,
 })
 export class LivePhotoComponent implements OnDestroy {
 	constructor(private elementRef: ElementRef) {}
@@ -32,11 +38,11 @@ export class LivePhotoComponent implements OnDestroy {
 	private progressInterval?: number;
 	private fadeInTween?: gsap.core.Tween;
 	private fadeOutTween?: gsap.core.Tween;
-	private clickOutsideListener(event: Event) {
+	private clickOutsideListener = (event: Event) => {
 		if (!this.elementRef.nativeElement.contains(event.target as Node)) {
 			this.onMouseLeave();
 		}
-	}
+	};
 
 	triggerVideo() {
 		const urls = this.shortVideoUrls();

@@ -1,7 +1,6 @@
 <div
 	#container
-	class="toc-container relative flex h-full w-52 flex-col gap-1 overflow-y-auto overflow-x-hidden px-2"
-	style="padding: max(1rem, 50vh - 50%) 0.5rem 1rem 0.5rem"
+	class="toc-container relative flex h-full flex-col gap-1 overflow-y-auto overflow-x-hidden px-2"
 >
 	@if (this.items() && this.items().length !== 0) {
 		@for (item of this.items(); track item.el.innerText; let i = $index) {
