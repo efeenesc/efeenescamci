@@ -6,7 +6,7 @@ import {
 	OnInit,
 	ChangeDetectionStrategy,
 } from '@angular/core';
-import { WindowObserverService } from '@services/window-observer.service';
+import { WindowService } from '@services/window.service';
 import gsap from 'gsap';
 
 interface MousePosition {
@@ -43,13 +43,25 @@ export class CarouselComponent implements AfterViewInit, OnInit {
 	private carouselTween?: gsap.core.Tween;
 	private supressClick = false;
 
-	constructor(private woSvc: WindowObserverService) {}
+	constructor(private wndSvc: WindowService) {}
 
 	ngOnInit() {
 		window.addEventListener('resize', () => this.onWindowSizeChange());
-		this.woSvc.mouseUpObservable.subscribe(() => this.stopDragging());
-		this.woSvc.mousePositionObservable.subscribe((event) => this.drag(event));
 	}
+
+	bindOnMouseClickEvents = () => {
+		window.addEventListener('mousemove', this.drag, { passive: true });
+		window.addEventListener('touchmove', this.drag, { passive: true });
+		window.addEventListener('mouseup', this.stopDragging);
+		window.addEventListener('touchend', this.stopDragging);
+	};
+
+	unbindOnMouseClickEvents = () => {
+		window.removeEventListener('mousemove', this.drag);
+		window.removeEventListener('touchmove', this.drag);
+		window.removeEventListener('mouseup', this.stopDragging);
+		window.removeEventListener('touchend', this.stopDragging);
+	};
 
 	onWindowSizeChange() {
 		this.carouselRect = this.carousel.getBoundingClientRect();
@@ -91,6 +103,7 @@ export class CarouselComponent implements AfterViewInit, OnInit {
 
 	startDragging(e: MouseEvent | TouchEvent): void {
 		if (this.isDragging) return;
+		this.bindOnMouseClickEvents();
 		this.isDragging = true;
 		this.clearMousePosition();
 
@@ -99,7 +112,7 @@ export class CarouselComponent implements AfterViewInit, OnInit {
 		this.setPrevMousePosition(this.dragStartPos, currentTime);
 	}
 
-	drag(e: MouseEvent | TouchEvent): void {
+	drag = (e: MouseEvent | TouchEvent) => {
 		if (!this.isDragging) return;
 		this.supressClick = true;
 
@@ -112,10 +125,11 @@ export class CarouselComponent implements AfterViewInit, OnInit {
 
 		this.updateCarouselPosition(150);
 		this.setPrevMousePosition(offsetX, currentTime);
-	}
+	};
 
-	stopDragging(): void {
+	stopDragging = () => {
 		if (!this.isDragging) return;
+		this.unbindOnMouseClickEvents();
 		this.isDragging = false;
 		setTimeout(() => (this.supressClick = false), 0);
 
@@ -135,7 +149,7 @@ export class CarouselComponent implements AfterViewInit, OnInit {
 		);
 
 		this.updateCarouselPosition(750);
-	}
+	};
 
 	onClick(e: MouseEvent | TouchEvent): void {
 		if (this.supressClick) {
