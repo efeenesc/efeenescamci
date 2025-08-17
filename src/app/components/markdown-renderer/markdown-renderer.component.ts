@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	effect,
+	input,
+} from '@angular/core';
 import { MdNode } from '@classes/markdown';
 import { MarkdownRendererDirective } from '@directives/markdown-renderer.directive';
 
@@ -14,12 +19,17 @@ import { MarkdownRendererDirective } from '@directives/markdown-renderer.directi
 })
 export class MarkdownRendererComponent {
 	parsedNode: MdNode[] | null = null;
-	@Input() set parsedContent(content: MdNode[] | string) {
-		if (typeof content === 'string') {
-			this.parsedNode = [new MdNode('text', content)];
-		} else {
-			this.parsedNode = content;
-		}
+	parsedContent = input.required<MdNode[] | string>();
+
+	constructor() {
+		effect(() => {
+			const content = this.parsedContent();
+			if (typeof content === 'string') {
+				this.parsedNode = [new MdNode('text', content)];
+			} else {
+				this.parsedNode = content;
+			}
+		});
 	}
 
 	public getTextInsideContent(node: string | MdNode[]): string | undefined {

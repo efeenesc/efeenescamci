@@ -1,11 +1,11 @@
 import {
 	Directive,
-	Input,
 	ViewContainerRef,
 	Renderer2,
 	OnChanges,
 	OnDestroy,
 	ElementRef,
+	input,
 } from '@angular/core';
 import { MdNode } from '@classes/markdown';
 import { HeadingDirective } from './heading.directive';
@@ -15,7 +15,7 @@ import { HeadingDirective } from './heading.directive';
 	standalone: true,
 })
 export class MarkdownRendererDirective implements OnChanges, OnDestroy {
-	@Input('markdownRenderer') nodes: MdNode[] | null = null;
+	nodes = input<MdNode[] | null>(undefined, { alias: 'markdownRenderer' });
 
 	private topLevelCreated: { node: Node; directive?: HeadingDirective }[] = [];
 	private headingDirectives: HeadingDirective[] = [];
@@ -27,9 +27,9 @@ export class MarkdownRendererDirective implements OnChanges, OnDestroy {
 
 	ngOnChanges(): void {
 		this.clear();
-		if (!this.nodes || this.nodes.length === 0) return;
+		if (!this.nodes() || this.nodes()!.length === 0) return;
 
-		for (const n of this.nodes) {
+		for (const n of this.nodes()!) {
 			this.renderTop(n);
 		}
 	}

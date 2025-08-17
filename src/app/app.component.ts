@@ -2,7 +2,7 @@ import {
 	Component,
 	ElementRef,
 	signal,
-	ViewChild,
+	viewChild,
 	OnInit,
 	ChangeDetectionStrategy,
 } from '@angular/core';
@@ -39,15 +39,8 @@ import { PortalOutletDirective } from '@directives/portal.directive';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
-	@ViewChild('main') set _m(content: ElementRef) {
-		this.main = content.nativeElement as HTMLDivElement;
-	}
-	main!: HTMLDivElement;
-
-	@ViewChild('contentarea') set _ca(content: ElementRef) {
-		this.contentarea = content.nativeElement as HTMLDivElement;
-	}
-	contentarea!: HTMLDivElement;
+	main = viewChild.required<ElementRef<HTMLDivElement>>('main');
+	contentarea = viewChild.required<ElementRef<HTMLDivElement>>('contentarea');
 
 	title = 'efeenescamci';
 	blendClass?: string;
@@ -150,65 +143,4 @@ export class AppComponent implements OnInit {
 		// Change the color variables to the restored color scheme
 		this.vsSvc.changeColorVariables(cs);
 	}
-
-	/**
-	 * Checks if the device is a touch device and subscribes to the scroll observable accordingly.
-	 * If it's not a touch device, it animates the page scroll. Otherwise, it performs a normal page scroll.
-	 */
-	// checkTouchDevice() {
-	//   // Check if the device is a touch device
-	//   if (!this.woSvc.isTouchDevice()) {
-	//     // Subscribe to the scroll observable and animate the page scroll on non-touch devices
-	//     this.woSvc.scrollObservable.subscribe((newYval) => {
-	//       this.animatePageScroll(newYval);
-	//     });
-	//   } else {
-	//     // Subscribe to the scroll observable and perform a normal page scroll on touch devices
-	//     this.woSvc.scrollObservable.subscribe((newYval) => {
-	//       this.normalPageScroll(newYval);
-	//     });
-	//   }
-	// }
-
-	/**
-	 * Animates the page scroll by updating the transform property of the main element.
-	 *
-	 * @param scrollY The current scroll Y position.
-	 */
-	// animatePageScroll(scrollY: number) {
-	//   // Check if a tween is already in progress and kill it if necessary.
-	//   if (this.pageScrollTween) {
-	//     this.pageScrollTween.kill();
-	//   }
-
-	//   // Create a new tween to animate the page scroll.
-	//   this.pageScrollTween = gsap.to(this.elTranslatePos, {
-	//     // Set the current position to the negative of the scroll Y position.
-	//     current: -scrollY,
-	//     // Set the animation duration to 0.2 seconds.
-	//     duration: 0.2,
-	//     // Use the power4.out easing function for a smooth animation.
-	//     ease: 'power4.out',
-	//     // Update the transform property of the main element on each frame.
-	//     onUpdate: () => {
-	//       // Calculate the new transform position.
-	//       const newPos = `translateY(${this.elTranslatePos.current}px)`;
-	//       // Set the transform property of the main element.
-	//       gsap.set(this.main, {
-	//         transform: newPos,
-	//         webkitTransform: newPos,
-	//       });
-	//     },
-	//   });
-	// }
-
-	// normalPageScroll(scrollY: number) {
-	//   this.main.style.transform = 'translateY(' + -scrollY + 'px)';
-	//   this.main.style.webkitTransform = 'translateY(' + -scrollY + 'px)';
-	// }
-
-	// setMainHeight() {
-	//   const pageHeight = document.getElementById('main')!.clientHeight;
-	//   document.body.style.height = pageHeight + 'px';
-	// }
 }

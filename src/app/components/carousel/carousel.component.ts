@@ -2,9 +2,9 @@ import {
 	AfterViewInit,
 	Component,
 	ElementRef,
-	ViewChild,
 	OnInit,
 	ChangeDetectionStrategy,
+	viewChild,
 } from '@angular/core';
 import { WindowService } from '@services/window.service';
 import gsap from 'gsap';
@@ -21,15 +21,8 @@ interface MousePosition {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CarouselComponent implements AfterViewInit, OnInit {
-	@ViewChild('carousel') set _carouselDiv(content: ElementRef) {
-		this.carousel = content.nativeElement as HTMLDivElement;
-	}
-	carousel!: HTMLDivElement;
-
-	@ViewChild('content') set _contentDiv(content: ElementRef) {
-		this.contentDiv = content.nativeElement as HTMLDivElement;
-	}
-	contentDiv!: HTMLDivElement;
+	carousel = viewChild.required<ElementRef<HTMLDivElement>>('carousel');
+	contentDiv = viewChild.required<ElementRef<HTMLDivElement>>('content');
 
 	isDragging = false;
 	dragStartTime = 0;
@@ -64,16 +57,19 @@ export class CarouselComponent implements AfterViewInit, OnInit {
 	};
 
 	onWindowSizeChange() {
-		this.carouselRect = this.carousel.getBoundingClientRect();
-		this.carouselBounds = [this.contentDiv.clientWidth * 0.9, 0];
+		this.carouselRect = this.carousel()!.nativeElement.getBoundingClientRect();
+		this.carouselBounds = [
+			this.contentDiv()!.nativeElement.clientWidth * 0.9,
+			0,
+		];
 	}
 
 	ngAfterViewInit(): void {
-		// this.carousel.addEventListener(
-		//   'touchstart',
-		//   (event: MouseEvent | TouchEvent) => this.startDragging(event)
-		// );
-		this.carousel.addEventListener(
+		this.carousel()!.nativeElement.addEventListener(
+			'touchstart',
+			(event: MouseEvent | TouchEvent) => this.startDragging(event),
+		);
+		this.carousel()!.nativeElement.addEventListener(
 			'click',
 			(event: MouseEvent | TouchEvent) => this.onClick(event),
 			true,

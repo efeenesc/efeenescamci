@@ -2,11 +2,11 @@ import {
 	Component,
 	ElementRef,
 	signal,
-	ViewChild,
 	OnInit,
 	OnDestroy,
 	output,
 	ChangeDetectionStrategy,
+	viewChild,
 } from '@angular/core';
 import { VsSearchComponent } from '@components/vs-search/vs-search.component';
 import { WindowService, WindowSize } from '@services/window.service';
@@ -23,10 +23,10 @@ import { Router } from '@angular/router';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TopBarComponent implements OnInit, OnDestroy {
-	@ViewChild('topbar') set _tb(content: ElementRef) {
-		this.topbar = content.nativeElement as HTMLDivElement;
-	}
-	topbar!: HTMLDivElement;
+	topbar = viewChild.required<ElementRef<HTMLDivElement>>('topbar');
+	sitelogo = viewChild.required<ElementRef<HTMLDivElement>>('sitelogo');
+	placeholder =
+		viewChild.required<ElementRef<HTMLDivElement>>('logoplaceholder');
 	themeButtonClicked = output<void>();
 
 	topbarScrollProgress = signal<number>(1);
@@ -165,10 +165,13 @@ export class TopBarComponent implements OnInit, OnDestroy {
 			this.topBarTween.kill();
 		}
 
-		this.topBarTween = gsap.to(['#topbar', '#website-logo-svg'], {
-			height: newHeight,
-			ease: 'elastic.out(1.2, 1)',
-		});
+		this.topBarTween = gsap.to(
+			[this.topbar().nativeElement, this.sitelogo().nativeElement],
+			{
+				height: newHeight,
+				ease: 'elastic.out(1.2, 1)',
+			},
+		);
 	}
 
 	// Logo dragging methods
@@ -187,18 +190,16 @@ export class TopBarComponent implements OnInit, OnDestroy {
 	};
 
 	applyPlaceholderHeight() {
-		const placeholder = document.getElementById('site-logo-placeholder');
-		console.log(placeholder);
-		const svg = document.getElementById('website-logo-svg');
-		if (!placeholder || !svg) return;
+		if (!this.placeholder() || !this.sitelogo()) return;
 
-		const { x, y, height, width } = placeholder.getBoundingClientRect();
+		const { x, y, height, width } =
+			this.placeholder().nativeElement.getBoundingClientRect();
 		this.initialPos = { x, y, h: height, w: width, offset: { x: 0, y: 0 } };
 
 		// Position SVG absolutely within the container instead of fixed
-		svg.style.left = x + 'px';
-		svg.style.top = y + 'px';
-		svg.style.height = height + 'px';
+		this.sitelogo().nativeElement.style.left = x + 'px';
+		this.sitelogo().nativeElement.style.top = y + 'px';
+		this.sitelogo().nativeElement.style.height = height + 'px';
 	}
 
 	getDragPosition(e: MouseEvent | TouchEvent): { x: number; y: number } {
@@ -225,7 +226,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
 		const relativeX = x - this.initialPos!.x - this.initialPos!.offset.x;
 		const relativeY = y - this.initialPos!.y - this.initialPos!.offset.y;
 
-		gsap.to('#website-logo-svg', {
+		gsap.to(this.sitelogo().nativeElement, {
 			x: relativeX,
 			y: relativeY,
 		});
@@ -236,7 +237,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
 		if (!this.isDragging) return;
 		this.isDragging = false;
 
-		gsap.to('#website-logo-svg', {
+		gsap.to(this.sitelogo().nativeElement, {
 			x: 0,
 			y: 0,
 			duration: 0.8,
@@ -263,7 +264,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
 	playClickAnimation() {
 		if (this.clickAnimationTween) this.clickAnimationTween.kill();
 
-		this.clickAnimationTween = gsap.to('#website-logo-svg', {
+		this.clickAnimationTween = gsap.to(this.sitelogo().nativeElement, {
 			scale: 0.8,
 			rotateZ: (Math.random() - 0.5) * 100, // Rotate different amounts to the left or right
 			duration: 0.1,
@@ -277,7 +278,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
 	restoreLogoPos() {
 		if (this.restoreTween) this.restoreTween.kill();
 
-		this.restoreTween = gsap.to('#website-logo-svg', {
+		this.restoreTween = gsap.to(this.sitelogo().nativeElement, {
 			scale: 1,
 			rotateZ: 0,
 			duration: 0.25,
@@ -288,7 +289,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
 	private playHoverAnimation() {
 		if (this.restoreTween?.isActive()) return;
 
-		gsap.to('#website-logo-svg', {
+		gsap.to(this.sitelogo().nativeElement, {
 			scale: 1.05,
 			duration: 0.1,
 			ease: 'power2.inOut',

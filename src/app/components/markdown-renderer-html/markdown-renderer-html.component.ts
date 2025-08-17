@@ -1,8 +1,8 @@
 import {
 	ChangeDetectionStrategy,
 	Component,
-	ElementRef,
-	Input,
+	effect,
+	input,
 	SecurityContext,
 	ViewEncapsulation,
 } from '@angular/core';
@@ -27,28 +27,27 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class MarkdownRendererHtmlComponent {
 	private sanitizer: DomSanitizer;
 	parsedNode: string | undefined | null;
-	@Input() set parsedContent(content: MdNode[] | string) {
-		let parsed: string;
+	parsedContent = input.required<MdNode[] | string>();
 
-		if (content === '' || content.length === 0) {
-			this.parsedNode = '';
-			return;
-		}
-
-		if (typeof content === 'string') {
-			parsed = this.renderNode(new MdNode('text', content));
-		} else {
-			parsed = content.map((node) => this.renderNode(node)).join('');
-		}
-
-		this.parsedNode = this.sanitizer.sanitize(SecurityContext.HTML, parsed);
-	}
-
-	constructor(
-		sanitizer: DomSanitizer,
-		private el: ElementRef,
-	) {
+	constructor(sanitizer: DomSanitizer) {
 		this.sanitizer = sanitizer;
+		effect(() => {
+			const content = this.parsedContent();
+			let parsed: string;
+
+			if (content === '' || content.length === 0) {
+				this.parsedNode = '';
+				return;
+			}
+
+			if (typeof content === 'string') {
+				parsed = this.renderNode(new MdNode('text', content));
+			} else {
+				parsed = content.map((node) => this.renderNode(node)).join('');
+			}
+
+			this.parsedNode = this.sanitizer.sanitize(SecurityContext.HTML, parsed);
+		});
 	}
 
 	renderNode = (node: MdNode): string => {

@@ -1,5 +1,5 @@
 <div
-	id="vs-search-main"
+	#vssearch
 	class="flex cursor-pointer select-none flex-row gap-2 py-2 pl-2 pr-6 transition-[transform,box-shadow] will-change-transform hover:scale-105 hover:bg-none active:scale-95"
 	tabindex="0"
 	(keydown)="this.keyPressed($event)"
@@ -15,11 +15,9 @@
 		/>
 	</div>
 	<div class="z-20 flex h-full flex-col justify-center overflow-visible">
-		<span
-			id="theme-name"
-			class="relative text-ellipsis text-nowrap font-bold"
-			>{{ this.themeName() }}</span
-		>
-		<span id="theme-author" class="opacity-100">{{ this.themeAuthor() }}</span>
+		<span #vsthemename class="relative text-ellipsis text-nowrap font-bold">{{
+			this.themeName()
+		}}</span>
+		<span #vsthemeauthor class="opacity-100">{{ this.themeAuthor() }}</span>
 	</div>
 </div>

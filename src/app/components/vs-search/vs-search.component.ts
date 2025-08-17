@@ -3,11 +3,12 @@ import {
 	input,
 	OnDestroy,
 	signal,
-	ViewChild,
 	OnInit,
 	effect,
 	output,
 	ChangeDetectionStrategy,
+	viewChild,
+	ElementRef,
 } from '@angular/core';
 import { LocalStorageService } from '@services/local-storage.service';
 import gsap from 'gsap';
@@ -20,7 +21,10 @@ import { Subscription } from 'rxjs';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VsSearchComponent implements OnDestroy, OnInit {
-	@ViewChild('themebtn') themeBtn!: HTMLElement;
+	themeBtn = viewChild.required<ElementRef<HTMLElement>>('themebtn');
+	vsSearch = viewChild.required<ElementRef<HTMLElement>>('vssearch');
+	vsThemeAuthor = viewChild.required<ElementRef<HTMLElement>>('vsthemeauthor');
+	vsThemeName = viewChild.required<ElementRef<HTMLElement>>('vsthemename');
 	animationSeekAt = input(0);
 
 	clicked = output();
@@ -84,7 +88,7 @@ export class VsSearchComponent implements OnDestroy, OnInit {
 	playScrollAnimation(progress: number) {
 		const pad = progress * 8 + 'px';
 
-		gsap.to('#vs-search-main', {
+		gsap.to(this.vsSearch().nativeElement, {
 			paddingLeft: pad,
 			paddingTop: pad,
 			paddingBottom: pad,
@@ -92,7 +96,7 @@ export class VsSearchComponent implements OnDestroy, OnInit {
 			ease: 'none',
 		});
 
-		gsap.to('#theme-author', {
+		gsap.to(this.vsThemeAuthor().nativeElement, {
 			opacity: progress,
 			duration: 0.01,
 			ease: 'none',
@@ -100,7 +104,7 @@ export class VsSearchComponent implements OnDestroy, OnInit {
 
 		const top = (1 - progress) * 1.2;
 
-		gsap.to('#theme-name', {
+		gsap.to(this.vsThemeName().nativeElement, {
 			top: top + 'vh',
 			duration: 0.01,
 			ease: 'none',

@@ -49,7 +49,7 @@ export class SidepanelTocComponent implements OnDestroy {
 	}>({ top: -1, left: -1, width: -1, height: -1 });
 	private subscription: Subscription;
 	readonly tocButtons = viewChildren<ElementRef<HTMLElement>>('tocButton');
-	readonly container = viewChild<ElementRef<HTMLElement>>('container');
+	readonly container = viewChild.required<ElementRef<HTMLElement>>('container');
 
 	constructor() {
 		this.subscription = HeadingDirective.tocState$.subscribe((state) => {
@@ -83,17 +83,17 @@ export class SidepanelTocComponent implements OnDestroy {
 	}
 
 	calculateActiveButtonCoords(idx: number) {
-		const activeButton = this.tocButtons()[idx].nativeElement;
+		const activeButton = this.tocButtons()[idx];
 		if (!activeButton) {
 			this.buttonCoords.set({ top: 0, left: 0, width: 0, height: 0 });
 			return;
 		}
 
 		this.buttonCoords.set({
-			top: activeButton.offsetTop,
-			left: activeButton.offsetLeft,
-			width: activeButton.offsetWidth,
-			height: activeButton.offsetHeight,
+			top: activeButton.nativeElement.offsetTop,
+			left: activeButton.nativeElement.offsetLeft,
+			width: activeButton.nativeElement.offsetWidth,
+			height: activeButton.nativeElement.offsetHeight,
 		});
 	}
 }

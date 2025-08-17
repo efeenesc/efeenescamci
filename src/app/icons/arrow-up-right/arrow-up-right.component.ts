@@ -1,14 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
 	selector: 'icon-arrow-up-right',
 	imports: [],
 	template: `
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			viewBox="0 0 20 20"
-			class="{{ applyClass }}"
-		>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
 			<!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
 			<g id="Arrow / Arrow_Up_Right_SM">
 				<path
@@ -23,6 +19,4 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArrowUpRightComponent {
-	@Input() applyClass?: string;
-}
+export class ArrowUpRightComponent {}

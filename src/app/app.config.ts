@@ -11,7 +11,6 @@ import { FormControl } from '@angular/forms';
 import { routes } from './app.routes';
 import { IMAGE_CONFIG } from '@angular/common';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-// import { provideLoadingBarRouter } from '@ngx-loading-bar/router';
 import { provideLoadingBar } from './services/fake-loading-bar-injector.service';
 
 const imgConfig = {
