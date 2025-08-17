@@ -1,6 +1,6 @@
 import {
 	ApplicationConfig,
-	provideExperimentalZonelessChangeDetection,
+	provideZonelessChangeDetection,
 } from '@angular/core';
 import {
 	provideRouter,
@@ -34,7 +34,7 @@ export const appConfig: ApplicationConfig = {
 		FormControl,
 		imgConfig,
 		provideHttpClient(withFetch()),
-		provideExperimentalZonelessChangeDetection(),
+		provideZonelessChangeDetection(),
 		provideLoadingBar(),
 	],
 };
