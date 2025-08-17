@@ -1,13 +1,12 @@
 import {
 	Component,
 	OnDestroy,
-	QueryList,
 	signal,
-	ViewChild,
-	ViewChildren,
 	OnInit,
 	ElementRef,
 	ChangeDetectionStrategy,
+	viewChild,
+	viewChildren,
 } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -59,9 +58,9 @@ import { LocalStorageService } from '@services/local-storage.service';
 	`,
 })
 export class VsMenuComponent implements OnDestroy, OnInit {
-	@ViewChild('themebtn') themeBtn!: ElementRef<HTMLElement>;
-	@ViewChildren(VsCardComponent) cards!: QueryList<VsCardComponent>;
-	@ViewChild('searchbar') searchBar!: ElementRef<HTMLElement>;
+	themeBtn = viewChild.required<ElementRef<HTMLElement>>('themebtn');
+	cards = viewChildren(VsCardComponent);
+	searchBar = viewChild.required<ElementRef<HTMLElement>>('searchbar');
 
 	// Removed unused property: results?: vst.VSExtension;
 	searchControl!: FormControl;
@@ -132,7 +131,7 @@ export class VsMenuComponent implements OnDestroy, OnInit {
 
 	ngOnDestroy(): void {
 		this.subscriptions.unsubscribe();
-		this.cards.forEach((item) => {
+		this.cards().forEach((item) => {
 			item.cancelThemeChange();
 		});
 	}
@@ -167,6 +166,6 @@ export class VsMenuComponent implements OnDestroy, OnInit {
 	}
 
 	inputContainerDivClicked() {
-		this.searchBar.nativeElement.focus();
+		this.searchBar().nativeElement.focus();
 	}
 }

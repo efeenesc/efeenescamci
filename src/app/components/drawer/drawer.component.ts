@@ -1,11 +1,11 @@
 import {
 	Component,
 	ElementRef,
-	ViewChild,
 	OnInit,
 	OnDestroy,
 	output,
 	ChangeDetectionStrategy,
+	viewChild,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { XMarkComponent } from '@icons/xmark/xmark.component';
@@ -24,15 +24,9 @@ interface VerticalMousePosition {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DrawerComponent implements OnInit, OnDestroy {
-	@ViewChild('drawerMain') set _dm(content: ElementRef) {
-		this.drawerMain = content.nativeElement as HTMLDivElement;
-	}
-	drawerMain!: HTMLDivElement;
-
-	@ViewChild('darkenedBg') set _db(content: ElementRef) {
-		this.darkenedBg = content.nativeElement as HTMLDivElement;
-	}
-	darkenedBg!: HTMLDivElement;
+	drawerMain = viewChild.required<ElementRef<HTMLDivElement>>('drawerMain');
+	mainOverlay = viewChild.required<ElementRef<HTMLDivElement>>('mainOverlay');
+	darkenedBg = viewChild.required<ElementRef<HTMLDivElement>>('darkenedBg');
 	closed = output<void>();
 
 	isDragging = false;
@@ -86,20 +80,16 @@ export class DrawerComponent implements OnInit, OnDestroy {
 	}
 
 	slideUp() {
-		const dkbg = document.getElementById('darkenedBg')!;
-		const overlay = document.getElementById('mainOverlay')!;
-		dkbg.style.opacity = '0.4';
-		overlay.style.pointerEvents = 'auto';
+		this.darkenedBg()!.nativeElement.style.opacity = '0.4';
+		this.mainOverlay()!.nativeElement.style.pointerEvents = 'auto';
 
 		this.objTranslate = { current: 100, target: 2 }; // Target 2vh, start at 100vh (bottom of page)
 		this.updateDrawerPosition(600, false, 'expo.out');
 	}
 
 	closeOverlay() {
-		const dkbg = document.getElementById('darkenedBg')!;
-		const overlay = document.getElementById('mainOverlay')!;
-		dkbg.style.removeProperty('opacity');
-		overlay.style.removeProperty('pointer-events');
+		this.darkenedBg()!.nativeElement.style.removeProperty('opacity');
+		this.mainOverlay()!.nativeElement.style.removeProperty('pointer-events');
 
 		if (document.body.style.overflow === 'hidden') {
 			document.body.style.removeProperty('overflow');
@@ -223,7 +213,8 @@ export class DrawerComponent implements OnInit, OnDestroy {
 			duration: duration / 1000, // GSAP uses seconds for duration
 			ease: easing,
 			onUpdate: () => {
-				this.drawerMain.style.top = this.objTranslate.current + 'vh';
+				this.drawerMain()!.nativeElement.style.top =
+					this.objTranslate.current + 'vh';
 			},
 			onComplete: () => {
 				if (closeAfter) {

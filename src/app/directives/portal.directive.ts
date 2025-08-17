@@ -1,11 +1,11 @@
 import {
 	Directive,
-	Input,
 	OnInit,
 	OnDestroy,
 	ViewContainerRef,
 	TemplateRef,
 	OnChanges,
+	input,
 } from '@angular/core';
 import { PortalService } from '@services/portal.service';
 
@@ -13,7 +13,7 @@ import { PortalService } from '@services/portal.service';
 	selector: '[portalOutlet]',
 })
 export class PortalOutletDirective implements OnInit, OnDestroy {
-	@Input('portalOutlet') portalName!: string;
+	portalName = input<string>('', { alias: 'portalOutlet' });
 
 	constructor(
 		private viewContainer: ViewContainerRef,
@@ -21,11 +21,11 @@ export class PortalOutletDirective implements OnInit, OnDestroy {
 	) {}
 
 	ngOnInit(): void {
-		this.portalService.registerOutlet(this.portalName, this.viewContainer);
+		this.portalService.registerOutlet(this.portalName(), this.viewContainer);
 	}
 
 	ngOnDestroy(): void {
-		this.portalService.unregisterOutlet(this.portalName);
+		this.portalService.unregisterOutlet(this.portalName());
 	}
 }
 
@@ -33,8 +33,8 @@ export class PortalOutletDirective implements OnInit, OnDestroy {
 	selector: '[portalContent]',
 })
 export class PortalContentDirective implements OnInit, OnDestroy, OnChanges {
-	@Input('portalContent') portalName!: string;
-	@Input() context?: any;
+	portalName = input<string>('', { alias: 'portalContent' });
+	context = input<any>();
 
 	constructor(
 		private template: TemplateRef<any>,
@@ -43,7 +43,7 @@ export class PortalContentDirective implements OnInit, OnDestroy, OnChanges {
 
 	ngOnInit(): void {
 		this.portalService.setPortalContent(
-			this.portalName,
+			this.portalName(),
 			this.template,
 			this.context,
 		);
@@ -51,11 +51,11 @@ export class PortalContentDirective implements OnInit, OnDestroy, OnChanges {
 
 	ngOnChanges(): void {
 		if (this.context !== undefined) {
-			this.portalService.updatePortalContext(this.portalName, this.context);
+			this.portalService.updatePortalContext(this.portalName(), this.context);
 		}
 	}
 
 	ngOnDestroy(): void {
-		this.portalService.clearPortalContent(this.portalName);
+		this.portalService.clearPortalContent(this.portalName());
 	}
 }

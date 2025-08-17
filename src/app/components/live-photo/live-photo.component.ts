@@ -3,9 +3,9 @@ import {
 	input,
 	signal,
 	ElementRef,
-	ViewChild,
 	OnDestroy,
 	ChangeDetectionStrategy,
+	viewChild,
 } from '@angular/core';
 import { LivePhotoIconComponent } from '@icons/live-photo/live-photo-icon.component';
 import gsap from 'gsap';
@@ -32,8 +32,7 @@ export class LivePhotoComponent implements OnDestroy {
 	longPressProgress = signal<number>(0);
 	isLongPressing = signal<boolean>(false);
 
-	@ViewChild('video') videoRef!: ElementRef<HTMLVideoElement>;
-	@ViewChild('image') imageRef!: ElementRef<HTMLImageElement>;
+	imageRef = viewChild.required<ElementRef<HTMLImageElement>>('image');
 
 	private progressInterval?: number;
 	private fadeInTween?: gsap.core.Tween;
@@ -54,9 +53,9 @@ export class LivePhotoComponent implements OnDestroy {
 
 	onVideoLoad() {
 		// Fade out image when video is ready
-		if (this.imageRef?.nativeElement) {
+		if (this.imageRef()) {
 			if (this.fadeInTween) this.fadeInTween.kill();
-			this.fadeInTween = gsap.to(this.imageRef.nativeElement, {
+			this.fadeInTween = gsap.to(this.imageRef().nativeElement!, {
 				opacity: 0,
 				duration: 0.3,
 				ease: 'power2.out',
@@ -147,9 +146,9 @@ export class LivePhotoComponent implements OnDestroy {
 
 	videoEnded() {
 		// Fade image back in when video ends
-		if (this.imageRef?.nativeElement) {
+		if (this.imageRef()) {
 			if (this.fadeOutTween) this.fadeOutTween.kill();
-			this.fadeOutTween = gsap.to(this.imageRef.nativeElement, {
+			this.fadeOutTween = gsap.to(this.imageRef().nativeElement, {
 				opacity: 1,
 				duration: 0.3,
 				ease: 'power2.out',

@@ -11,13 +11,12 @@
 	},
 	"private": true,
 	"dependencies": {
-		"@angular/animations": "^19.0.1",
-		"@angular/common": "^19.0.1",
-		"@angular/core": "^19.0.1",
-		"@angular/forms": "^19.0.1",
-		"@angular/platform-browser": "^19.0.1",
-		"@angular/platform-browser-dynamic": "^19.0.1",
-		"@angular/router": "^19.0.1",
+		"@angular/common": "^20.1.7",
+		"@angular/core": "^20.1.7",
+		"@angular/forms": "^20.1.7",
+		"@angular/platform-browser": "^20.1.7",
+		"@angular/platform-browser-dynamic": "^20.1.7",
+		"@angular/router": "^20.1.7",
 		"@plist/parse": "^1.1.0",
 		"eslint-plugin-tailwindcss": "^3.18.0",
 		"gsap": "^3.12.5",
@@ -26,10 +25,10 @@
 		"strip-json-comments": "^5.0.1"
 	},
 	"devDependencies": {
-		"@angular-devkit/build-angular": "^19.0.2",
-		"@angular/cli": "^19.0.2",
-		"@angular/compiler": "^19.0.1",
-		"@angular/compiler-cli": "^19.0.1",
+		"@angular/build": "^20.1.6",
+		"@angular/cli": "^20.1.6",
+		"@angular/compiler": "^20.1.7",
+		"@angular/compiler-cli": "^20.1.7",
 		"@eslint/js": "^9.9.1",
 		"@types/jasmine": "~5.1.0",
 		"@types/plist": "^3.0.5",
@@ -48,7 +47,7 @@
 		"prettier-plugin-tailwindcss": "^0.6.13",
 		"tailwindcss": "^3.4.4",
 		"tslib": "^2.7.0",
-		"typescript": "~5.5.4",
+		"typescript": "~5.8.3",
 		"typescript-eslint": "8.23.0"
 	},
 	"optionalDependencies": {

@@ -4,7 +4,7 @@ import {
 	effect,
 	ElementRef,
 	signal,
-	ViewChild,
+	viewChild,
 } from '@angular/core';
 import { FakeLoadingBarService } from '@services/fake-loading-bar.service';
 import gsap from 'gsap';
@@ -16,10 +16,7 @@ import gsap from 'gsap';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FakeLoadingBarComponent {
-	@ViewChild('loadingbar') set _lb(content: ElementRef) {
-		this.loadingBar = content.nativeElement as HTMLDivElement;
-	}
-	loadingBar!: HTMLDivElement;
+	loadingBar = viewChild.required<ElementRef<HTMLDivElement>>('loadingbar');
 
 	showLoading = signal<boolean>(true);
 	loadingProgress = signal<number>(0);
@@ -27,7 +24,7 @@ export class FakeLoadingBarComponent {
 	private loadingTween?: gsap.core.Tween;
 
 	constructor(private fakeLoadingBarSvc: FakeLoadingBarService) {
-		fakeLoadingBarSvc.state.subscribe((state) => {
+		this.fakeLoadingBarSvc.state.subscribe((state) => {
 			if (state === 'started') {
 				this.showLoading.set(true);
 				if (this.stopLoadingTimeout) {
@@ -42,7 +39,7 @@ export class FakeLoadingBarComponent {
 			}
 		});
 
-		fakeLoadingBarSvc.value.subscribe((val) => {
+		this.fakeLoadingBarSvc.value.subscribe((val) => {
 			this.loadingProgress.set(val);
 		});
 
@@ -60,13 +57,13 @@ export class FakeLoadingBarComponent {
 	}
 
 	showLoadingBar() {
-		if (this.loadingBar) {
+		if (this.loadingBar()) {
 			if (this.loadingTween?.isActive()) {
 				gsap.killTweensOf(this.loadingTween);
 			}
 
-			this.loadingBar.style.opacity = '1';
-			this.loadingBar.style.width = '';
+			this.loadingBar().nativeElement.style.opacity = '1';
+			this.loadingBar().nativeElement.style.width = '';
 		}
 	}
 
@@ -75,7 +72,7 @@ export class FakeLoadingBarComponent {
 			gsap.killTweensOf(this.loadingTween);
 		}
 
-		this.loadingTween = gsap.to(this.loadingBar, {
+		this.loadingTween = gsap.to(this.loadingBar().nativeElement, {
 			width: progress + '%',
 			duration: 0.5,
 			ease: 'expo.inOut',
@@ -87,7 +84,7 @@ export class FakeLoadingBarComponent {
 			gsap.killTweensOf(this.loadingTween);
 		}
 
-		gsap.to(this.loadingBar, {
+		gsap.to(this.loadingBar().nativeElement, {
 			opacity: 0,
 			duration: 0.5,
 			ease: 'expo.inOut',

@@ -1,12 +1,13 @@
 import {
 	Component,
 	ElementRef,
-	ViewChild,
 	ViewEncapsulation,
 	OnInit,
 	input,
 	output,
 	ChangeDetectionStrategy,
+	viewChild,
+	effect,
 } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, Subject } from 'rxjs';
@@ -23,18 +24,12 @@ import { MarkdownRendererComponent } from '@components/markdown-renderer/markdow
 	styleUrl: './markdown-editor.component.css',
 })
 export class MarkdownEditorComponent implements OnInit {
-	@ViewChild('markdownArea') set content(content: ElementRef) {
-		this.textarea = content.nativeElement as HTMLTextAreaElement;
-		setTimeout(() => {
-			this.assignCurrentLine();
-			this.processMd(this.getText());
-		}, 0);
-	}
 	showRenderer = input(true);
 	mdResult = output<MdNode>();
 
 	textChanged = new Subject<null>();
-	textarea!: HTMLTextAreaElement;
+	textarea =
+		viewChild.required<ElementRef<HTMLTextAreaElement>>('markdownArea');
 	focusedLine?: number;
 	lineCount: number[] = [0];
 	selectedLineNumber = 0;
@@ -69,6 +64,13 @@ export class MarkdownEditorComponent implements OnInit {
 				this.processMd(this.getText());
 			});
 		}
+
+		effect(() => {
+			if (this.textarea()) {
+				this.assignCurrentLine();
+				this.processMd(this.getText());
+			}
+		});
 	}
 
 	ngOnInit() {
@@ -105,7 +107,7 @@ export class MarkdownEditorComponent implements OnInit {
 				!line.trim() ? '<div><br></div>' : '<div>' + line + '</div>',
 			)
 			.join('');
-		this.textarea.innerHTML = html;
+		this.textarea().nativeElement.innerHTML = html;
 
 		if (changeMd) {
 			this.textChanged.next(null);
@@ -115,12 +117,12 @@ export class MarkdownEditorComponent implements OnInit {
 	}
 
 	checkDOM() {
-		this.textarea.childNodes.forEach((n) => {
+		this.textarea().nativeElement.childNodes.forEach((n) => {
 			if (n.nodeType === 3) {
 				// Check if the node is a text node
 				const div = document.createElement('div'); // Create a new div
 				div.textContent = n.textContent; // Set the text content of the div
-				this.textarea.replaceChild(div, n); // Replace the text node with the div
+				this.textarea().nativeElement.replaceChild(div, n); // Replace the text node with the div
 			}
 		});
 	}
@@ -128,7 +130,7 @@ export class MarkdownEditorComponent implements OnInit {
 	getText() {
 		let finalText = '';
 
-		this.textarea.childNodes.forEach((node, idx) => {
+		this.textarea().nativeElement.childNodes.forEach((node, idx) => {
 			(node as HTMLElement).id = idx.toString();
 			finalText += node.textContent + '\n';
 		});
@@ -140,7 +142,7 @@ export class MarkdownEditorComponent implements OnInit {
 		// Prevent deleting the only <br> inside an empty textarea div
 		if (
 			(ev.key === 'Backspace' || ev.key === 'Delete') &&
-			this.textarea.innerText === '\n'
+			this.textarea().nativeElement.innerText === '\n'
 		) {
 			ev.preventDefault();
 			return;
@@ -217,7 +219,7 @@ export class MarkdownEditorComponent implements OnInit {
 		}
 
 		const lineNumber = Array.prototype.indexOf.call(
-			this.textarea.childNodes,
+			this.textarea().nativeElement.childNodes,
 			currentElement,
 		);
 
@@ -248,7 +250,7 @@ export class MarkdownEditorComponent implements OnInit {
 	}
 
 	getNumberofLines(): number {
-		return this.textarea.childNodes?.length || 1;
+		return this.textarea().nativeElement.childNodes?.length || 1;
 	}
 
 	assignCurrentLine() {

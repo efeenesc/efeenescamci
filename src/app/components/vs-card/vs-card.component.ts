@@ -6,7 +6,7 @@ import {
 	input,
 	OnDestroy,
 	signal,
-	ViewChild,
+	viewChild,
 } from '@angular/core';
 import { VSExtension } from '@apptypes/vs-types';
 import { SkeletonLoaderComponent } from '@components/skeleton-loader/skeleton-loader.component';
@@ -54,35 +54,15 @@ export class VsCardStyle {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VsCardComponent implements OnDestroy {
-	@ViewChild('themeinfo') set _dm(content: ElementRef) {
-		this.themeInfoDiv = content.nativeElement;
-	}
-	themeInfoDiv!: HTMLDivElement;
-
-	@ViewChild('loadingcontainer') set _lc(content: ElementRef) {
-		this.loadingContainerDiv = content.nativeElement;
-	}
-	loadingContainerDiv!: HTMLDivElement;
-
-	@ViewChild('shadowcontainer') set _sc(content: ElementRef) {
-		this.shadowContainerDiv = content.nativeElement;
-	}
-	shadowContainerDiv!: HTMLDivElement;
-
-	@ViewChild('maincontainer') set _mc(content: ElementRef) {
-		this.mainContainerDiv = content.nativeElement;
-	}
-	mainContainerDiv!: HTMLDivElement;
-
-	@ViewChild('background') set _bg(content: ElementRef) {
-		this.backgroundDiv = content.nativeElement;
-	}
-	backgroundDiv!: HTMLDivElement;
-
-	@ViewChild('loadingdiv') set _ld(content: ElementRef) {
-		this.loadingDiv = content.nativeElement;
-	}
-	loadingDiv!: HTMLDivElement;
+	themeInfoDiv = viewChild.required<ElementRef<HTMLDivElement>>('themeinfo');
+	loadingContainerDiv =
+		viewChild.required<ElementRef<HTMLDivElement>>('loadingcontainer');
+	shadowContainerDiv =
+		viewChild.required<ElementRef<HTMLDivElement>>('shadowcontainer');
+	mainContainerDiv =
+		viewChild.required<ElementRef<HTMLDivElement>>('maincontainer');
+	backgroundDiv = viewChild.required<ElementRef<HTMLDivElement>>('background');
+	loadingDiv = viewChild.required<ElementRef<HTMLDivElement>>('loadingdiv');
 
 	cardInfo = input.required<VSExtension>();
 	cardType = input<'small' | 'large'>('large');
@@ -179,27 +159,27 @@ export class VsCardComponent implements OnDestroy {
 	}
 
 	resetLoadingBarNoAnim() {
-		this.loadingDiv.style.background = '';
+		this.loadingDiv().nativeElement.style.background = '';
 	}
 
 	startLoadingAnimation() {
-		gsap.to(this.shadowContainerDiv, {
+		gsap.to(this.shadowContainerDiv().nativeElement, {
 			opacity: 0,
 			duration: 0.05,
 		});
-		gsap.to(this.mainContainerDiv, {
+		gsap.to(this.mainContainerDiv().nativeElement, {
 			translateY: '0.25rem',
 			duration: 0.05,
 		});
 
 		// Fade in the loading containerQ
-		gsap.to(this.loadingContainerDiv, {
+		gsap.to(this.loadingContainerDiv().nativeElement, {
 			opacity: 1,
 			duration: 0.05,
 		});
 
 		// Scale the theme info div
-		gsap.to(this.backgroundDiv, {
+		gsap.to(this.backgroundDiv().nativeElement, {
 			opacity: 0,
 			duration: 1,
 			ease: 'power1.inOut',
@@ -207,21 +187,21 @@ export class VsCardComponent implements OnDestroy {
 	}
 
 	stopLoadingAnimation() {
-		gsap.to(this.mainContainerDiv, {
+		gsap.to(this.mainContainerDiv().nativeElement, {
 			translateY: 0,
 			duration: 0.05,
 		});
-		gsap.to(this.shadowContainerDiv, {
+		gsap.to(this.shadowContainerDiv().nativeElement, {
 			opacity: 1,
 			duration: 0.05,
 		});
-		gsap.to(this.loadingContainerDiv, {
+		gsap.to(this.loadingContainerDiv().nativeElement, {
 			opacity: 0,
 			duration: 0.5,
 		});
 
 		// Second animation (scale the theme info div back to 1.0)
-		gsap.to(this.backgroundDiv, {
+		gsap.to(this.backgroundDiv().nativeElement, {
 			opacity: 1,
 			duration: 1,
 			ease: 'power1.inOut',
@@ -235,7 +215,7 @@ export class VsCardComponent implements OnDestroy {
 			duration: 0.1, // 100ms converted to seconds (0.1s)
 			onUpdate: () => {
 				this.currentProgress = this.downloadProgressObj.current;
-				this.loadingDiv.style.background = `conic-gradient(#3b82f6 ${this.currentProgress}% 0, transparent 0%)`;
+				this.loadingDiv().nativeElement.style.background = `conic-gradient(#3b82f6 ${this.currentProgress}% 0, transparent 0%)`;
 
 				if (this.currentProgress === 100) {
 					setTimeout(() => {

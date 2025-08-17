@@ -1,15 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
 	selector: 'icon-arrow-down',
 	imports: [],
 	template: `
-		<svg
-			viewBox="0 0 24 24"
-			fill="none"
-			xmlns="http://www.w3.org/2000/svg"
-			class="{{ applyClass }}"
-		>
+		<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 			<!--
 			Vectors and icons by Vlad Cristea
 			https://www.figma.com/@thevladc?ref=svgrepo.com
@@ -25,6 +20,4 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArrowDownComponent {
-	@Input() applyClass?: string;
-}
+export class ArrowDownComponent {}
