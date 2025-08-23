@@ -7,7 +7,6 @@ import {
 	ViewEncapsulation,
 	WritableSignal,
 } from '@angular/core';
-import { SkeletonLoaderComponent } from '../skeleton-loader/skeleton-loader.component';
 import { Router } from '@angular/router';
 
 export interface NormalCardInfo {
@@ -22,7 +21,7 @@ export interface NormalCardInfo {
 
 @Component({
 	selector: 'normal-card',
-	imports: [SkeletonLoaderComponent],
+	imports: [],
 	templateUrl: './normal-card.component.html',
 	styles: `
 		.card {

@@ -15,10 +15,16 @@ import { OverflowDirective } from '@directives/overflow.directive';
 import gsap from 'gsap';
 import { PortalService } from '@services/portal.service';
 import { Router } from '@angular/router';
+import { MiniTocComponent } from '@components/mini-toc/mini-toc.component';
 
 @Component({
 	selector: 'top-bar',
-	imports: [VsSearchComponent, SiteLogoComponent, OverflowDirective],
+	imports: [
+		VsSearchComponent,
+		SiteLogoComponent,
+		OverflowDirective,
+		MiniTocComponent,
+	],
 	templateUrl: './top-bar.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -77,9 +83,9 @@ export class TopBarComponent implements OnInit, OnDestroy {
 			const appliedBg = this.applyBackground();
 			const appliedBgBlur = this.applyBackgroundBlur();
 			const target = this.backgroundApplyScrollYTarget;
-			if (appliedBgBlur && newYval < 10) {
+			if (appliedBgBlur && newYval < 50) {
 				this.applyBackgroundBlur.set(false);
-			} else if (!appliedBgBlur && newYval > 10) {
+			} else if (!appliedBgBlur && newYval > 50) {
 				this.applyBackgroundBlur.set(true);
 			}
 			if (appliedBg && newYval < target) {
@@ -169,6 +175,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
 			[this.topbar().nativeElement, this.sitelogo().nativeElement],
 			{
 				height: newHeight,
+				duration: 0.3,
 				ease: 'elastic.out(1.2, 1)',
 			},
 		);
@@ -229,6 +236,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
 		gsap.to(this.sitelogo().nativeElement, {
 			x: relativeX,
 			y: relativeY,
+			duration: 0.1,
 		});
 	};
 
@@ -291,7 +299,7 @@ export class TopBarComponent implements OnInit, OnDestroy {
 
 		gsap.to(this.sitelogo().nativeElement, {
 			scale: 1.05,
-			duration: 0.1,
+			duration: 0.15,
 			ease: 'power2.inOut',
 		});
 	}

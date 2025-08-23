@@ -7,10 +7,10 @@
 	</h1>
 
 	<div class="relative z-[1] w-full">
-		<span class="block self-start lg:text-lg">
+		<p>
 			A few things from my vault of unfinished projects I thought were cool (and
 			barely finished) enough to put on here:
-		</span>
+		</p>
 		<div
 			class="mt-6 flex flex-col items-center justify-center gap-2 self-center"
 		>
@@ -42,10 +42,10 @@
 			>
 				<button
 					(click)="this.toggleShowMore()"
-					class="bg-accent1/20 flex flex-row gap-3 self-end rounded-full p-4 shadow-light backdrop-blur-md transition-all hover:bg-highlight-solid active:translate-y-1 active:shadow-dark-inset"
+					class="flex h-fit flex-row items-center gap-3 self-end rounded-full bg-accent1/20 p-4 shadow-light backdrop-blur-md transition-all hover:bg-highlight-solid active:translate-y-1 active:shadow-dark-inset"
 				>
 					<icon-arrow-down
-						class="aspect-square w-6 stroke-contrast transition-[rotate] duration-300"
+						class="aspect-square h-fit w-6 stroke-contrast transition-[rotate] duration-300"
 						[style.rotate]="showingMore() ? '180deg' : '0deg'"
 					></icon-arrow-down>
 					@if (!showingMore()) {

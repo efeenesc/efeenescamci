@@ -1,8 +1,7 @@
 .card-container {
 	transition-property: max-height;
 	transition-duration: var(--duration, 400ms);
-	transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-	transition-delay: var(--delay, 0ms);
+	transition-delay: var(0ms);
 }
 
 .card-container.collapsed {
@@ -31,7 +30,7 @@
 
 @media (max-width: 450px) {
 	.card-container.collapsed .card {
-		max-height: 100px;
+		max-height: 200px;
 		overflow: hidden;
 		transform: translateY(calc(var(--yPos, -120px) + 20px))
 			scale(var(--scale, 1));

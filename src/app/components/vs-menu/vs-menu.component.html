@@ -121,9 +121,9 @@
 						track i
 					) {
 						<div class="size-full overflow-hidden rounded-3xl bg-system-700">
-							<skeleton-loader
-								class="aspect-square size-full"
-							></skeleton-loader>
+							<div
+								class="block aspect-square h-full w-full bg-system-600"
+							></div>
 						</div>
 					}
 				} @else {
@@ -134,7 +134,6 @@
 						<vs-card
 							class="aspect-square h-fit w-full lg:w-full"
 							[cardInfo]="ext"
-							[cardType]="'small'"
 						></vs-card>
 					}
 				}

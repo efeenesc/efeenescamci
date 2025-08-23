@@ -9,7 +9,6 @@ import {
 	viewChild,
 } from '@angular/core';
 import { VSExtension } from '@apptypes/vs-types';
-import { SkeletonLoaderComponent } from '@components/skeleton-loader/skeleton-loader.component';
 import { ArrowUpRightComponent } from '@icons/arrow-up-right/arrow-up-right.component';
 import { MissingIconComponent } from '@icons/missing-icon/missing-icon.component';
 import { VsThemeService } from '@services/vs-theme.service';
@@ -45,11 +44,7 @@ export class VsCardStyle {
 
 @Component({
 	selector: 'vs-card',
-	imports: [
-		SkeletonLoaderComponent,
-		ArrowUpRightComponent,
-		MissingIconComponent,
-	],
+	imports: [ArrowUpRightComponent, MissingIconComponent],
 	templateUrl: './vs-card.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -65,7 +60,6 @@ export class VsCardComponent implements OnDestroy {
 	loadingDiv = viewChild.required<ElementRef<HTMLDivElement>>('loadingdiv');
 
 	cardInfo = input.required<VSExtension>();
-	cardType = input<'small' | 'large'>('large');
 	cardStyle = input<VsCardStyle>();
 	cardIcon = signal<string | undefined | null>(undefined);
 
@@ -83,6 +77,8 @@ export class VsCardComponent implements OnDestroy {
 	currentProgress = 0;
 	downloadProgress = 0;
 	downloadProgressObj = { current: 0 };
+	private progressTween?: gsap.core.Tween;
+	private loadingTweens: gsap.core.Tween[] = [];
 
 	constructor(
 		private vs: VsThemeService,
@@ -108,7 +104,7 @@ export class VsCardComponent implements OnDestroy {
 			return;
 		}
 		this.cardIcon.set(
-			(await this.vsSvc.getIcon(this.cardInfo(), 'large')) ?? null,
+			(await this.vsSvc.getIcon(this.cardInfo(), 'small')) ?? null,
 		);
 	}
 
@@ -163,63 +159,99 @@ export class VsCardComponent implements OnDestroy {
 	}
 
 	startLoadingAnimation() {
-		gsap.to(this.shadowContainerDiv().nativeElement, {
-			opacity: 0,
-			duration: 0.05,
-		});
-		gsap.to(this.mainContainerDiv().nativeElement, {
-			translateY: '0.25rem',
-			duration: 0.05,
-		});
+		// Kill existing animations
+		this.loadingTweens.forEach((tween) => tween.kill());
+		this.loadingTweens = [];
 
-		// Fade in the loading containerQ
-		gsap.to(this.loadingContainerDiv().nativeElement, {
-			opacity: 1,
-			duration: 0.05,
-		});
+		this.loadingTweens.push(
+			gsap.to(this.shadowContainerDiv().nativeElement, {
+				opacity: 0,
+				duration: 0.05,
+			}),
+		);
+		this.loadingTweens.push(
+			gsap.to(this.mainContainerDiv().nativeElement, {
+				translateY: '0.25rem',
+				duration: 0.05,
+			}),
+		);
+
+		// Fade in the loading container
+		this.loadingTweens.push(
+			gsap.to(this.loadingContainerDiv().nativeElement, {
+				opacity: 1,
+				duration: 0.05,
+			}),
+		);
 
 		// Scale the theme info div
-		gsap.to(this.backgroundDiv().nativeElement, {
-			opacity: 0,
-			duration: 1,
-			ease: 'power1.inOut',
-		});
+		this.loadingTweens.push(
+			gsap.to(this.backgroundDiv().nativeElement, {
+				opacity: 0,
+				duration: 1,
+				ease: 'power1.inOut',
+			}),
+		);
 	}
 
 	stopLoadingAnimation() {
-		gsap.to(this.mainContainerDiv().nativeElement, {
-			translateY: 0,
-			duration: 0.05,
-		});
-		gsap.to(this.shadowContainerDiv().nativeElement, {
-			opacity: 1,
-			duration: 0.05,
-		});
-		gsap.to(this.loadingContainerDiv().nativeElement, {
-			opacity: 0,
-			duration: 0.5,
-		});
+		// Kill existing animations
+		this.loadingTweens.forEach((tween) => tween.kill());
+		this.loadingTweens = [];
+
+		this.loadingTweens.push(
+			gsap.to(this.mainContainerDiv().nativeElement, {
+				translateY: 0,
+				duration: 0.05,
+			}),
+		);
+		this.loadingTweens.push(
+			gsap.to(this.shadowContainerDiv().nativeElement, {
+				opacity: 1,
+				duration: 0.05,
+			}),
+		);
+		this.loadingTweens.push(
+			gsap.to(this.loadingContainerDiv().nativeElement, {
+				opacity: 0,
+				duration: 0.5,
+			}),
+		);
 
 		// Second animation (scale the theme info div back to 1.0)
-		gsap.to(this.backgroundDiv().nativeElement, {
-			opacity: 1,
-			duration: 1,
-			ease: 'power1.inOut',
-		});
+		this.loadingTweens.push(
+			gsap.to(this.backgroundDiv().nativeElement, {
+				opacity: 1,
+				duration: 1,
+				ease: 'power1.inOut',
+			}),
+		);
 	}
 
 	setCalculatedGradient(downloadProgress: number) {
-		gsap.to(this.downloadProgressObj, {
-			current: downloadProgress,
-			ease: 'power1.out', // Equivalent to 'easeOutQuad' in GSAP
-			duration: 0.1, // 100ms converted to seconds (0.1s)
-			onUpdate: () => {
-				this.currentProgress = this.downloadProgressObj.current;
-				this.loadingDiv().nativeElement.style.background = `conic-gradient(#3b82f6 ${this.currentProgress}% 0, transparent 0%)`;
+		// Kill existing progress animation
+		if (this.progressTween) {
+			this.progressTween.kill();
+		}
 
+		this.progressTween = gsap.to(this.downloadProgressObj, {
+			current: downloadProgress,
+			ease: 'power1.out',
+			duration: 0.1,
+			onUpdate: () => {
+				// Throttle DOM updates to reduce repaints
+				const progress = Math.round(this.downloadProgressObj.current);
+				if (progress !== this.currentProgress) {
+					this.currentProgress = progress;
+					this.loadingDiv().nativeElement.style.setProperty(
+						'background',
+						`conic-gradient(#3b82f6 ${this.currentProgress}% 0, transparent 0%)`,
+					);
+				}
+			},
+			onComplete: () => {
 				if (this.currentProgress === 100) {
 					setTimeout(() => {
-						// console.log(this.currentProgress);
 						this.stopLoadingAnimation();
 					}, 250);
 				}
@@ -230,5 +262,11 @@ export class VsCardComponent implements OnDestroy {
 	ngOnDestroy() {
 		// console.log("Card destroyed?");
 		this.cancelThemeChange();
+
+		// Clean up GSAP animations
+		if (this.progressTween) {
+			this.progressTween.kill();
+		}
+		this.loadingTweens.forEach((tween) => tween.kill());
 	}
 }

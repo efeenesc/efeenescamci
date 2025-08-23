@@ -1,4 +1,14 @@
-<div class="mx-auto flex h-max flex-col gap-16">
+<div
+	class="mx-auto flex h-max flex-col gap-8 text-base sm:text-lg lg:gap-16 lg:text-xl"
+>
+	<section class="flex w-full justify-center">
+		<about-section></about-section>
+	</section>
+
+	<section class="flex w-full justify-center">
+		<technologies-section></technologies-section>
+	</section>
+
 	<section class="flex w-full justify-center">
 		<themes-section></themes-section>
 	</section>
@@ -10,85 +20,88 @@
 	<section class="flex w-full justify-center">
 		<blog-section></blog-section>
 	</section>
+
+	<!-- @for (item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track $index) {
+		<h1 class="pb-24" is-heading>{{ "heading" + item }}</h1>
+	} -->
 </div>
 
 <!-- Site header portal -->
 <ng-template portalContent="header">
 	<div
-		class="-mb-24 ml-2 flex w-[calc(100%-16px)] flex-1 -translate-y-[10vh] flex-col overflow-hidden text-nowrap pt-2 transition-colors"
+		class="flex h-full flex-wrap items-center gap-6 xs:px-[10%] sm:flex-nowrap sm:items-center sm:justify-center sm:px-0"
 	>
-		<div
-			class="hero-bg flex h-fit w-full flex-col overflow-hidden rounded-2xl p-3 drop-shadow-2xl lg:mb-0 lg:rounded-3xl"
-		>
-			<div class="h-[10vh]"></div>
-			<div
-				class="flex flex-wrap gap-6 xs:pl-[10%] sm:flex-nowrap sm:items-center sm:justify-center sm:pl-0"
-			>
-				<live-photo
-					class="w-full max-w-[300px] shrink-0"
-					mainPhotoUrl="https://avatars.githubusercontent.com/u/79850104?v=4"
-					[shortVideoUrls]="['assets/lisa1.mp4', 'assets/lisa2.mp4']"
-				/>
+		<live-photo
+			class="max-h-fit max-w-[85vw] sm:max-w-[300px]"
+			mainPhotoUrl="https://avatars.githubusercontent.com/u/79850104?v=4"
+			[shortVideoUrls]="['assets/lisa1.mp4', 'assets/lisa2.mp4']"
+		/>
 
-				<div class="relative z-20 flex w-fit flex-col self-stretch md:my-8">
-					<div>
-						<h1
-							is-heading
-							class="my-0 w-max text-4xl font-extrabold text-white lg:text-6xl"
-						>
-							Efe Enes Çamcı
-						</h1>
-						<h2 class="mb-4 text-2xl text-white lg:text-4xl">
-							Full-Stack Developer
-						</h2>
-					</div>
+		<div class="relative z-20 flex w-fit flex-col self-stretch md:my-8">
+			<div>
+				<h1
+					is-heading
+					class="my-0 w-max text-[42px] font-extrabold xs:text-5xl lg:text-6xl"
+				>
+					<b
+						style="--opacity: 100%; --color: #efe; --bg: var(--accent1)"
+						class="-ml-4 px-4"
+						>Efe Enes Çamcı</b
+					>
+				</h1>
+				<h2 class="mb-4 text-3xl text-foreground lg:text-4xl">
+					<b
+						style="--opacity: 100%; --color: var(--accent1); --bg: #efe"
+						class="-ml-4 px-4"
+						>Full Stack Developer</b
+					>
+				</h2>
+			</div>
 
-					<div class="mt-4 flex gap-3">
-						<a
-							class="relative block aspect-square w-20 overflow-hidden rounded-3xl bg-gradient-to-tl from-neutral-800 to-neutral-900 object-contain p-3 shadow-light transition-all after:absolute after:left-0 after:top-0 after:block after:size-full after:rounded-3xl after:shadow-light after:transition-opacity hover:scale-105 hover:from-neutral-800 hover:via-neutral-900 hover:to-neutral-900 active:translate-y-1 active:scale-100 active:shadow-dark-inset active:after:opacity-0"
-							href="https://github.com/efeenesc"
-							target="_blank"
-							><img
-								class="pointer-events-none select-none object-contain"
-								src="assets/github-mark-white.png"
-								alt="GitHub"
-						/></a>
-						<a
-							class="relative block aspect-square w-20 overflow-hidden rounded-3xl bg-gradient-to-tl from-[#0a66c2] to-blue-400 object-contain p-2 shadow-light transition-all after:absolute after:left-0 after:top-0 after:block after:size-full after:rounded-3xl after:shadow-light after:transition-opacity hover:scale-105 hover:from-[#0a66c2] hover:via-[#0a66c2] hover:to-blue-400 active:translate-y-1 active:scale-100 active:shadow-dark-inset active:after:opacity-0"
-							href="https://linkedin.com/in/efeenescamci"
-							target="_blank"
-							><img
-								class="pointer-events-none select-none object-contain"
-								src="assets/InBug-White-Inverse.png"
-								alt="LinkedIn"
-						/></a>
-						<a
-							class="relative block aspect-square w-20 rounded-3xl bg-highlight-solid bg-gradient-to-tl from-theme-300 to-theme-900 object-contain p-3 shadow-lg transition-all after:absolute after:left-0 after:top-0 after:block after:size-full after:rounded-3xl after:shadow-light after:transition-opacity hover:scale-105 hover:bg-none hover:from-theme-300 hover:via-theme-300 active:translate-y-1 active:scale-100 active:shadow-dark-inset active:after:opacity-0"
-							href="mailto:hello@efeenescamci.com"
-							target="_blank"
-						>
-							<svg
-								viewBox="0 0 24 24"
-								fill="none"
-								class="stroke-contrast"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									d="M7.39999 6.32003L15.89 3.49003C19.7 2.22003 21.77 4.30003 20.51 8.11003L17.68 16.6C15.78 22.31 12.66 22.31 10.76 16.6L9.91999 14.08L7.39999 13.24C1.68999 11.34 1.68999 8.23003 7.39999 6.32003Z"
-									stroke-width="1.5"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								/>
-								<path
-									d="M10.11 13.6501L13.69 10.0601"
-									stroke-width="1.5"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								/>
-							</svg>
-						</a>
-					</div>
-				</div>
+			<div class="mt-4 flex gap-3">
+				<a
+					class="relative block aspect-square w-20 overflow-hidden rounded-3xl bg-gradient-to-tl from-neutral-800 to-neutral-900 object-contain p-3 shadow-light transition-all after:absolute after:left-0 after:top-0 after:block after:size-full after:rounded-3xl after:shadow-light after:transition-opacity hover:scale-105 hover:from-neutral-800 hover:via-neutral-900 hover:to-neutral-900 active:translate-y-1 active:scale-100 active:shadow-dark-inset active:after:opacity-0"
+					href="https://github.com/efeenesc"
+					target="_blank"
+					><img
+						class="pointer-events-none select-none object-contain"
+						src="assets/github-mark-white.png"
+						alt="GitHub"
+				/></a>
+				<a
+					class="relative block aspect-square w-20 overflow-hidden rounded-3xl bg-gradient-to-tl from-[#0a66c2] to-blue-400 object-contain p-2 shadow-light transition-all after:absolute after:left-0 after:top-0 after:block after:size-full after:rounded-3xl after:shadow-light after:transition-opacity hover:scale-105 hover:from-[#0a66c2] hover:via-[#0a66c2] hover:to-blue-400 active:translate-y-1 active:scale-100 active:shadow-dark-inset active:after:opacity-0"
+					href="https://linkedin.com/in/efeenescamci"
+					target="_blank"
+					><img
+						class="pointer-events-none select-none object-contain"
+						src="assets/InBug-White-Inverse.png"
+						alt="LinkedIn"
+				/></a>
+				<a
+					class="relative block aspect-square w-20 rounded-3xl bg-highlight-solid bg-gradient-to-tl from-theme-300 to-theme-900 object-contain p-3 shadow-lg transition-all after:absolute after:left-0 after:top-0 after:block after:size-full after:rounded-3xl after:shadow-light after:transition-opacity hover:scale-105 hover:bg-none hover:from-theme-300 hover:via-theme-300 active:translate-y-1 active:scale-100 active:shadow-dark-inset active:after:opacity-0"
+					href="mailto:hello@efeenescamci.com"
+					target="_blank"
+				>
+					<svg
+						viewBox="0 0 24 24"
+						fill="none"
+						class="stroke-contrast"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							d="M7.39999 6.32003L15.89 3.49003C19.7 2.22003 21.77 4.30003 20.51 8.11003L17.68 16.6C15.78 22.31 12.66 22.31 10.76 16.6L9.91999 14.08L7.39999 13.24C1.68999 11.34 1.68999 8.23003 7.39999 6.32003Z"
+							stroke-width="1.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+						<path
+							d="M10.11 13.6501L13.69 10.0601"
+							stroke-width="1.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+					</svg>
+				</a>
 			</div>
 		</div>
 	</div>

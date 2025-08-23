@@ -1,8 +1,5 @@
 <div class="flex min-h-screen flex-col justify-center gap-2">
 	@if (this.isLoading()) {
-		<skeleton-loader
-			class="size-full min-h-screen flex-1 bg-theme-900 [&_div]:h-screen"
-		/>
 	} @else {
 		<div
 			class="flex flex-1 flex-col overflow-auto text-nowrap text-foreground transition-colors"

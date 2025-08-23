@@ -86,26 +86,17 @@ export class VsSearchComponent implements OnDestroy, OnInit {
 	}
 
 	playScrollAnimation(progress: number) {
-		const pad = progress * 8 + 'px';
-
-		gsap.to(this.vsSearch().nativeElement, {
-			paddingLeft: pad,
-			paddingTop: pad,
-			paddingBottom: pad,
-			duration: 0.01,
-			ease: 'none',
-		});
-
 		gsap.to(this.vsThemeAuthor().nativeElement, {
 			opacity: progress,
 			duration: 0.01,
 			ease: 'none',
 		});
 
-		const top = (1 - progress) * 1.2;
+		// Use translateY instead of top to keep element in container bounds
+		const translateY = (1 - progress) * 50; // Move up when progress is low
 
 		gsap.to(this.vsThemeName().nativeElement, {
-			top: top + 'vh',
+			y: translateY + '%',
 			duration: 0.01,
 			ease: 'none',
 		});

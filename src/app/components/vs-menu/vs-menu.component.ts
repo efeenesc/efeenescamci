@@ -21,7 +21,6 @@ import { VsThemeService } from '@services/vs-theme.service';
 import * as vst from '@apptypes/vs-types';
 import { VsCardComponent } from '@components/vs-card/vs-card.component';
 import { MagnifyingGlassComponent } from '@icons/magnifying-glass/magnifying-glass.component';
-import { SkeletonLoaderComponent } from '@components/skeleton-loader/skeleton-loader.component';
 import { ColorScheme } from '@classes/colorscheme';
 import { LocalStorageService } from '@services/local-storage.service';
 
@@ -32,7 +31,6 @@ import { LocalStorageService } from '@services/local-storage.service';
 		ReactiveFormsModule,
 		VsCardComponent,
 		MagnifyingGlassComponent,
-		SkeletonLoaderComponent,
 	],
 	templateUrl: './vs-menu.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,

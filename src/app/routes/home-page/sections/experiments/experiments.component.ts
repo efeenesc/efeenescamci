@@ -39,11 +39,10 @@ export class ExperimentsComponent {
 		},
 		{
 			id: 3,
-			icon_url:
-				'https://github.com/efeenesc/recap/raw/master/assets/appicon.png',
+			icon_url: 'assets/WinFloatingDockPic.png',
 			name: 'WinFloatingDock',
 			desc: 'A floating, always-on-top transparent dock that functions like a minimal taskbar. Built using C++ and MSVC.',
-			source_url: 'https://github.com/efeenesc/simple-invoice-latex',
+			source_url: 'https://github.com/efeenesc/WinFloatingDock',
 			read_more: '',
 			loaded: signal(false),
 		},

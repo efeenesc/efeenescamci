@@ -6,7 +6,6 @@ import {
 } from '@angular/core';
 import { BackendService } from '@services/backend.service';
 import { Router } from '@angular/router';
-import { SkeletonLoaderComponent } from '@components/skeleton-loader/skeleton-loader.component';
 import {
 	NormalCardComponent,
 	NormalCardInfo,
@@ -16,12 +15,7 @@ import { HeadingDirective } from '@directives/heading.directive';
 
 @Component({
 	selector: 'blog-section',
-	imports: [
-		SkeletonLoaderComponent,
-		NormalCardComponent,
-		ArrowDownComponent,
-		HeadingDirective,
-	],
+	imports: [NormalCardComponent, ArrowDownComponent, HeadingDirective],
 	templateUrl: './blog.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	styles: `

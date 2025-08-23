@@ -15,22 +15,34 @@
 
 	<fake-loading-bar></fake-loading-bar>
 
-	<div portalOutlet="header"></div>
+	<div
+		class="-mb-24 ml-2 flex w-[calc(100%-16px)] flex-1 -translate-y-[10vh] flex-col overflow-hidden text-nowrap pt-2"
+	>
+		<div
+			class="relative flex h-[calc(100vh-16px)] w-full flex-col overflow-hidden rounded-2xl p-3 sm:h-fit lg:rounded-3xl"
+		>
+			<ripple-bg class="absolute left-0 top-0 h-full w-full"></ripple-bg>
+			<div class="h-[10vh] w-full"></div>
+			<div class="h-full min-h-[300px]">
+				<div portalOutlet="header"></div>
+			</div>
+		</div>
+	</div>
 
 	<div
 		id="contentarea"
 		#contentarea
-		class="bottom-0 grid h-min w-full pt-4 xs:grid-cols-[10%_80%_10%] md:grid-cols-[20%_60%_20%] lg:grid-cols-[25%_50%_25%] xl:grid-cols-[30%_40%_30%]"
+		class="bottom-0 grid h-min w-full xs:grid-cols-[10%_80%_10%] md:grid-cols-[20%_60%_20%] lg:grid-cols-[25%_50%_25%] xl:grid-cols-[30%_40%_30%]"
 	>
 		<div class="h-full w-full md:hidden"></div>
 		<div
-			class="sticky top-[calc(50%-10vh)] hidden h-fit w-fit justify-self-end pt-4 md:block"
+			class="sticky top-[calc(50%-10vh)] mt-16 hidden h-fit w-fit justify-self-end md:block"
 		>
 			<sidepanel-toc class="h-full w-full"></sidepanel-toc>
 		</div>
 
 		<main
-			class="size-full px-3 text-contrast antialiased transition-colors"
+			class="size-full px-3 pt-16 text-contrast antialiased transition-colors"
 			id="main"
 			#main
 		>

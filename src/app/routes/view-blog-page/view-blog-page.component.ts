@@ -7,7 +7,6 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { MdNode } from '@classes/markdown';
 import { MarkdownRendererComponent } from '@components/markdown-renderer/markdown-renderer.component';
-import { SkeletonLoaderComponent } from '@components/skeleton-loader/skeleton-loader.component';
 import { Meta } from '@angular/platform-browser';
 import { HeadingDirective } from '@directives/heading.directive';
 import { PortalContentDirective } from '@directives/portal.directive';
@@ -18,7 +17,6 @@ import { FakeLoadingBarService } from '@services/fake-loading-bar.service';
 	standalone: true,
 	imports: [
 		MarkdownRendererComponent,
-		SkeletonLoaderComponent,
 		HeadingDirective,
 		PortalContentDirective,
 	],
