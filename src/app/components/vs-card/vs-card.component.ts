@@ -260,10 +260,8 @@ export class VsCardComponent implements OnDestroy {
 	}
 
 	ngOnDestroy() {
-		// console.log("Card destroyed?");
 		this.cancelThemeChange();
 
-		// Clean up GSAP animations
 		if (this.progressTween) {
 			this.progressTween.kill();
 		}

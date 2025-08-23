@@ -64,14 +64,8 @@ export class ViewBlogPageComponent {
 				const parser = new MarkdownParser();
 				const lexed = lexer.tokenize(this.markdownText());
 				const mdTree = parser.parse(lexed);
-				console.log('AAA', mdTree);
 				this.markdownNode.set(mdTree);
 			}
-		});
-
-		effect(() => {
-			console.log('NOOO', this.markdownText().slice(0, 10));
-			console.log('FICUk', this.markdownNode());
 		});
 
 		effect(() => {

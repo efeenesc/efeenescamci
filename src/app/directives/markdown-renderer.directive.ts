@@ -23,14 +23,10 @@ export class MarkdownRendererDirective implements OnChanges, OnDestroy {
 	constructor(
 		private vcr: ViewContainerRef,
 		private renderer: Renderer2,
-	) {
-		console.log('1:', this.nodes());
-	}
+	) {}
 
 	ngOnChanges(): void {
 		this.clear();
-		console.log('2:', this.nodes());
-		// console.log(this.nodes()!.value);
 		if (!this.nodes() || this.nodes()!.value.length === 0) return;
 
 		for (const n of this.nodes()!.value) {
