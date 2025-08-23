@@ -5,6 +5,10 @@
 	font-weight: 450;
 }
 
+p {
+	@apply my-4;
+}
+
 h1 {
 	@apply my-8 text-4xl font-extrabold !text-foreground sm:text-5xl lg:text-6xl;
 }
@@ -14,7 +18,7 @@ h2 {
 }
 
 h3 {
-	@apply mb-4 mt-6 text-xl !text-accent1 md:text-3xl lg:text-4xl;
+	@apply !mb-4 mt-8 text-xl !text-accent1 md:text-3xl lg:text-4xl;
 }
 
 h4 {
@@ -41,8 +45,7 @@ strong {
 ul {
 	display: block;
 	list-style-type: disc;
-	margin-left: 2em;
-	margin-right: 2em;
+	margin: 1em 2em;
 }
 
 code {

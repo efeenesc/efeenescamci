@@ -1,10 +1,5 @@
-import {
-	ChangeDetectionStrategy,
-	Component,
-	effect,
-	input,
-} from '@angular/core';
-import { MdNode } from '@classes/markdown';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ASTRootNode } from '@classes/markdown/parser.interface';
 import { MarkdownRendererDirective } from '@directives/markdown-renderer.directive';
 
 @Component({
@@ -12,36 +7,12 @@ import { MarkdownRendererDirective } from '@directives/markdown-renderer.directi
 	standalone: true,
 	imports: [MarkdownRendererDirective],
 	template: `
-		<ng-template id="md-renderer" *markdownRenderer="parsedNode"> </ng-template>
+		<ng-template id="md-renderer" *markdownRenderer="parsedContent()">
+		</ng-template>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	styleUrl: './markdown-renderer.component.css',
 })
 export class MarkdownRendererComponent {
-	parsedNode: MdNode[] | null = null;
-	parsedContent = input.required<MdNode[] | string>();
-
-	constructor() {
-		effect(() => {
-			const content = this.parsedContent();
-			if (typeof content === 'string') {
-				this.parsedNode = [new MdNode('text', content)];
-			} else {
-				this.parsedNode = content;
-			}
-		});
-	}
-
-	public getTextInsideContent(node: string | MdNode[]): string | undefined {
-		if (typeof node == 'string') return node;
-
-		const currentNode = node[0];
-
-		if (currentNode.type === 'text') {
-			const result = currentNode.content as string;
-			return result;
-		}
-
-		return;
-	}
+	parsedContent = input.required<ASTRootNode>();
 }
