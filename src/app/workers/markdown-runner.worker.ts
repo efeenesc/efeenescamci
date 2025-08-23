@@ -1,8 +1,9 @@
 /// <reference lib="webworker" />
 
-import { ConvertToHtmlTree } from '@classes/markdown';
+import { MarkdownLexer } from '@classes/markdown/lexer';
+import { MarkdownParser } from '@classes/markdown/parser';
 
 addEventListener('message', ({ data }) => {
-	const mdTree = ConvertToHtmlTree(data);
+	const mdTree = new MarkdownParser().parse(new MarkdownLexer().tokenize(data));
 	postMessage(mdTree);
 });

@@ -3,26 +3,33 @@ import {
 	signal,
 	effect,
 	ChangeDetectionStrategy,
+	ViewEncapsulation,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MdNode } from '@classes/markdown';
+import { ASTRootNode } from '@classes/markdown/parser.interface';
 import { MarkdownRendererComponent } from '@components/markdown-renderer/markdown-renderer.component';
-import { SkeletonLoaderComponent } from '@components/skeleton-loader/skeleton-loader.component';
 import { Meta } from '@angular/platform-browser';
 import { HeadingDirective } from '@directives/heading.directive';
 import { PortalContentDirective } from '@directives/portal.directive';
 import { FakeLoadingBarService } from '@services/fake-loading-bar.service';
+import { MarkdownLexer } from '@classes/markdown/lexer';
+import { MarkdownParser } from '@classes/markdown/parser';
 
 @Component({
 	selector: 'view-blog-page',
 	standalone: true,
 	imports: [
 		MarkdownRendererComponent,
-		SkeletonLoaderComponent,
 		HeadingDirective,
 		PortalContentDirective,
 	],
 	templateUrl: './view-blog-page.component.html',
+	styles: `
+		.markdown > *:first-child {
+			margin-top: 0 !important;
+		}
+	`,
+	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ViewBlogPageComponent {
@@ -31,7 +38,7 @@ export class ViewBlogPageComponent {
 	editingEnabled = signal<boolean>(false);
 	isLoading = signal<boolean>(true);
 	error = signal<string | null>(null);
-	markdownNode = signal<MdNode | undefined>(undefined);
+	markdownNode = signal<ASTRootNode | undefined>(undefined);
 	worker: Worker | null = null;
 
 	constructor(
@@ -41,20 +48,30 @@ export class ViewBlogPageComponent {
 		private loadbarSvc: FakeLoadingBarService,
 	) {
 		loadbarSvc.setStrategy('custom');
-		if (typeof Worker !== 'undefined') {
-			this.worker = new Worker(
-				new URL('../../workers/markdown-runner.worker.ts', import.meta.url),
-			);
-			this.worker.onmessage = ({ data }) => {
-				this.markdownNode.set(data);
-			};
-			this.worker.postMessage(this.markdownText());
-		}
+		// if (typeof Worker !== 'undefined') {
+		// 	this.worker = new Worker(
+		// 		new URL('../../workers/markdown-runner.worker.ts', import.meta.url),
+		// 	);
+		// 	this.worker.onmessage = ({ data }) => {
+		// 		this.markdownNode.set(data);
+		// 	};
+		// 	this.worker.postMessage(this.markdownText());
+		// }
 
 		effect(() => {
-			if (this.markdownText()) {
-				this.worker?.postMessage(this.markdownText());
+			if (this.markdownText().trim()) {
+				const lexer = new MarkdownLexer();
+				const parser = new MarkdownParser();
+				const lexed = lexer.tokenize(this.markdownText());
+				const mdTree = parser.parse(lexed);
+				console.log('AAA', mdTree);
+				this.markdownNode.set(mdTree);
 			}
+		});
+
+		effect(() => {
+			console.log('NOOO', this.markdownText().slice(0, 10));
+			console.log('FICUk', this.markdownNode());
 		});
 
 		effect(() => {
@@ -79,13 +96,5 @@ export class ViewBlogPageComponent {
 			content: blog.title + ' - efeenescamci.com',
 		});
 		this.meta.updateTag({ property: 'og:url', content: this.router.url });
-	}
-
-	fillText(text: string) {
-		this.markdownText.set(text);
-	}
-
-	editButtonClicked() {
-		this.editingEnabled.set(!this.editingEnabled());
 	}
 }

@@ -7,7 +7,7 @@ import {
 	ElementRef,
 	input,
 } from '@angular/core';
-import { MdNode } from '@classes/markdown';
+import { ASTNode, ASTRootNode } from '@classes/markdown/parser.interface';
 import { HeadingDirective } from './heading.directive';
 
 @Directive({
@@ -15,7 +15,7 @@ import { HeadingDirective } from './heading.directive';
 	standalone: true,
 })
 export class MarkdownRendererDirective implements OnChanges, OnDestroy {
-	nodes = input<MdNode[] | null>(undefined, { alias: 'markdownRenderer' });
+	nodes = input<ASTRootNode | null>(undefined, { alias: 'markdownRenderer' });
 
 	private topLevelCreated: { node: Node; directive?: HeadingDirective }[] = [];
 	private headingDirectives: HeadingDirective[] = [];
@@ -23,13 +23,17 @@ export class MarkdownRendererDirective implements OnChanges, OnDestroy {
 	constructor(
 		private vcr: ViewContainerRef,
 		private renderer: Renderer2,
-	) {}
+	) {
+		console.log('1:', this.nodes());
+	}
 
 	ngOnChanges(): void {
 		this.clear();
-		if (!this.nodes() || this.nodes()!.length === 0) return;
+		console.log('2:', this.nodes());
+		// console.log(this.nodes()!.value);
+		if (!this.nodes() || this.nodes()!.value.length === 0) return;
 
-		for (const n of this.nodes()!) {
+		for (const n of this.nodes()!.value) {
 			this.renderTop(n);
 		}
 	}
@@ -73,11 +77,11 @@ export class MarkdownRendererDirective implements OnChanges, OnDestroy {
 		this.topLevelCreated = [];
 	}
 
-	private renderTop(node: MdNode): void {
+	private renderTop(node: ASTNode): void {
 		// top-level nodes are inserted before the anchor
 		switch (node.type) {
-			case 'text': {
-				const t = this.renderer.createText(String(node.content ?? ''));
+			case 'TEXT': {
+				const t = this.renderer.createText(String(node.value ?? ''));
 				this.beforeAnchorAppend(t);
 				break;
 			}
@@ -91,8 +95,8 @@ export class MarkdownRendererDirective implements OnChanges, OnDestroy {
 		}
 	}
 
-	private renderChildrenInto(parentEl: HTMLElement, node: MdNode): void {
-		const content = node.content;
+	private renderChildrenInto(parentEl: HTMLElement, node: ASTNode): void {
+		const content = node.value;
 		if (!content) return;
 
 		if (typeof content === 'string') {
@@ -101,10 +105,10 @@ export class MarkdownRendererDirective implements OnChanges, OnDestroy {
 		}
 
 		for (const child of content) {
-			if (child.type === 'text') {
+			if (child.type === 'TEXT') {
 				this.renderer.appendChild(
 					parentEl,
-					this.renderer.createText(String(child.content ?? '')),
+					this.renderer.createText(String(child.value ?? '')),
 				);
 			} else {
 				const childEl = this.createElementFor(child);
@@ -116,69 +120,56 @@ export class MarkdownRendererDirective implements OnChanges, OnDestroy {
 		}
 	}
 
-	private createElementFor(node: MdNode): HTMLElement | null {
+	private createElementFor(node: ASTNode): HTMLElement | null {
 		switch (node.type) {
 			// block nodes
-			case 'p':
+			case 'PARAGRAPH':
 				return this.renderer.createElement('p');
-			case 'ul':
-				return this.renderer.createElement('ul');
-			case 'ol':
+			case 'BREAKLINE':
+				return this.renderer.createElement('br');
+			case 'ORDEREDLIST':
 				return this.renderer.createElement('ol');
-			case 'li':
+			case 'UNORDEREDLIST':
+				return this.renderer.createElement('ul');
+			case 'LISTITEM':
 				return this.renderer.createElement('li');
-			case 'code':
-				return this.renderer.createElement('code');
-			case 'bq':
-				return this.renderer.createElement('blockquote');
-
-			// headings with optional hook
-			case 'h1':
-				return this.createHeading(1);
-			case 'h2':
-				return this.createHeading(2);
-			case 'h3':
-				return this.createHeading(3);
-			case 'h4':
-				return this.createHeading(4);
-			case 'h5':
-				return this.createHeading(5);
-			case 'h6':
-				return this.createHeading(6);
-
-			// inline formatting
-			case 'b':
-				return this.renderer.createElement('strong');
-			case 'i':
-				return this.renderer.createElement('em');
-			case 'bi': {
-				// <strong><em>…</em></strong>
+			case 'STRONG': {
 				const strong = this.renderer.createElement('strong');
 				const em = this.renderer.createElement('em');
 				this.renderer.appendChild(strong, em);
-				// Render children into <em> later by special path:
-				// we return <strong> and temporarily stash <em> on it.
 				(strong as any).__innerTarget = em as HTMLElement;
 				return strong;
 			}
-			case 'st':
+			case 'TEXT':
+				return this.renderer.createText(node.value);
+			case 'INLINECODE':
+			case 'BLOCKCODE':
+				return this.renderer.createElement('code');
+			case 'BLOCKQUOTE':
+				return this.renderer.createElement('blockquote');
+
+			// headings with optional hook
+			case 'HEADING':
+				return this.createHeading(node.level as any);
+
+			// inline formatting
+			case 'BOLD':
+				return this.renderer.createElement('strong');
+			case 'ITALIC':
+				return this.renderer.createElement('em');
+			case 'STRIKETHROUGH':
 				return this.renderer.createElement('del');
-
-			case 'br':
-				return this.renderer.createElement('br');
-
-			case 'a': {
+			case 'LINK': {
 				const a = this.renderer.createElement('a');
 				if (node.url) this.renderer.setAttribute(a, 'href', node.url);
 				this.renderer.setAttribute(a, 'target', '_blank');
 				this.renderer.setAttribute(a, 'rel', 'noopener noreferrer');
 				return a;
 			}
-
-			case 'img': {
+			case 'IMAGE': {
 				const img = this.renderer.createElement('img');
 				this.renderer.setAttribute(img, 'src', node.url ?? '');
-				const alt = this.extractText(node.content);
+				const alt = this.extractText(node.value);
 				if (alt) this.renderer.setAttribute(img, 'alt', alt);
 				// hide broken images
 				(img as HTMLImageElement).onerror = () => {
@@ -205,13 +196,13 @@ export class MarkdownRendererDirective implements OnChanges, OnDestroy {
 		return el;
 	}
 
-	private extractText(content: MdNode[] | string | undefined): string {
+	private extractText(content: ASTNode[] | string | undefined): string {
 		if (!content) return '';
 		if (typeof content === 'string') return content;
 		let out = '';
 		for (const c of content) {
-			if (c.type === 'text') out += String(c.content ?? '');
-			else if (c.content) out += this.extractText(c.content as any);
+			if (c.type === 'TEXT') out += String(c.value ?? '');
+			else if (c.value) out += this.extractText(c.value as any);
 		}
 		return out.trim();
 	}
