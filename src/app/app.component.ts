@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LocalStorageService } from './services/local-storage.service';
-import { MdNode } from './classes/markdown/index.interface';
 import { VsThemeService } from './services/vs-theme.service';
 import { DrawerComponent } from './components/drawer/drawer.component';
 import { VsMenuComponent } from './components/vs-menu/vs-menu.component';
@@ -21,6 +20,7 @@ import gsap from 'gsap';
 import { FakeLoadingBarComponent } from './components/fake-loading-bar/fake-loading-bar.component';
 import { SidepanelTocComponent } from '@components/sidepanel-toc/sidepanel-toc.component';
 import { PortalOutletDirective } from '@directives/portal.directive';
+import { RippleBgComponent } from '@components/ripple-bg/ripple-bg.component';
 
 @Component({
 	selector: 'app-root',
@@ -34,6 +34,7 @@ import { PortalOutletDirective } from '@directives/portal.directive';
 		FakeLoadingBarComponent,
 		SidepanelTocComponent,
 		PortalOutletDirective,
+		RippleBgComponent,
 	],
 	templateUrl: './app.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,7 +45,6 @@ export class AppComponent implements OnInit {
 
 	title = 'efeenescamci';
 	blendClass?: string;
-	markdown?: MdNode;
 	scrollPos = 0;
 	elTranslatePos: { current: number } = { current: 0 };
 	themeBarStyle = '';

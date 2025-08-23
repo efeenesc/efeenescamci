@@ -3,7 +3,7 @@
 	(click)="this.themeSelected($event)"
 	(keydown)="this.keyPressed($event)"
 	tabindex="0"
-	class="group relative flex aspect-square size-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-3xl text-sm transition-all will-change-transform active:!translate-y-1 md:text-xl"
+	class="group relative flex aspect-square size-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-3xl transition-all active:!translate-y-1"
 >
 	<div
 		#themeinfo
@@ -18,7 +18,7 @@
 				@if (!this.cardIcon()) {
 					<!-- If extensionIcon is false (therefore the icon doesn't exist): -->
 					<div
-						class="flex aspect-square h-full w-fit items-center justify-center rounded-3xl bg-system-200 text-2xl font-extrabold text-black [&_svg]:stroke-white"
+						class="flex aspect-square h-full w-fit items-center justify-center rounded-xl bg-system-200 font-extrabold text-black [&_svg]:stroke-white"
 					>
 						<icon-missing-icon
 							class="aspect-square w-12 fill-black stroke-black"
@@ -29,17 +29,14 @@
 					<img
 						id="theme_icon"
 						draggable="false"
-						class="block aspect-square h-full w-fit select-none overflow-hidden rounded-3xl object-cover"
+						class="block aspect-square h-full w-fit select-none overflow-hidden rounded-xl object-cover"
 						[alt]="'Icon for ' + this.cardInfo().displayName"
 						[src]="this.cardIcon()"
 					/>
 				}
 			} @placeholder {
 				<div class="h-full grow overflow-hidden rounded-3xl object-contain">
-					<skeleton-loader
-						class="block aspect-square size-full"
-						[class]="[this.bg900()]"
-					/>
+					<div class="block aspect-square h-full w-full bg-system-600"></div>
 				</div>
 			}
 			<!-- END ICON -->
@@ -67,14 +64,7 @@
 					><icon-arrow-up-right class="aspect-square w-4" />
 				</a>
 			} @placeholder {
-				<!-- Skeleton loader start -->
-				<skeleton-loader
-					class="transition-color h-8 w-full overflow-hidden rounded-3xl text-foreground"
-				/>
-				<skeleton-loader
-					class="transition-color mt-2 h-8 w-full overflow-hidden rounded-3xl text-accent1"
-				/>
-				<!-- Skeleton loader end -->
+				<div class="block aspect-square h-full w-full bg-system-600"></div>
 			}
 			<!-- END TEXT CONTENT -->
 		</div>

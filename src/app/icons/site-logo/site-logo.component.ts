@@ -5,9 +5,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 	imports: [],
 	template: ` <!-- Safari fix - box-shadow gets cut off despite overflow-visible being set, delete the outside box-shadow, add filter: drop-shadow instead which won't get cut off -->
 		<svg
-			viewBox="0 0 101 101"
+			viewBox="12.924 12.924 75.152 75.152"
 			xmlns="http://www.w3.org/2000/svg"
-			class="aspect-square h-full min-h-[40px] w-auto transition-colors duration-500"
+			class="aspect-square w-auto transition-colors duration-500"
 		>
 			<path
 				fill-rule="evenodd"

@@ -1,0 +1,43 @@
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+<div
+	#minitoc
+	(click)="openPopover()"
+	class="mini-toc flex h-full w-full items-center gap-2 px-4 py-4"
+>
+	@for (item of items(); let i = $index; track i) {
+		<div
+			class="h-full max-h-12 !min-h-4 w-2 shrink-0 rounded bg-white opacity-50 transition-opacity"
+			[class.scale-125]="i === activeIndex()"
+			[class.!opacity-100]="i === activeIndex()"
+		></div>
+	}
+	<div
+		popover
+		[template]="popoverContent"
+		[(show)]="isPopoverVisible"
+		[closeOnClickOutside]="true"
+		[closeOnScroll]="true"
+	></div>
+</div>
+
+<ng-template #popoverContent>
+	<div
+		class="z-10 flex max-h-[90%] w-min max-w-[90%] flex-col flex-nowrap overflow-x-hidden rounded-lg bg-theme-600 p-4 shadow-light"
+	>
+		@for (item of this.items(); track item.el.innerText; let i = $index) {
+			<button
+				class="z-10 w-fit text-nowrap rounded-lg px-2 py-1 text-start text-contrast transition-colors duration-300"
+				(click)="scrollTo(item)"
+				[class.!text-accent1]="i === activeIndex()"
+				[class.delay-50]="i === activeIndex()"
+				[style.paddingLeft]="(1 - item.type) * -10 + 'px'"
+				[class.font-semibold]="item.type === 1"
+			>
+				<div class="h-full w-fit pr-2" #tocButton>
+					{{ item.el.innerText.trim() }}
+				</div>
+			</button>
+		}
+	</div>
+</ng-template>

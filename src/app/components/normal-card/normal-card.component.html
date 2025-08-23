@@ -9,24 +9,24 @@
 			class="relative block aspect-square h-fit w-16 shrink-0 items-center justify-center justify-self-center overflow-hidden rounded-2xl bg-theme-900 xs:w-24"
 		>
 			@if (!this.info().loaded) {
-				<skeleton-loader class="block aspect-square" />
+				<div class="block aspect-square h-full w-full bg-system-600"></div>
 			}
 			<img
 				loading="lazy"
 				(load)="this.setLoaded()"
 				[src]="this.info().icon_url"
 				[alt]="this.info().name + 'icon'"
-				class="pointer-events-none scale-110"
+				class="pointer-events-none"
 				onerror="this.style.display='none'"
 			/>
 		</div>
 	}
 
 	<div class="flex flex-col">
-		<h2 class="text-xl font-semibold text-foreground lg:text-xl">
+		<h2 class="font-semibold text-foreground">
 			{{ this.info().name }}
 		</h2>
-		<p class="text-contrast lg:text-lg">
+		<p class="text-contrast">
 			{{ this.info().desc }}
 		</p>
 	</div>

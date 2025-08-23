@@ -92,6 +92,57 @@ body {
 	background: var(--highlight);
 }
 
+small {
+	opacity: 60%;
+}
+b {
+	position: relative;
+	color: var(--color, var(--accent1));
+	text-wrap: nowrap;
+}
+b.wrappable {
+	text-wrap: wrap;
+	display: inline;
+	background-color: var(--bg, var(--color, var(--accent2)));
+	background-size: 100% 100%;
+	mask-image: url("assets/brush.svg");
+	mask-size: 100% 100%;
+	padding: 0.2em 0.4em;
+	margin: -0.1em -0.2em;
+	line-height: 1.6em;
+	border-radius: 4px;
+	opacity: var(--opacity, 100%);
+	box-decoration-break: clone;
+	-webkit-box-decoration-break: clone;
+}
+b::before {
+	content: "";
+	position: absolute;
+	left: -2px;
+	top: 0;
+	width: calc(100% + 4px);
+	height: 105%;
+	z-index: -1;
+	opacity: var(--opacity, 30%);
+	background-color: var(--bg, var(--color, var(--accent2)));
+	mask-image: url("assets/brush.svg");
+	mask-size: 100% 100%;
+}
+b.wrappable::before {
+	display: none;
+}
+b:nth-of-type(2n)::before {
+	left: -4px;
+	width: calc(100% + 8px);
+	height: 105%;
+	mask-image: url("assets/brush2.svg");
+}
+b:nth-of-type(3n)::before {
+	left: -4px;
+	width: calc(100% + 8px);
+	mask-image: url("assets/brush3.svg");
+}
+
 .top-bar-scrolled-down {
 	@apply bg-accent1/10 shadow-light;
 }
@@ -118,7 +169,7 @@ body {
 		theme("colors.theme-600 / 0.1") 95%,
 		theme("colors.theme-900 / 0.2") 100%
 	);
-	animation: drift 10s infinite steps(300);
+	animation: drift 10s infinite steps(300, jump-both);
 	z-index: 0;
 }
 
@@ -127,6 +178,6 @@ body {
 		transform: translate(0, 0);
 	}
 	100% {
-		transform: translate(-10%, -10%);
+		transform: translate(-5%, -5%);
 	}
 }

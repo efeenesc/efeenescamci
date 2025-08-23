@@ -6,13 +6,11 @@
 		Shorts
 	</h1>
 
-	<div
-		class="flex w-full flex-col items-center justify-center gap-2 self-center rounded-xl"
-	>
-		<span class="self-start lg:text-lg">
+	<div class="z-[1] flex w-full flex-col justify-center gap-2 self-center">
+		<p>
 			Streams of consciousness too short to be blog posts, and too large not to
 			share:
-		</span>
+		</p>
 
 		<div
 			class="mt-6 flex w-full flex-col items-center justify-center gap-2 self-center"
@@ -47,31 +45,18 @@
 					>
 						<button
 							(click)="this.toggleShowMore()"
-							class="bg-accent1/20 flex flex-row gap-3 self-end rounded-full p-4 shadow-light backdrop-blur-md transition-all hover:bg-highlight-solid active:translate-y-1 active:shadow-dark-inset"
+							class="flex h-fit flex-row items-center gap-3 self-end rounded-full bg-accent1/20 p-4 shadow-light backdrop-blur-md transition-all hover:bg-highlight-solid active:translate-y-1 active:shadow-dark-inset"
 						>
 							<icon-arrow-down
-								class="aspect-square w-6 stroke-contrast transition-[rotate] duration-300"
+								class="aspect-square h-fit w-6 stroke-contrast transition-[rotate] duration-300"
 								[style.rotate]="showingMore() ? '180deg' : '0deg'"
 							></icon-arrow-down>
 							@if (!showingMore()) {
-								Show {{ this.blogs().length - showCount }} more
+								Show {{ blogs.length - showCount }} more
 							} @else {
 								Collapse
 							}
 						</button>
-					</div>
-				}
-			} @else {
-				@for (num of [0, 1, 2]; track num) {
-					<div
-						class="flex w-full cursor-pointer flex-col gap-2 rounded-3xl px-2 py-4 transition-all duration-300"
-					>
-						<div class="flex h-7 w-full lg:h-8">
-							<skeleton-loader class="block w-full bg-theme-900" />
-						</div>
-						<div class="flex h-6 w-full lg:h-7">
-							<skeleton-loader class="block w-full bg-theme-900" />
-						</div>
 					</div>
 				}
 			}

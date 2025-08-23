@@ -1,6 +1,5 @@
 import {
 	Component,
-	OnDestroy,
 	signal,
 	viewChild,
 	viewChildren,
@@ -8,12 +7,10 @@ import {
 	effect,
 } from '@angular/core';
 import { HeadingDirective } from '@directives/heading.directive';
-import { Subscription } from 'rxjs';
 
 interface HeadingElement {
 	el: HTMLElement;
 	type: 1 | 2 | 3 | 4 | 5 | 6;
-	isVisible?: boolean;
 }
 
 @Component({
@@ -38,35 +35,22 @@ interface HeadingElement {
 		}
 	`,
 })
-export class SidepanelTocComponent implements OnDestroy {
-	items = signal<HeadingElement[]>([]);
-	activeIndex = signal<number>(-1);
+export class SidepanelTocComponent {
+	items = HeadingDirective.tocElements;
+	activeIndex = HeadingDirective.activeIndex;
 	buttonCoords = signal<{
 		top: number;
 		left: number;
 		width: number;
 		height: number;
 	}>({ top: -1, left: -1, width: -1, height: -1 });
-	private subscription: Subscription;
 	readonly tocButtons = viewChildren<ElementRef<HTMLElement>>('tocButton');
 	readonly container = viewChild.required<ElementRef<HTMLElement>>('container');
 
 	constructor() {
-		this.subscription = HeadingDirective.tocState$.subscribe((state) => {
-			this.items.set(state.elements);
-			this.activeIndex.set(state.activeIndex);
-		});
-
 		effect(() => {
-			const idx = this.activeIndex();
-			if (idx !== -1) {
-				this.calculateActiveButtonCoords(idx);
-			}
+			this.calculateActiveButtonCoords(this.activeIndex());
 		});
-	}
-
-	ngOnDestroy() {
-		this.subscription.unsubscribe();
 	}
 
 	/**

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { catchError, map, Observable, throwError, of } from 'rxjs';
 import { environment } from '@envs/environment.development';
 
 @Injectable({
@@ -22,6 +22,9 @@ export class BackendService {
 		'Nov',
 		'Dec',
 	];
+
+	private newBlogPostBriefsCache: BlogQueryResult | null = null;
+	private limitedPostsCache = new Map<string, BlogQueryResult>();
 
 	constructor(private http: HttpClient) {}
 
@@ -49,12 +52,22 @@ export class BackendService {
 		limit: number,
 		skip: number,
 	): Observable<BlogQueryResult> {
+		const cacheKey = `${limit}-${skip}`;
+		
+		if (this.limitedPostsCache.has(cacheKey)) {
+			return of(this.limitedPostsCache.get(cacheKey)!);
+		}
+
 		return this.http
 			.get<BlogQueryResult>(this.api + `/blog?limit=${limit}&skip=${skip}`, {
 				responseType: 'json',
 			})
 			.pipe(
-				map((response) => this.mapToReadableDate(response)),
+				map((response) => {
+					const mappedResponse = this.mapToReadableDate(response);
+					this.limitedPostsCache.set(cacheKey, mappedResponse);
+					return mappedResponse;
+				}),
 				catchError((error) => {
 					console.error('Error fetching blog post briefs:', error);
 					return throwError(() => error);
@@ -63,10 +76,18 @@ export class BackendService {
 	}
 
 	getNewBlogPostBriefs(): Observable<BlogQueryResult> {
+		if (this.newBlogPostBriefsCache) {
+			return of(this.newBlogPostBriefsCache);
+		}
+
 		return this.http
 			.get<BlogQueryResult>(this.api + '/blog/latest', { responseType: 'json' })
 			.pipe(
-				map((response) => this.mapToReadableDate(response)),
+				map((response) => {
+					const mappedResponse = this.mapToReadableDate(response);
+					this.newBlogPostBriefsCache = mappedResponse;
+					return mappedResponse;
+				}),
 				catchError((error) => {
 					console.error('Error fetching new blog post briefs:', error);
 					return throwError(() => error);
@@ -87,5 +108,10 @@ export class BackendService {
 					return throwError(() => error);
 				}),
 			);
+	}
+
+	clearCache(): void {
+		this.newBlogPostBriefsCache = null;
+		this.limitedPostsCache.clear();
 	}
 }

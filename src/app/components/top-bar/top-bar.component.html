@@ -4,9 +4,11 @@
 	#topbar
 	correct-overflow
 	[padBy]="14"
-	class="fixed left-1/2 top-0 z-10 my-1 ml-[-50%] mt-2 flex h-[10vh] w-full justify-center px-1 text-inverse"
+	class="fixed left-1/2 top-0 z-10 my-1 ml-[-50%] mt-2 flex h-[10vh] w-full justify-center px-2 text-inverse"
 >
-	<div class="flex size-full xs:w-4/5 md:w-3/5 lg:w-1/2 xl:w-2/5">
+	<div
+		class="flex size-full justify-between px-1 xs:w-4/5 md:w-3/5 lg:w-1/2 xl:w-2/5"
+	>
 		<div
 			#logoplaceholder
 			class="block aspect-square h-full w-auto rounded-full"
@@ -21,18 +23,26 @@
 			(focus)="this.onMouseOver()"
 			(keydown)="this.keyPressed($event)"
 			tabindex="0"
-			class="fixed aspect-square rounded-full fill-white transition-[background-color] hover:cursor-pointer focus:outline-0 focus-visible:outline-1"
-			[class.top-bar-scrolled-down]="this.applyBackground()"
-			[class.backdrop-blur-lg]="this.applyBackgroundBlur()"
+			class="fixed aspect-square rounded-full bg-theme-600 fill-black p-1 shadow-light hover:cursor-pointer focus:outline-0 focus-visible:outline-1 dark:fill-white"
 		>
 			<site-logo></site-logo>
 		</div>
-		<div class="pointer-events-none flex-1"></div>
+
+		@if (mobileMode()) {
+			<div class="h-full w-fit max-w-fit transition-all">
+				<mini-toc
+					style="opacity: 0"
+					class="flex w-min overflow-hidden rounded-full bg-theme-600 shadow-light"
+					[show]="this.applyBackground()"
+				></mini-toc>
+			</div>
+		}
 
 		<div
-			class="flex h-full rounded-full transition-all"
-			[class.top-bar-scrolled-down]="this.applyBackground()"
-			[class.backdrop-blur-lg]="this.applyBackgroundBlur()"
+			class="mr-1 h-full rounded-full bg-theme-600 pr-4 shadow-light [&_span]:text-contrast"
+			correct-overflow
+			[useTransform]="true"
+			[padBy]="-3"
 		>
 			<vs-search
 				class="flex h-full text-white"
