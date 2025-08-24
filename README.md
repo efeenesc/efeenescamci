@@ -1,6 +1,6 @@
 <div align="center">
 <picture>
-    <img src="src/assets/efeenescamci-logo.png" width="30%">
+    <img src="src/assets/logos/efeenescamci-logo.png" width="30%">
 </picture>
 </div>
 <h1 align="center">
@@ -11,15 +11,13 @@ efeenescamci.com
 
 My whatever goes website. Uses the Angular framework and is an SPA. Built as a challenge to experiment with different ideas, and see how differently I could present a personal website.
 
-Has a no-standard-compliant markdown editor component alongside a markdown parser. It's not of much use, but I've never seen a markdown component it in another personal website, so 🤷
-
 Also has a Visual Studio Marketplace component for theming, because why have just a light and dark theme when you can have tens of thousands? Not of much use either, but at least it's fun to play around with.
 
 ## Technical Description
 
 ### Markdown
 
-There's a lexer and a parser duo; the lexer extracts tokens from text, and the parser interprets the extracted tokens in order, returning a nested set of nodes. A markdown renderer component then goes through the nodes to create the final HTML DOM. Not performant, pretty, or complete.
+There's a toy lexer and a parser duo; as expected, the lexer extracts tokens, parser interprets them into a tree. A simple markdown renderer directive goes through the nodes to create the HTML using Angular's Renderer2.
 
 ### Theming
 
@@ -27,4 +25,4 @@ I used Fiddler on Windows to see how VSCode contacts VS Marketplace. VS Marketpl
 
 ### Deployment
 
-I've got a GitHub Actions runner set up on my VPS that, after a push to the master branch, executes a couple of commands to build the site and move it to /var/www/. Not a great idea.
+I've got a GitHub Actions runner set up on my VPS that, after a push to the master branch, executes a couple of commands to build the site and move it to /var/www/. Not a great idea but it does the job.
