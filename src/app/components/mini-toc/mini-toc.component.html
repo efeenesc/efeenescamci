@@ -7,7 +7,7 @@
 >
 	@for (item of items(); let i = $index; track i) {
 		<div
-			class="h-full max-h-12 !min-h-4 w-2 shrink-0 rounded bg-white opacity-50 transition-opacity"
+			class="h-full max-h-12 !min-h-4 w-2 shrink-0 rounded bg-contrast opacity-50 transition-opacity duration-500"
 			[class.scale-125]="i === activeIndex()"
 			[class.!opacity-100]="i === activeIndex()"
 		></div>
