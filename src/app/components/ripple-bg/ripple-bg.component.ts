@@ -48,6 +48,7 @@ export class RippleBgComponent implements AfterViewInit, OnDestroy {
 	private readonly LOOP_DURATION_FRAMES = 63; // near perfect loop
 	private readonly FRAMES_PER_RENDER = 5;
 
+	private resizeDebouncer: ReturnType<typeof setTimeout> | null = null;
 	bg!: string;
 	fg!: string;
 
@@ -59,10 +60,18 @@ export class RippleBgComponent implements AfterViewInit, OnDestroy {
 		private vsSvc: VsThemeService,
 		private rippleCache: RippleCacheService,
 	) {
+		const styles = getComputedStyle(document.documentElement);
+		this.bg = styles.getPropertyValue('--theme-600').trim();
+		this.fg = styles.getPropertyValue('--accent1').trim();
+		window.addEventListener('resize', this.handleResize.bind(this), {
+			passive: true,
+		});
+
 		this.vsSvc.activeThemeVariantName.subscribe(() => {
 			const styles = getComputedStyle(document.documentElement);
 			this.bg = styles.getPropertyValue('--theme-600').trim();
 			this.fg = styles.getPropertyValue('--accent1').trim();
+			console.log('DEBUGGING', this.fg);
 
 			this.generateCharBitmaps();
 			this.precomputeIntensityMappings();
@@ -73,8 +82,20 @@ export class RippleBgComponent implements AfterViewInit, OnDestroy {
 		});
 	}
 
-	private loadOrGeneratePrecomputedData() {
-		if (!this.rippleCache.isInitialized) {
+	private handleResize() {
+		if (this.resizeDebouncer) {
+			clearTimeout(this.resizeDebouncer);
+		}
+
+		this.resizeDebouncer = setTimeout(() => {
+			this.stop();
+			this.initializeAnimation(true);
+			this.start();
+		}, 500);
+	}
+
+	private loadOrGeneratePrecomputedData(recalculate = false) {
+		if (!this.rippleCache.isInitialized || recalculate) {
 			this.generateCharBitmaps();
 			this.precomputeIntensityMappings();
 			this.precomputeCellData();
@@ -127,11 +148,13 @@ export class RippleBgComponent implements AfterViewInit, OnDestroy {
 		};
 	}
 
-	initializeAnimation() {
-		this.ctx = this.canvas.nativeElement.getContext('2d', {
-			alpha: true,
-			desynchronized: true,
-		})!;
+	initializeAnimation(recalculate = false) {
+		if (!this.ctx) {
+			this.ctx = this.canvas.nativeElement.getContext('2d', {
+				alpha: true,
+				desynchronized: true,
+			})!;
+		}
 
 		this.CANVAS_WIDTH = this.canvas.nativeElement.clientWidth * 0.8;
 		this.CANVAS_HEIGHT = this.canvas.nativeElement.clientHeight * 0.8;
@@ -141,7 +164,7 @@ export class RippleBgComponent implements AfterViewInit, OnDestroy {
 		this.GRID_WIDTH = Math.ceil(this.CANVAS_WIDTH / this.CHAR_SIZE);
 		this.GRID_HEIGHT = Math.ceil(this.CANVAS_HEIGHT / this.CHAR_SIZE);
 
-		this.loadOrGeneratePrecomputedData();
+		this.loadOrGeneratePrecomputedData(recalculate);
 
 		this.currentLoopFrame = 0;
 		this.start();
