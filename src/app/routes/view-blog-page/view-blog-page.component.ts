@@ -48,23 +48,26 @@ export class ViewBlogPageComponent {
 		private loadbarSvc: FakeLoadingBarService,
 	) {
 		loadbarSvc.setStrategy('custom');
-		// if (typeof Worker !== 'undefined') {
-		// 	this.worker = new Worker(
-		// 		new URL('../../workers/markdown-runner.worker.ts', import.meta.url),
-		// 	);
-		// 	this.worker.onmessage = ({ data }) => {
-		// 		this.markdownNode.set(data);
-		// 	};
-		// 	this.worker.postMessage(this.markdownText());
-		// }
+		if (typeof Worker !== 'undefined') {
+			this.worker = new Worker(
+				new URL('../../workers/markdown-runner.worker.ts', import.meta.url),
+			);
+			this.worker.onmessage = ({ data }) => {
+				this.markdownNode.set(data);
+			};
+		}
 
 		effect(() => {
 			if (this.markdownText().trim()) {
-				const lexer = new MarkdownLexer();
-				const parser = new MarkdownParser();
-				const lexed = lexer.tokenize(this.markdownText());
-				const mdTree = parser.parse(lexed);
-				this.markdownNode.set(mdTree);
+				if (this.worker) {
+					this.worker.postMessage(this.markdownText());
+				} else {
+					const lexer = new MarkdownLexer();
+					const parser = new MarkdownParser();
+					const lexed = lexer.tokenize(this.markdownText());
+					const mdTree = parser.parse(lexed);
+					this.markdownNode.set(mdTree);
+				}
 			}
 		});
 
