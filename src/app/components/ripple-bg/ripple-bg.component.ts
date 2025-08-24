@@ -48,6 +48,7 @@ export class RippleBgComponent implements AfterViewInit, OnDestroy {
 	private readonly LOOP_DURATION_FRAMES = 63; // near perfect loop
 	private readonly FRAMES_PER_RENDER = 5;
 
+	bg!: string;
 	fg!: string;
 
 	private currentLoopFrame = 0;
@@ -60,6 +61,7 @@ export class RippleBgComponent implements AfterViewInit, OnDestroy {
 	) {
 		this.vsSvc.activeThemeVariantName.subscribe(() => {
 			const styles = getComputedStyle(document.documentElement);
+			this.bg = styles.getPropertyValue('--theme-600').trim();
 			this.fg = styles.getPropertyValue('--accent1').trim();
 
 			this.generateCharBitmaps();
@@ -184,8 +186,8 @@ export class RippleBgComponent implements AfterViewInit, OnDestroy {
 	}
 
 	renderFrame() {
-		// Use precomputed background color
-		this.ctx.clearRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
+		this.ctx.fillStyle = this.bg;
+		this.ctx.fillRect(0, 0, this.CANVAS_WIDTH, this.CANVAS_HEIGHT);
 
 		if (this.rippleCache.charBitmaps.size === 0) return;
 
