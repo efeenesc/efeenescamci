@@ -7,12 +7,23 @@
 >
 	<!-- Safari fix - need div to enforce aspect-square on img -->
 	<div class="z-20 aspect-square h-full object-contain">
-		<img
-			id="theme_icon"
-			[alt]="'Icon for ' + this.themeName()"
-			class="pointer-events-none aspect-square h-full w-full select-none rounded-full bg-none object-contain p-1"
-			[src]="this.themeIcon()"
-		/>
+		@if (this.themeIcon()) {
+			<img
+				id="theme_icon"
+				[alt]="'Icon for ' + this.themeName()"
+				class="pointer-events-none aspect-square h-full w-full select-none rounded-full bg-none object-contain p-1"
+				[src]="this.themeIcon()"
+			/>
+		} @else {
+			<div
+				id="theme_icon"
+				class="pointer-events-none aspect-square h-full w-full select-none rounded-full bg-system-600 bg-none object-contain p-4"
+			>
+				<icon-missing-icon
+					class="aspect-square h-full w-full stroke-contrast opacity-60"
+				></icon-missing-icon>
+			</div>
+		}
 	</div>
 	<div class="z-20 flex h-full flex-col justify-center overflow-visible">
 		<span #vsthemename class="relative text-ellipsis text-nowrap font-bold">{{
