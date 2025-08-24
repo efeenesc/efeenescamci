@@ -7,7 +7,9 @@ import {
 	computed,
 	effect,
 	EffectRef,
+	inject,
 } from '@angular/core';
+import { FakeLoadingBarService } from '@services/fake-loading-bar.service';
 
 interface HeadingMeta {
 	el: HTMLElement;
@@ -16,8 +18,12 @@ interface HeadingMeta {
 
 @Directive({
 	selector: '[is-heading]',
+	// eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
+	inputs: ['excludeLink'],
 })
 export class HeadingDirective implements OnInit, OnDestroy {
+	private static loader: FakeLoadingBarService;
+
 	private static _tocElements = signal<HeadingMeta[]>([]);
 	private static _visibleMap = signal<Map<HTMLElement, boolean>>(new Map());
 	static activeIndex = signal<number>(-1);
@@ -32,6 +38,7 @@ export class HeadingDirective implements OnInit, OnDestroy {
 
 	private tag!: number;
 	private element!: HeadingMeta;
+	excludeLink = false;
 
 	constructor(private el: ElementRef<HTMLElement>) {
 		if (!HeadingDirective.effectRef) {
@@ -44,9 +51,17 @@ export class HeadingDirective implements OnInit, OnDestroy {
 					return;
 				}
 
-				// scan in DOM order for first visible,
 				const idx = metas.findIndex((m) => vis.get(m.el) === true);
 				HeadingDirective.activeIndex.set(idx);
+			});
+		}
+
+		if (!HeadingDirective.loader) {
+			HeadingDirective.loader = inject(FakeLoadingBarService);
+			HeadingDirective.loader.state.subscribe((state) => {
+				if (state === 'completed') {
+					setTimeout(() => this.handleHashChange(), 200); // arbitrary timeout, could've subscribed to items here but too lazy
+				}
 			});
 		}
 	}
@@ -54,6 +69,15 @@ export class HeadingDirective implements OnInit, OnDestroy {
 	ngOnInit(): void {
 		this.tag = this.getTag(this.el.nativeElement);
 		if (this.tag === -1) return;
+
+		if (!this.excludeLink) {
+			this.el.nativeElement.classList.add('link-icon');
+			this.el.nativeElement.addEventListener(
+				'click',
+				this.onLinkClick.bind(this),
+				{ passive: true },
+			);
+		}
 
 		this.element = {
 			el: this.el.nativeElement,
@@ -68,6 +92,7 @@ export class HeadingDirective implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
+		this.el.nativeElement.removeEventListener('click', this.onLinkClick);
 		if (HeadingDirective.observer) {
 			HeadingDirective.observer.unobserve(this.el.nativeElement);
 		}
@@ -107,6 +132,51 @@ export class HeadingDirective implements OnInit, OnDestroy {
 			default:
 				return -1;
 		}
+	}
+
+	handleHashChange() {
+		const encodedHeading = window.location.hash;
+		if (!encodedHeading) return;
+
+		try {
+			const decodedHeading = decodeURIComponent(
+				encodedHeading.replaceAll('-', ' ').slice(1),
+			);
+			this.scrollToHeading(decodedHeading);
+		} catch {
+			console.warn('Failed to decode heading hash:', encodedHeading);
+		}
+	}
+
+	scrollToHeading(headingText: string) {
+		const elements = HeadingDirective._tocElements();
+		const targetElement = elements.find(
+			(meta) =>
+				meta.el.textContent?.trim().toLocaleLowerCase() ===
+				headingText.toLocaleLowerCase(),
+		);
+
+		if (targetElement) {
+			const { top } = targetElement.el.getBoundingClientRect();
+			scrollTo({ behavior: 'smooth', top: window.scrollY + top - 100 });
+		}
+	}
+
+	onLinkClick() {
+		const headingText = this.el.nativeElement.textContent?.trim() || '';
+		const encodedHeading = encodeURIComponent(
+			headingText.replaceAll(' ', '-').toLocaleLowerCase(),
+		);
+
+		const currentUrl = window.location.pathname;
+		const newUrl = `${currentUrl}#${encodedHeading}`;
+		window.history.replaceState(null, '', newUrl);
+
+		const { top } = this.el.nativeElement.getBoundingClientRect();
+		scrollTo({
+			behavior: 'smooth',
+			top: Math.floor(window.scrollY + top - 100),
+		});
 	}
 
 	private static orderDOMElements(a: HeadingMeta, b: HeadingMeta): number {
