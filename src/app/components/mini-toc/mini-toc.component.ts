@@ -116,7 +116,9 @@ export class MiniTocComponent implements OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.subscription.unsubscribe();
+		if (this.subscription && !this.subscription.closed) {
+			this.subscription.unsubscribe();
+		}
 	}
 
 	openPopover() {
