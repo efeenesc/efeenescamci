@@ -54,7 +54,8 @@ export class RippleBgComponent implements AfterViewInit, OnDestroy {
 
 	private currentLoopFrame = 0;
 	private isVisible = true;
-	private intervalId: any = null;
+	private animationIntervalId: any = null;
+	private initializerTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	constructor(
 		private vsSvc: VsThemeService,
@@ -71,7 +72,6 @@ export class RippleBgComponent implements AfterViewInit, OnDestroy {
 			const styles = getComputedStyle(document.documentElement);
 			this.bg = styles.getPropertyValue('--theme-600').trim();
 			this.fg = styles.getPropertyValue('--accent1').trim();
-			console.log('DEBUGGING', this.fg);
 
 			this.generateCharBitmaps();
 			this.precomputeIntensityMappings();
@@ -113,7 +113,7 @@ export class RippleBgComponent implements AfterViewInit, OnDestroy {
 			charCanvas.width = this.CHAR_SIZE;
 			charCanvas.height = this.CHAR_SIZE;
 			const charCtx = charCanvas.getContext('2d')!;
-			charCtx.font = `${this.CHAR_SIZE}px 'Courier New', monospace`;
+			charCtx.font = `${this.CHAR_SIZE}px monospace`;
 			charCtx.textAlign = 'left';
 			charCtx.textBaseline = 'top';
 			charCtx.fillStyle = `rgb(${accent2Rgb.r}, ${accent2Rgb.g}, ${accent2Rgb.b})`;
@@ -156,8 +156,19 @@ export class RippleBgComponent implements AfterViewInit, OnDestroy {
 			})!;
 		}
 
-		this.CANVAS_WIDTH = this.canvas.nativeElement.clientWidth * 0.8;
-		this.CANVAS_HEIGHT = this.canvas.nativeElement.clientHeight * 0.8;
+		const w = this.canvas.nativeElement.clientWidth;
+		const h = this.canvas.nativeElement.clientHeight;
+
+		// if either of these is zero, canvas's parent hasn't appeared yet; retry in 10ms
+		if (w === 0 || h === 0) {
+			if (this.initializerTimeout) clearTimeout(this.initializerTimeout);
+
+			setTimeout(() => this.initializeAnimation(recalculate), 10);
+			return;
+		}
+
+		this.CANVAS_WIDTH = w * 0.8;
+		this.CANVAS_HEIGHT = h * 0.8;
 		this.width.set(this.CANVAS_WIDTH);
 		this.height.set(this.CANVAS_HEIGHT);
 
@@ -242,18 +253,18 @@ export class RippleBgComponent implements AfterViewInit, OnDestroy {
 	start() {
 		this.renderFrame();
 
-		if (this.intervalId) {
-			clearInterval(this.intervalId);
-			this.intervalId = null;
+		if (this.animationIntervalId) {
+			clearInterval(this.animationIntervalId);
+			this.animationIntervalId = null;
 		}
 
-		this.intervalId = setInterval(this.animate, 1000 / 12);
+		this.animationIntervalId = setInterval(this.animate, 1000 / 12);
 	}
 
 	stop() {
-		if (this.intervalId) {
-			clearInterval(this.intervalId);
-			this.intervalId = null;
+		if (this.animationIntervalId) {
+			clearInterval(this.animationIntervalId);
+			this.animationIntervalId = null;
 		}
 	}
 
