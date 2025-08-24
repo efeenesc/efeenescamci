@@ -11,7 +11,7 @@
 		<div class="flex h-[98vh] w-full flex-col overflow-hidden">
 			<div
 				id="grabberDiv"
-				class="mb-2 flex h-[5vh] cursor-grab justify-end active:cursor-grabbing"
+				class="mb-2 flex h-[5vh] cursor-grab touch-none select-none justify-end active:cursor-grabbing"
 				(mousedown)="this.startDragging($event)"
 			>
 				<div
@@ -39,7 +39,7 @@
 	<div
 		id="darkenedBg"
 		#darkenedBg
-		class="fixed left-0 top-0 h-screen w-screen bg-black opacity-0 transition-all"
+		class="fixed left-0 top-0 h-screen w-screen touch-none select-none bg-black opacity-0 transition-all"
 		aria-hidden="true"
 		(click)="this.clickedOutside()"
 	></div>
