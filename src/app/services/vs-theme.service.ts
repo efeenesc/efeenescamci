@@ -14,7 +14,7 @@ export interface ThemeInfo {
 	themeId: string;
 	themeName: string;
 	themeAuthor: string;
-	themeIcon: string;
+	themeIcon?: string;
 }
 
 @Injectable({
@@ -27,13 +27,7 @@ export class VsThemeService {
 
 	constructor(private _lss: LocalStorageService) {
 		const currentVariant = this._lss.get('theme_variant');
-
 		if (currentVariant) this.activeThemeVariantName.next(currentVariant);
-
-		this._lss.valueChanges.subscribe((nv) => {
-			if (nv.key === 'theme_variant')
-				this.activeThemeVariantName.next(nv.value);
-		});
 	}
 
 	/**
@@ -164,17 +158,25 @@ export class VsThemeService {
 		const pkg_json = JSON.parse(packagemanifest) as ThemePackage;
 		let pkg_logo_path = pkg_json.icon;
 		const pkg_themes = pkg_json.contributes.themes;
+		let themeIcon;
 
-		if (pkg_logo_path.charAt(0) === '/') {
-			pkg_logo_path = pkg_logo_path.substring(1);
+		if (pkg_logo_path) {
+			switch (pkg_logo_path.charAt(0)) {
+				case '.':
+					pkg_logo_path = pkg_logo_path.substring(2);
+					break;
+				case '/':
+					pkg_logo_path = pkg_logo_path.substring(1);
+					break;
+				default:
+					break;
+			}
+			themeIcon = await zip.files[`extension/${pkg_logo_path}`].async('base64');
 		}
 
 		const themeName = pkg_json.displayName;
 		const themeAuthor = pkg_json.publisher;
 		const themeId = ext.extensionId;
-
-		const themeIcon =
-			await zip.files[`extension/${pkg_logo_path}`].async('base64');
 
 		const themeInfo: ThemeInfo = {
 			themeId,
@@ -202,7 +204,7 @@ export class VsThemeService {
 		this._lss.set('theme_name', info.themeName);
 		this._lss.set('theme_author', info.themeAuthor);
 		this._lss.set('theme_id', info.themeId);
-		this._lss.set('theme_icon', info.themeIcon);
+		this._lss.set('theme_icon', info.themeIcon ?? '');
 		this._lss.set('theme_variant', newVariantName);
 
 		if (themes) {
@@ -235,7 +237,7 @@ export class VsThemeService {
 
 				const themeFile =
 					await zip.files[
-						`extension${theme.path.substring(1, theme.path.length)}` // Discard the . at the start of a path, e.g.: ./themes/1.json
+						`extension${theme.path.slice(1)}` // Discard the . at the start of a path, e.g.: ./themes/1.json
 					].async('string');
 
 				const colorScheme = themeFile.substring(0, 5).includes('<?xml')
@@ -439,7 +441,6 @@ export class VsThemeService {
 		);
 		document.documentElement.setAttribute('data-theme', cs.theme);
 
-		this.activeThemeVariantName.next(cs.name);
 		this.saveToLocalStorage(cs);
 	}
 
