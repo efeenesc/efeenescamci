@@ -1,6 +1,6 @@
 <div
 	#vssearch
-	class="flex cursor-pointer select-none flex-row gap-2 transition-[transform,box-shadow] hover:scale-105 hover:bg-none active:scale-95"
+	class="flex w-fit cursor-pointer select-none flex-row gap-2"
 	tabindex="0"
 	(keydown)="this.keyPressed($event)"
 	(click)="this.cardClicked()"
@@ -10,7 +10,7 @@
 		<img
 			id="theme_icon"
 			[alt]="'Icon for ' + this.themeName()"
-			class="pointer-events-none aspect-square h-full select-none rounded-full bg-none object-contain p-1"
+			class="pointer-events-none aspect-square h-full w-full select-none rounded-full bg-none object-contain p-1"
 			[src]="this.themeIcon()"
 		/>
 	</div>
