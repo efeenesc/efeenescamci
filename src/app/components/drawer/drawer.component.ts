@@ -13,10 +13,6 @@ import { WindowService } from '@services/window.service';
 import gsap from 'gsap';
 import { OverflowDirective } from '@directives/overflow.directive';
 
-interface VerticalMousePosition {
-	y: number;
-	time: number;
-}
 @Component({
 	selector: 'drawer-component',
 	imports: [XMarkComponent],
@@ -30,13 +26,9 @@ export class DrawerComponent implements OnInit, OnDestroy {
 	closed = output<void>();
 
 	isDragging = false;
-	dragStartTime = 0;
 	dragStartPos = 0;
 	objTranslate: { current: number; target: number } = { current: 0, target: 0 };
 	carouselBounds: [number, number] = [90, 2];
-
-	private currentMousePos: VerticalMousePosition | null = { y: 0, time: 0 };
-	private prevMousePos: VerticalMousePosition | null = { y: 0, time: 0 };
 	private drawerTween?: gsap.core.Tween;
 	private mousePositionSub!: Subscription;
 	private mouseUpSub!: Subscription;
@@ -73,10 +65,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
 	}
 
 	resetMouseVariables() {
-		this.dragStartTime = 0;
 		this.dragStartPos = 0;
-		this.currentMousePos = null;
-		this.prevMousePos = null;
 	}
 
 	slideUp() {
@@ -122,14 +111,6 @@ export class DrawerComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	setPrevMousePosition(y: number, time: number): void {
-		if (this.currentMousePos) {
-			this.prevMousePos = { ...this.currentMousePos };
-		}
-
-		this.currentMousePos = { y, time };
-	}
-
 	startDragging(e: MouseEvent | TouchEvent): void {
 		if (
 			(e.target as HTMLDivElement).id !== 'grabberDiv' &&
@@ -142,10 +123,8 @@ export class DrawerComponent implements OnInit, OnDestroy {
 
 		this.bindOnMouseClickEvents();
 
-		const currentTime = performance.now();
 		this.resetMouseVariables();
 		this.dragStartPos = this.getDragPosition(e);
-		this.setPrevMousePosition(this.dragStartPos, currentTime);
 
 		this.isDragging = true;
 	}
@@ -156,44 +135,33 @@ export class DrawerComponent implements OnInit, OnDestroy {
 		const offsetY = this.getDragPosition(e);
 		const dragDistance = offsetY - this.dragStartPos;
 
-		this.objTranslate.target += dragDistance * 0.1;
+		const vhMovement = (dragDistance / window.innerHeight) * 100;
+		this.objTranslate.target += vhMovement;
+
 		this.objTranslate.target = Math.min(
 			Math.max(this.objTranslate.target, this.carouselBounds[1]),
 			100,
 		); // Clamp position
+
 		this.dragStartPos = offsetY;
 
 		const closeAfter = this.objTranslate.target > this.carouselBounds[0];
 		this.isDragging = !closeAfter;
 
-		this.updateDrawerPosition(150, closeAfter, '');
-		this.setPrevMousePosition(offsetY, e.timeStamp);
+		this.updateDrawerPosition(50, closeAfter, '');
 	};
 
 	stopDragging = () => {
 		if (!this.isDragging) return;
 		this.isDragging = false;
 
-		if (this.prevMousePos === null || this.currentMousePos === null) return;
-
 		this.unbindOnMouseClickEvents();
 
-		const { y: curY, time: curTime } = this.currentMousePos;
-		const { y: prevY, time: prevTime } = this.prevMousePos;
-
-		const dt = curTime - prevTime;
-		const dy = curY - prevY;
-		const vel = Math.min(20, Math.max(-20, Math.round((dy / dt) * 2))); // Clamp velocity
-
-		this.objTranslate.target += vel;
 		const closeAfter = this.objTranslate.target > this.carouselBounds[0];
-
-		this.objTranslate.target = closeAfter
-			? 100
-			: Math.max(this.objTranslate.target, this.carouselBounds[1]);
+		this.objTranslate.target = closeAfter ? 100 : this.carouselBounds[1];
 
 		this.resetMouseVariables();
-		this.updateDrawerPosition(400, closeAfter, 'expo.out');
+		this.updateDrawerPosition(1000, closeAfter, 'expo.out');
 	};
 
 	private updateDrawerPosition(
@@ -210,7 +178,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
 				Math.max(this.objTranslate.target, this.carouselBounds[1]),
 				100,
 			), // Clamp position
-			duration: duration / 1000, // GSAP uses seconds for duration
+			duration: duration / 1000,
 			ease: easing,
 			onUpdate: () => {
 				this.drawerMain()!.nativeElement.style.top =
