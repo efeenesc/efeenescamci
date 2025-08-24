@@ -44,8 +44,8 @@ export class OverflowDirective implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Corrects document overflow being set to 'hidden' by getting registered fixed pos. elements'
-	 * padding-right before setting it to the value specified in 'padBy'.
+	 * Corrects document overflow being set to 'hidden' by getting registered absolute pos. elements'
+	 * margin-right before setting it to the value specified in 'padBy'.
 	 * This is to prevent the element from shifting when the overflow is set to 'hidden'.
 	 *
 	 * Call this right before setting overflow to 'hidden'.
@@ -63,9 +63,9 @@ export class OverflowDirective implements OnInit, OnDestroy {
 				newPad = `translateX(${val}px)`;
 				el.style.transform = newPad;
 			} else {
-				origPad = el.style.paddingRight;
-				newPad = el.style.paddingRight + val + 'px';
-				el.style.paddingRight = newPad;
+				origPad = el.style.marginRight;
+				newPad = el.style.marginRight + val + 'px';
+				el.style.marginRight = newPad;
 			}
 
 			el.dataset['originalPad'] = origPad;
@@ -73,7 +73,7 @@ export class OverflowDirective implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Resets the padding-right style of all registered fixed pos. elements.
+	 * Resets the margin-right style of all registered absolute pos. elements.
 	 *
 	 * Call this right after setting overflow to its initial, non-hidden value.
 	 *
@@ -86,7 +86,7 @@ export class OverflowDirective implements OnInit, OnDestroy {
 			if (useTransform) {
 				el.style.transform = el.dataset['originalPad']!;
 			} else {
-				el.style.paddingRight = el.dataset['originalPad']!;
+				el.style.marginRight = el.dataset['originalPad']!;
 			}
 		});
 	}
