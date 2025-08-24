@@ -95,12 +95,7 @@ body {
 small {
 	opacity: 60%;
 }
-b {
-	position: relative;
-	color: var(--color, var(--accent1));
-	text-wrap: nowrap;
-}
-b.wrappable {
+.highlight-wrappable {
 	text-wrap: wrap;
 	display: inline;
 	background-color: var(--bg, var(--color, var(--accent2)));
@@ -115,6 +110,14 @@ b.wrappable {
 	box-decoration-break: clone;
 	-webkit-box-decoration-break: clone;
 }
+.highlight-wrappable::before {
+	display: none;
+}
+b {
+	position: relative;
+	color: var(--color, var(--accent1));
+	text-wrap: nowrap;
+}
 b::before {
 	content: "";
 	position: absolute;
@@ -127,9 +130,6 @@ b::before {
 	background-color: var(--bg, var(--color, var(--accent2)));
 	mask-image: url("assets/brush.svg");
 	mask-size: 100% 100%;
-}
-b.wrappable::before {
-	display: none;
 }
 b:nth-of-type(2n)::before {
 	left: -4px;
@@ -171,6 +171,48 @@ b:nth-of-type(3n)::before {
 	);
 	animation: drift 10s infinite steps(300, jump-both);
 	z-index: 0;
+}
+
+.link-icon {
+	position: relative;
+	pointer-events: none;
+}
+.link-icon::before {
+	content: "";
+	position: absolute;
+	top: 0%;
+	left: calc(100% + 10px);
+	height: 100%;
+	aspect-ratio: 1/1;
+	opacity: 50%;
+	background: var(--theme-600);
+	pointer-events: all;
+	cursor: pointer;
+	border-radius: 10px;
+	transition-property: opacity;
+	transition-duration: 300ms;
+}
+.link-icon::after {
+	content: "";
+	position: absolute;
+	top: 15%;
+	left: calc(100% + 10px);
+	transform: translateX(20%);
+	height: 70%;
+	aspect-ratio: 1/1;
+	background-color: var(--contrast);
+	opacity: 50%;
+	pointer-events: all;
+	mask-image: url("assets/link.svg");
+	mask-size: 100% 100%;
+	cursor: pointer;
+}
+.link-icon:hover::before {
+	opacity: 100%;
+}
+.link-icon:hover::after {
+	opacity: 100%;
+	background-color: var(--accent1);
 }
 
 @keyframes drift {
