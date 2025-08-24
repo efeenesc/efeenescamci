@@ -20,10 +20,6 @@
 	<section class="flex w-full justify-center">
 		<blog-section></blog-section>
 	</section>
-
-	<!-- @for (item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track $index) {
-		<h1 class="pb-24" is-heading>{{ "heading" + item }}</h1>
-	} -->
 </div>
 
 <!-- Site header portal -->
@@ -41,6 +37,7 @@
 			<div>
 				<h1
 					is-heading
+					[excludeLink]="true"
 					class="my-0 w-max text-[42px] font-extrabold xs:text-5xl lg:text-6xl"
 				>
 					<b
@@ -63,24 +60,27 @@
 					class="relative block aspect-square w-20 overflow-hidden rounded-3xl bg-gradient-to-tl from-neutral-800 to-neutral-900 object-contain p-3 shadow-light transition-all after:absolute after:left-0 after:top-0 after:block after:size-full after:rounded-3xl after:shadow-light after:transition-opacity hover:scale-105 hover:from-neutral-800 hover:via-neutral-900 hover:to-neutral-900 active:translate-y-1 active:scale-100 active:shadow-dark-inset active:after:opacity-0"
 					href="https://github.com/efeenesc"
 					target="_blank"
+					alt="GitHub"
 					><img
 						class="pointer-events-none select-none object-contain"
 						src="assets/github-mark-white.png"
-						alt="GitHub"
+						alt="GitHub logo"
 				/></a>
 				<a
 					class="relative block aspect-square w-20 overflow-hidden rounded-3xl bg-gradient-to-tl from-[#0a66c2] to-blue-400 object-contain p-2 shadow-light transition-all after:absolute after:left-0 after:top-0 after:block after:size-full after:rounded-3xl after:shadow-light after:transition-opacity hover:scale-105 hover:from-[#0a66c2] hover:via-[#0a66c2] hover:to-blue-400 active:translate-y-1 active:scale-100 active:shadow-dark-inset active:after:opacity-0"
 					href="https://linkedin.com/in/efeenescamci"
 					target="_blank"
+					alt="LinkedIn"
 					><img
 						class="pointer-events-none select-none object-contain"
 						src="assets/InBug-White-Inverse.png"
-						alt="LinkedIn"
+						alt="LinkedIn logo"
 				/></a>
 				<a
 					class="relative block aspect-square w-20 rounded-3xl bg-highlight-solid bg-gradient-to-tl from-theme-300 to-theme-900 object-contain p-3 shadow-lg transition-all after:absolute after:left-0 after:top-0 after:block after:size-full after:rounded-3xl after:shadow-light after:transition-opacity hover:scale-105 hover:bg-none hover:from-theme-300 hover:via-theme-300 active:translate-y-1 active:scale-100 active:shadow-dark-inset active:after:opacity-0"
 					href="mailto:hello@efeenescamci.com"
 					target="_blank"
+					alt="E-mail"
 				>
 					<svg
 						viewBox="0 0 24 24"
