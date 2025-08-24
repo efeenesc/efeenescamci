@@ -31,7 +31,7 @@ export class ExperimentsComponent {
 			id: 4,
 			icon_url: 'assets/logos/simple-invoice-latex.png',
 			name: 'simple-invoice-latex',
-			desc: 'A simple invoice generator. Comes with a nice looking LaTeX invoice template. Has a pipe-based date syntax for date generation, conversion and formatting in JSON configs. Built using TypeScript.',
+			desc: 'A simple invoice generator. Comes with a nice LaTeX template; has a pipe-based date syntax in JSON. Built using TypeScript.',
 			source_url: 'https://github.com/efeenesc/simple-invoice-latex',
 			read_more: '',
 			loaded: signal(false),
