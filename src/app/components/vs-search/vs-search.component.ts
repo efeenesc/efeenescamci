@@ -13,10 +13,11 @@ import {
 import { LocalStorageService } from '@services/local-storage.service';
 import gsap from 'gsap';
 import { Subscription } from 'rxjs';
+import { MissingIconComponent } from '@icons/missing-icon/missing-icon.component';
 
 @Component({
 	selector: 'vs-search',
-	imports: [],
+	imports: [MissingIconComponent],
 	templateUrl: './vs-search.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -54,7 +55,10 @@ export class VsSearchComponent implements OnDestroy, OnInit {
 					break;
 
 				case 'theme_icon':
-					if (obj.value.startsWith('data:image')) {
+					if (obj.value.trim() === '') {
+						this.themeIcon.set(null);
+						break;
+					} else if (obj.value.startsWith('data:image')) {
 						this.themeIcon.set(obj.value);
 					} else {
 						this.themeIcon.set('data:image/png;base64,' + obj.value);
