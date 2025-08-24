@@ -37,12 +37,12 @@
 		}
 
 		<div
-			class="mr-1 h-full rounded-full bg-theme-600 pr-4 shadow-light [&_span]:text-contrast"
+			class="mr-1 h-full rounded-full bg-theme-600 pr-4 shadow-light transition-[transform] hover:scale-105 active:scale-95 [&_span]:text-contrast"
 			correct-overflow
 			[padBy]="11"
 		>
 			<vs-search
-				class="flex h-full text-white"
+				class="flex h-full w-fit text-white"
 				[animationSeekAt]="this.topbarScrollProgress()"
 				(clicked)="this.emitThemeBarClickedEvent()"
 			/>

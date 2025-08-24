@@ -90,15 +90,17 @@ export class VsSearchComponent implements OnDestroy, OnInit {
 			opacity: progress,
 			duration: 0.01,
 			ease: 'none',
+			force3D: true,
 		});
 
-		// Use translateY instead of top to keep element in container bounds
-		const translateY = (1 - progress) * 50; // Move up when progress is low
+		const translateY = (1 - progress) * 50;
 
 		gsap.to(this.vsThemeName().nativeElement, {
 			y: translateY + '%',
 			duration: 0.01,
 			ease: 'none',
+			force3D: true,
+			transformOrigin: 'center top',
 		});
 	}
 
