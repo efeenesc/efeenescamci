@@ -29,8 +29,7 @@ export class ExperimentsComponent {
 	expCards = [
 		{
 			id: 4,
-			icon_url:
-				'https://github.com/efeenesc/simple-invoice-latex/raw/master/logo.png',
+			icon_url: 'assets/logos/simple-invoice-latex.png',
 			name: 'simple-invoice-latex',
 			desc: 'A simple invoice generator. Comes with a nice looking LaTeX invoice template. Has a pipe-based date syntax for date generation, conversion and formatting in JSON configs. Built using TypeScript.',
 			source_url: 'https://github.com/efeenesc/simple-invoice-latex',
@@ -39,7 +38,7 @@ export class ExperimentsComponent {
 		},
 		{
 			id: 3,
-			icon_url: 'assets/WinFloatingDockPic.png',
+			icon_url: 'assets/logos/WinFloatingDockPic.png',
 			name: 'WinFloatingDock',
 			desc: 'A floating, always-on-top transparent dock that functions like a minimal taskbar. Built using C++ and MSVC.',
 			source_url: 'https://github.com/efeenesc/WinFloatingDock',
@@ -48,8 +47,7 @@ export class ExperimentsComponent {
 		},
 		{
 			id: 2,
-			icon_url:
-				'https://github.com/efeenesc/recap/raw/master/assets/appicon.png',
+			icon_url: 'assets/logos/recap.png',
 			name: 'Recap',
 			desc: 'Get a Recap of your daily activity. Built using Go and Wails.',
 			source_url: 'https://github.com/efeenesc/recap',
@@ -58,8 +56,7 @@ export class ExperimentsComponent {
 		},
 		{
 			id: 1,
-			icon_url:
-				'https://github.com/efeenesc/c-twig-server/raw/main/assets/icon.png',
+			icon_url: 'assets/logos/c-twig-server.png',
 			name: 'c-twig-server',
 			desc: 'C server that snaps like a twig. Educational purposes only.',
 			source_url: 'https://github.com/efeenesc/c-twig-server',
@@ -68,7 +65,7 @@ export class ExperimentsComponent {
 		},
 		{
 			id: 0,
-			icon_url: 'assets/efeenescamci-logo.png',
+			icon_url: 'assets/logos/efeenescamci-logo.png',
 			name: 'efeenescamci',
 			desc: 'This website. Built using Angular and Go.',
 			source_url: 'https://github.com/efeenesc/efeenescamci',
