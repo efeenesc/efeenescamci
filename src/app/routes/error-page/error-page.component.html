@@ -1,16 +1,43 @@
 <!-- Setting min height at all is extremely far from ideal but it's the easiest way to make footer look OK in this short page -->
 <div
-	class="relative mx-auto flex h-max min-h-[65vh] flex-col gap-12 overflow-hidden"
+	class="relative mx-auto flex h-max flex-col gap-12 overflow-hidden sm:min-h-[24vh]"
 >
-	<div class="grid size-full">
-		<div class="flex flex-col items-center justify-center p-8 text-center">
-			<h1 class="mb-4 text-6xl font-bold text-foreground">404</h1>
-			<p class="mb-4 text-xl text-foreground">
-				Could not find the page you were looking for.
-			</p>
-			<a [routerLink]="'/'" class="text-lg text-accent1 underline">
-				Go back to the homepage
-			</a>
-		</div>
+	<div
+		class="hidden flex-col items-center justify-center p-8 text-center sm:block"
+	>
+		<p class="mb-4 text-xl text-foreground">
+			Whoops! This page seems to have wandered off somewhere.
+		</p>
+		<a [routerLink]="'/'" class="text-lg text-accent1 underline">
+			Let's head back home
+		</a>
 	</div>
 </div>
+
+<ng-template portalContent="header">
+	<div
+		class="relative z-10 flex h-full min-h-[300px] max-w-full flex-col items-center justify-center gap-2 self-center text-wrap pb-4 pt-2"
+	>
+		<h1
+			class="w-full text-wrap break-words text-center text-6xl font-bold text-white"
+		>
+			<b
+				style="--color: #efe; --bg: #d53737"
+				class="highlight-wrappable -ml-4 !text-wrap px-4"
+			>
+				404
+			</b>
+		</h1>
+		<p
+			class="mb-4 block bg-theme-600 p-4 text-center text-xl text-foreground sm:hidden"
+		>
+			Whoops! This page seems to have wandered off somewhere.
+			<a
+				[routerLink]="'/'"
+				class="block text-center text-lg text-accent1 underline"
+			>
+				Let's head back home
+			</a>
+		</p>
+	</div>
+</ng-template>
