@@ -35,6 +35,7 @@ export class HeadingDirective implements OnInit, OnDestroy {
 
 	private static observer: IntersectionObserver | null = null;
 	private static effectRef: EffectRef | null = null;
+	private static lastScrollY = 0;
 
 	private tag!: number;
 	private element!: HeadingMeta;
@@ -42,6 +43,7 @@ export class HeadingDirective implements OnInit, OnDestroy {
 
 	constructor(private el: ElementRef<HTMLElement>) {
 		if (!HeadingDirective.effectRef) {
+			HeadingDirective.lastScrollY = window.scrollY;
 			HeadingDirective.effectRef = effect(() => {
 				const metas = HeadingDirective.tocElements();
 				const vis = HeadingDirective._visibleMap();
@@ -52,7 +54,21 @@ export class HeadingDirective implements OnInit, OnDestroy {
 				}
 
 				const idx = metas.findIndex((m) => vis.get(m.el) === true);
-				HeadingDirective.activeIndex.set(idx);
+
+				if (idx === -1) {
+					const currentScrollY = window.scrollY;
+					const scrollingUp = currentScrollY < HeadingDirective.lastScrollY;
+					const currentIndex = HeadingDirective.activeIndex();
+
+					if (scrollingUp && currentIndex > 0) {
+						HeadingDirective.activeIndex.set(currentIndex - 1);
+					}
+
+					HeadingDirective.lastScrollY = currentScrollY;
+				} else {
+					HeadingDirective.activeIndex.set(idx);
+					HeadingDirective.lastScrollY = window.scrollY;
+				}
 			});
 		}
 
@@ -206,6 +222,7 @@ export class HeadingDirective implements OnInit, OnDestroy {
 					});
 				},
 				{
+					rootMargin: '0% 0px 0% 0px',
 					threshold: 0,
 				},
 			);

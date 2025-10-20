@@ -36,11 +36,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
 	constructor(private wndSvc: WindowService) {}
 
 	ngOnInit() {
-		if (!this.wndSvc.isTouchDevice()) {
-			OverflowDirective.preOverflowHidden();
-		}
-
-		document.body.style.overflow = 'hidden';
+		OverflowDirective.setOverflowHidden();
 		this.slideUp();
 		window.addEventListener('touchstart', (event) => this.startDragging(event));
 	}
@@ -81,11 +77,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
 		this.mainOverlay()!.nativeElement.style.removeProperty('pointer-events');
 
 		if (document.body.style.overflow === 'hidden') {
-			document.body.style.removeProperty('overflow');
-
-			if (!this.wndSvc.isTouchDevice()) {
-				OverflowDirective.postOverflowHidden();
-			}
+			OverflowDirective.removeOverflowHidden();
 		}
 	}
 

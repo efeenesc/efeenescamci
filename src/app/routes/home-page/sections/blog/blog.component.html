@@ -49,7 +49,7 @@
 								[style.rotate]="showingMore() ? '180deg' : '0deg'"
 							></icon-arrow-down>
 							@if (!showingMore()) {
-								Show {{ blogs.length - showCount }} more
+								Show {{ blogs().length - showCount }} more
 							} @else {
 								Collapse
 							}

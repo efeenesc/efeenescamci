@@ -9,6 +9,9 @@ import {
 } from '@angular/core';
 import { ASTNode, ASTRootNode } from '@classes/markdown/parser.interface';
 import { HeadingDirective } from './heading.directive';
+import gsap from 'gsap';
+import { WindowService } from '@services/window.service';
+import { OverflowDirective } from './overflow.directive';
 
 @Directive({
 	selector: '[markdownRenderer]',
@@ -23,6 +26,7 @@ export class MarkdownRendererDirective implements OnChanges, OnDestroy {
 	constructor(
 		private vcr: ViewContainerRef,
 		private renderer: Renderer2,
+		private wndSvc: WindowService,
 	) {}
 
 	ngOnChanges(): void {
@@ -109,6 +113,9 @@ export class MarkdownRendererDirective implements OnChanges, OnDestroy {
 			} else {
 				const childEl = this.createElementFor(child);
 				if (childEl) {
+					if (childEl.tagName === 'IMG') {
+						this.setupImageClickHandler(childEl as HTMLImageElement);
+					}
 					this.renderer.appendChild(parentEl, childEl);
 					this.renderChildrenInto(childEl, child);
 				}
@@ -121,7 +128,7 @@ export class MarkdownRendererDirective implements OnChanges, OnDestroy {
 			// block nodes
 			case 'PARAGRAPH':
 				return this.renderer.createElement('p');
-			case 'BREAKLINE':
+			case 'HTMLBR':
 				return this.renderer.createElement('br');
 			case 'ORDEREDLIST':
 				return this.renderer.createElement('ol');
@@ -173,6 +180,39 @@ export class MarkdownRendererDirective implements OnChanges, OnDestroy {
 				};
 				return img;
 			}
+			case 'HTMLDIV': {
+				const div = this.renderer.createElement('div');
+				let style = '';
+				Object.entries(node.props).forEach(([k, v]) => {
+					switch (k) {
+						case 'align': {
+							let align = '';
+							switch (v) {
+								case 'left':
+									align = 'md-div-left';
+									break;
+								case 'center':
+									align = 'md-div-center';
+									break;
+								case 'right':
+									align = 'md-div-right';
+									break;
+							}
+							this.renderer.addClass(div, align);
+							break;
+						}
+						case 'width':
+							// yes, I'm not checking if the value has anything unexpected
+							style += `width: ${v}; `;
+							break;
+						default:
+							this.renderer.setAttribute(div, k, v);
+							break;
+					}
+				});
+				this.renderer.setAttribute(div, 'style', style);
+				return div;
+			}
 
 			// text will fall under default; it's handled in renderTop/renderChildrenInto
 			default:
@@ -201,5 +241,99 @@ export class MarkdownRendererDirective implements OnChanges, OnDestroy {
 			else if (c.value) out += this.extractText(c.value as any);
 		}
 		return out.trim();
+	}
+
+	private setupImageClickHandler(img: HTMLImageElement): void {
+		img.addEventListener('click', () => {
+			if (img.dataset['fullscreen'] !== 'true') {
+				this.enterFullscreen(img);
+			} else {
+				this.exitFullscreen(img);
+			}
+		});
+	}
+
+	private enterFullscreen(img: HTMLImageElement): void {
+		const { height, width, left, top } = img.getBoundingClientRect();
+		img.dataset['top'] = top + 'px';
+		img.dataset['left'] = left + 'px';
+		img.dataset['height'] = height + 'px';
+		img.dataset['width'] = width + 'px';
+
+		const placeholder = document.createElement('div');
+		placeholder.style.height = height + 'px';
+		placeholder.style.width = width + 'px';
+		placeholder.style.marginBottom = '4px';
+		placeholder.className = 'md-placeholder-div';
+
+		OverflowDirective.setOverflowHidden();
+		img.style.position = 'fixed';
+		img.style.zIndex = '9999';
+		img.dataset['fullscreen'] = 'true';
+
+		img.parentNode!.insertBefore(placeholder, img);
+		const viewportWidth = window.innerWidth;
+		const viewportHeight = window.innerHeight;
+		const maxWidth = viewportWidth * 0.9;
+		const maxHeight = viewportHeight * 0.9;
+
+		const aspectRatio = img.naturalWidth / img.naturalHeight;
+
+		let finalWidth = maxWidth;
+		let finalHeight = maxWidth / aspectRatio;
+
+		if (finalHeight > maxHeight) {
+			finalHeight = maxHeight;
+			finalWidth = maxHeight * aspectRatio;
+		}
+
+		const centerX = (viewportWidth - finalWidth) / 2;
+		const centerY = (viewportHeight - finalHeight) / 2;
+
+		gsap.fromTo(
+			img,
+			{
+				top: top + 'px',
+				left: left + 'px',
+				height: height + 'px',
+				width: width + 'px',
+			},
+			{
+				top: centerY + 'px',
+				left: centerX + 'px',
+				width: finalWidth + 'px',
+				height: finalHeight + 'px',
+				duration: 0.3,
+				ease: 'power2.out',
+			},
+		);
+	}
+
+	private exitFullscreen(img: HTMLImageElement): void {
+		img.style.zIndex = '5';
+		gsap.to(img, {
+			top: img.dataset['top'],
+			left: img.dataset['left'],
+			height: img.dataset['height'],
+			width: img.dataset['width'],
+			duration: 0.3,
+			ease: 'power2.out',
+			onComplete: () => {
+				img.style.top = '';
+				img.style.left = '';
+				img.style.height = '';
+				img.style.width = '';
+				img.style.position = '';
+				img.style.zIndex = '';
+				OverflowDirective.removeOverflowHidden();
+
+				const placeholder =
+					document.getElementsByClassName('md-placeholder-div');
+				Array.from(placeholder).forEach((el) => {
+					img.parentElement!.removeChild(el);
+				});
+			},
+		});
+		img.dataset['fullscreen'] = 'false';
 	}
 }

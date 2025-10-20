@@ -1,4 +1,4 @@
-import { LexNode } from "./lexer.interface";
+import { LexNode } from './lexer.interface';
 
 interface RepeatingTypeConfig {
 	max: number;
@@ -7,13 +7,13 @@ interface RepeatingTypeConfig {
 }
 
 const SPECIAL_TOKENS: Record<string, RepeatingTypeConfig> = {
-	">": { max: 0, endsWith: " " },
-	"-": { max: 0, endsWith: " " },
-	"*": { max: 3 },
+	'>': { max: 0, endsWith: ' ', optEndsWith: '\n' },
+	'-': { max: 0, endsWith: ' ' },
+	'*': { max: 3 },
 	_: { max: 3 },
-	"#": { max: 6, endsWith: " " },
-	"~": { max: 2 },
-	"`": { max: 3, optEndsWith: "\n" },
+	'#': { max: 6, endsWith: ' ' },
+	'~': { max: 2 },
+	'`': { max: 3, optEndsWith: '\n' },
 };
 
 export class MarkdownLexer {
@@ -25,11 +25,11 @@ export class MarkdownLexer {
 			const ch = input[i];
 			const tok = this.charmap(ch);
 			switch (tok) {
-				case "TEXT": {
+				case 'TEXT': {
 					this.textbuf.push(ch);
 					break;
 				}
-				case "NUM": {
+				case 'NUM': {
 					const {
 						num,
 						lastValidIndex: index,
@@ -40,7 +40,7 @@ export class MarkdownLexer {
 						this.textbuf.push(num as string);
 					} else {
 						this.flushtextbuf();
-						this.tokens.push({ type: "n.", value: num });
+						this.tokens.push({ type: 'n.', value: num });
 					}
 					i = index;
 					break;
@@ -72,7 +72,7 @@ export class MarkdownLexer {
 
 	private flushtextbuf() {
 		if (!this.textbuf.length) return;
-		this.tokens.push({ value: this.textbuf.join(""), type: "text" });
+		this.tokens.push({ value: this.textbuf.join(''), type: 'text' });
 		this.textbuf = [];
 	}
 
@@ -80,7 +80,7 @@ export class MarkdownLexer {
 		token: keyof typeof SPECIAL_TOKENS,
 		index: number,
 		input: string,
-		config: RepeatingTypeConfig
+		config: RepeatingTypeConfig,
 	): [LexNode, number] | null {
 		index++;
 		let state = token;
@@ -115,30 +115,30 @@ export class MarkdownLexer {
 	}
 
 	private parseNumber(index: number, input: string) {
-		let number = "";
+		let number = '';
 		let isList = false;
 		let lastValidIndex = index;
-		if (index !== 0 && input[index - 1] !== "\n") {
+		if (index !== 0 && input[index - 1] !== '\n') {
 			return { num: input[index], lastValidIndex: index, isList: false };
 		}
 		while (index < input.length && !isList) {
 			const character = input[index];
 			switch (character) {
-				case "0":
-				case "1":
-				case "2":
-				case "3":
-				case "4":
-				case "5":
-				case "6":
-				case "7":
-				case "8":
-				case "9":
+				case '0':
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9':
 					number += character;
 					lastValidIndex = index;
 					break;
-				case ".":
-					if (input[index + 1] === " ") {
+				case '.':
+					if (input[index + 1] === ' ') {
 						lastValidIndex = index + 1;
 						isList = true;
 					}
@@ -151,34 +151,34 @@ export class MarkdownLexer {
 
 	private charmap(character: string) {
 		switch (character) {
-			case "*":
-			case "_":
-			case "#":
-			case "[":
-			case "]":
-			case "(":
-			case ")":
-			case "~":
-			case "-":
-			case "<":
-			case ">":
-			case "`":
-			case "!":
-			case "\n":
+			case '*':
+			case '_':
+			case '#':
+			case '[':
+			case ']':
+			case '(':
+			case ')':
+			case '~':
+			case '-':
+			case '<':
+			case '>':
+			case '`':
+			case '!':
+			case '\n':
 				return character;
-			case "0":
-			case "1":
-			case "2":
-			case "3":
-			case "4":
-			case "5":
-			case "6":
-			case "7":
-			case "8":
-			case "9":
-				return "NUM";
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+				return 'NUM';
 			default:
-				return "TEXT";
+				return 'TEXT';
 		}
 	}
 }

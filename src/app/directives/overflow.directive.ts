@@ -1,4 +1,12 @@
-import { Directive, ElementRef, OnInit, OnDestroy, input } from '@angular/core';
+import {
+	Directive,
+	ElementRef,
+	OnInit,
+	OnDestroy,
+	input,
+	inject,
+} from '@angular/core';
+import { WindowService } from '@services/window.service';
 
 enum OverflowState {
 	NOT_CORRECTED,
@@ -10,6 +18,7 @@ enum OverflowState {
 export class OverflowDirective implements OnInit, OnDestroy {
 	padBy = input(10);
 	useTransform = input(false);
+	private static wndSvc: WindowService;
 	private static elements = new Set<{
 		el: HTMLElement;
 		val: number;
@@ -17,7 +26,11 @@ export class OverflowDirective implements OnInit, OnDestroy {
 	}>();
 	static state: OverflowState = OverflowState.NOT_CORRECTED;
 
-	constructor(private el: ElementRef) {}
+	constructor(private el: ElementRef) {
+		if (!OverflowDirective.wndSvc) {
+			OverflowDirective.wndSvc = inject(WindowService);
+		}
+	}
 
 	ngOnInit(): void {
 		OverflowDirective.elements.add({
@@ -33,6 +46,20 @@ export class OverflowDirective implements OnInit, OnDestroy {
 			val: this.padBy(),
 			useTransform: this.useTransform(),
 		});
+	}
+
+	static setOverflowHidden() {
+		if (!this.wndSvc.isTouchDevice()) {
+			OverflowDirective.preOverflowHidden();
+		}
+		document.body.style.overflow = 'hidden';
+	}
+
+	static removeOverflowHidden() {
+		document.body.style.removeProperty('overflow');
+		if (!OverflowDirective.wndSvc.isTouchDevice()) {
+			OverflowDirective.postOverflowHidden();
+		}
 	}
 
 	static getAllElements(): {

@@ -8,14 +8,16 @@ export type ASTNode =
 	| ASTBoldNode
 	| ASTItalicNode
 	| ASTStrongNode
-	| ASTBreaklineNode
+	| ASTHTMLBreaklineNode
 	| ASTBlockQuoteNode
 	| ASTBlockCodeNode
 	| ASTOrderedListNode
 	| ASTUnorderedListNode
 	| ASTListItemNode
 	| ASTStrikethroughNode
-	| ASTParaNode;
+	| ASTParaNode
+	| ASTHTMLDivNode
+	| ASTHTMLImageNode;
 
 export type ASTBlockNode =
 	| ASTHeadingNode
@@ -24,7 +26,9 @@ export type ASTBlockNode =
 	| ASTInlineCodeNode
 	| ASTBlockQuoteNode
 	| ASTBlockCodeNode
-	| ASTParaNode;
+	| ASTParaNode
+	| ASTHTMLDivNode
+	| ASTHTMLImageNode;
 
 export type ASTInlineNode =
 	| ASTTextNode
@@ -33,122 +37,135 @@ export type ASTInlineNode =
 	| ASTBoldNode
 	| ASTItalicNode
 	| ASTStrongNode
-	| ASTBreaklineNode
+	| ASTHTMLBreaklineNode
 	| ASTListItemNode
 	| ASTStrikethroughNode;
 
 export interface ASTRootNode {
-	type: "DOCUMENT";
+	type: 'DOCUMENT';
 	value: ASTNode[];
 }
 
 export interface ASTHeadingNode {
-	type: "HEADING";
+	type: 'HEADING';
 	level: number;
 	value: ASTNode[];
 }
 
 export interface ASTInlineCodeNode {
-	type: "INLINECODE";
+	type: 'INLINECODE';
 	value: ASTNode[];
 }
 
 export interface ASTBlockCodeNode {
-	type: "BLOCKCODE";
+	type: 'BLOCKCODE';
 	value: ASTNode[];
 }
 
 export interface ASTTextNode {
-	type: "TEXT";
+	type: 'TEXT';
 	value: string;
 }
 
 export interface ASTLinkNode {
-	type: "LINK";
+	type: 'LINK';
 	value: ASTNode[];
 	url: string;
 }
 
 export interface ASTImageNode {
-	type: "IMAGE";
+	type: 'IMAGE';
 	value: ASTNode[];
 	url: string;
 }
 
 export interface ASTBoldNode {
-	type: "BOLD";
+	type: 'BOLD';
 	value: ASTNode[];
 }
 
 export interface ASTItalicNode {
-	type: "ITALIC";
+	type: 'ITALIC';
 	value: ASTNode[];
 }
 
 export interface ASTStrongNode {
-	type: "STRONG";
+	type: 'STRONG';
 	value: ASTNode[];
 }
 
-export interface ASTBreaklineNode {
-	type: "BREAKLINE";
-	value: never & string;
-}
-
 export interface ASTBlockQuoteNode {
-	type: "BLOCKQUOTE";
+	type: 'BLOCKQUOTE';
 	value: ASTNode[];
 }
 
 export interface ASTOrderedListNode {
-	type: "ORDEREDLIST";
+	type: 'ORDEREDLIST';
 	value: ASTNode[];
 }
 
 export interface ASTUnorderedListNode {
-	type: "UNORDEREDLIST";
+	type: 'UNORDEREDLIST';
 	value: ASTNode[];
 }
 
 export interface ASTListItemNode {
-	type: "LISTITEM";
+	type: 'LISTITEM';
 	value: ASTNode[];
 }
 
 export interface ASTStrikethroughNode {
-	type: "STRIKETHROUGH";
+	type: 'STRIKETHROUGH';
 	value: ASTNode[];
 }
 
 export interface ASTParaNode {
-	type: "PARAGRAPH";
+	type: 'PARAGRAPH';
 	value: ASTNode[];
+}
+
+export interface ASTHTMLDivNode {
+	type: 'HTMLDIV';
+	props: Record<'align' | 'width', string>;
+	value: ASTNode[];
+}
+
+export interface ASTHTMLImageNode {
+	type: 'HTMLIMG';
+	props: Record<'align' | 'width' | 'src' | 'alt', string>;
+	value: never & string;
+}
+
+export interface ASTHTMLBreaklineNode {
+	type: 'HTMLBR';
+	props: never;
+	value: never & string;
 }
 
 export type NODE = BASE | LEVELED | WRAPPABLE;
 
 export interface BASE {
-	state: "LISTITEM" | "BLOCKQUOTE";
+	state: 'LISTITEM' | 'BLOCKQUOTE';
 	wrap?: never;
 	level?: never;
 }
 
 export interface LEVELED {
-	state: "HEADER";
+	state: 'HEADER';
 	level: number;
 	wrap?: never;
 }
 
 export interface WRAPPABLE {
 	state:
-		| "BOLD"
-		| "ITALIC"
-		| "STRONG"
-		| "INLINECODE"
-		| "STRIKETHROUGH"
-		| "BLOCKCODE"
-		| "LINK"
-		| "PARENTHESES";
-	wrap: "self" | string[];
+		| 'BOLD'
+		| 'ITALIC'
+		| 'STRONG'
+		| 'INLINECODE'
+		| 'STRIKETHROUGH'
+		| 'BLOCKCODE'
+		| 'LINK'
+		| 'PARENTHESES';
+	wrap: 'self' | string[];
 	level?: never;
 }
